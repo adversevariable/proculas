@@ -5,10 +5,19 @@
 --	$Id$
 --
 
+-------------------------------------------------------
+-- Proculas
 Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
-local VERSION = "0.6-alpha"
+local db
 
+-------------------------------------------------------
+-- Proculas Version
+Proculas.revision = tonumber(("$Rev$"):match("%d+"))
+Proculas.version = "0.6 r" .. (Proculas.revision or 0)
+local VERSION = Proculas.version
+
+-------------------------------------------------------
 -- Register some media
 LSM:Register("sound", "Rubber Ducky", [[Sound\Doodad\Goblin_Lottery_Open01.wav]])
 LSM:Register("sound", "Cartoon FX", [[Sound\Doodad\Goblin_Lottery_Open03.wav]])
@@ -24,7 +33,7 @@ LSM:Register("sound", "Fel Portal", [[Sound\Spells\Sunwell_Fel_PortalStand.wav]]
 LSM:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.wav]])
 LSM:Register("sound", "You Will Die!", [[Sound\Creature\CThun\CThunYouWillDIe.wav]])
 
-local db
+-------------------------------------------------------
 -- Default options
 local defaults = {
 	profile = {
@@ -38,6 +47,8 @@ local defaults = {
 	},
 }
 
+-------------------------------------------------------
+-- Proc buffs
 local buffMongoose = GetSpellInfo(28093)
 local buffCobraStrikes = GetSpellInfo(53257)
 local buffClearcastMage = GetSpellInfo(12536)
@@ -48,6 +59,8 @@ local buffQuickShots = GetSpellInfo(6150)
 local buffRotU = GetSpellInfo(33649)
 local active = {}
 
+-------------------------------------------------------
+-- Proc names
 local PROC = {
 			mongoose = "Mongoose",
 			quickshots = "Quick Shots",
@@ -56,6 +69,8 @@ local PROC = {
 			rotu = "Rage of the Unraveller",
 			}
 
+-------------------------------------------------------
+-- Just some required things...
 function Proculas:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", defaults)
 	self.opt = self.db.profile
@@ -76,84 +91,74 @@ function Proculas:HasBuff(buff)
 	return name ~= nil
 end
 
----------------------------------------------
+-------------------------------------------------------
 -- Proculas Profiles Stuff
----------------------------------------------
 function Proculas:OnProfileChanged(event, database, newProfileKey)
 	db = database.profile
 	self:Print("Profile changed.")
 end
 
----------------------------------------------
+-------------------------------------------------------
 -- Buff Monitoring to check for when procs buff the player
----------------------------------------------
 function Proculas:COMBAT_LOG_EVENT()
-	-----
+	---------------------------------------------------
 	-- Mongoose
-	-----
 	if (self:HasBuff(buffMongoose) and active["mongoose"] == nil) then
 		self:Postproc("mongoose")
 		active["mongoose"] = true
 	elseif (not self:HasBuff(buffMongoose)) then
 		active["mongoose"] = nil
 	end
-	-----
+	---------------------------------------------------
 	-- Cobra Strikes
-	-----
 	if (self:HasBuff(buffCobraStrikes) and active["cobrastrikes"] == nil) then
 		self:Postproc("cobrastrikes")
 		active["cobrastrikes"] = true
 	elseif (not self:HasBuff(buffCobraStrikes)) then
 		active["cobrastrikes"] = nil
 	end
-	-----
+	---------------------------------------------------
 	-- Quick Strikes
-	-----
 	if (self:HasBuff(buffQuickShots) and active["quickshots"] == nil) then
 		self:Postproc("quickshots")
 		active["quickshots"] = true
 	elseif (not self:HasBuff(buffQuickShots)) then
 		active["quickshots"] = nil
 	end
-	-----
+	---------------------------------------------------
 	-- Clearcasting [Mage]
-	-----
 	if (self:HasBuff(buffClearcastMage) and active["ccmage"] == nil) then
 		self:Postproc("clearcasting")
 		active["ccmage"] = true
 	elseif (not self:HasBuff(buffClearcastMage)) then
 		active["ccmage"] = nil
 	end
-	-----
+	---------------------------------------------------
 	-- Clearcasting [Shaman]
-	-----
 	if (self:HasBuff(buffClearcastShaman) and active["ccshaman"] == nil) then
 		self:Postproc("clearcasting")
 		active["ccshaman"] = true
 	elseif (not self:HasBuff(buffClearcastShaman)) then
 		active["ccshaman"] = nil
 	end
-	-----
+	---------------------------------------------------
 	-- Clearcasting [Druid]
-	-----
 	if (self:HasBuff(buffClearcastDruid) and active["ccdruid"] == nil) then
 		self:Postproc("clearcasting")
 		active["ccdruid"] = true
 	elseif (not self:HasBuff(buffClearcastDruid)) then
 		active["ccdruid"] = nil
 	end
-	-----
+	---------------------------------------------------
 	-- Clearcasting [Priest]
-	-----
 	if (self:HasBuff(buffClearcastPriest) and active["ccpriest"] == nil) then
 		self:Postproc("clearcasting")
 		active["ccpriest"] = true
 	elseif (not self:HasBuff(buffClearcastPriest)) then
 		active["ccpriest"] = nil
 	end
-	-----
+	---------------------------------------------------
 	-- Rage of the Unraveller [Trinker]
-	-----
 	if (self:HasBuff(buffRotU) and active["rotu"] == nil) then
 		self:Postproc("rotu")
 		active["rotu"] = true
@@ -162,6 +167,8 @@ function Proculas:COMBAT_LOG_EVENT()
 	end
 end
 
+-------------------------------------------------------
+-- Used to post procs to chat, play sounds, etc
 function Proculas:Postproc(proc)
 	if (db.Post) then
 		-- Chat Frame
@@ -181,17 +188,16 @@ function Proculas:Postproc(proc)
 		PlaySoundFile(LSM:Fetch("sound", db.Sound.SoundFile))
 	end
 end
-
+-------------------------------------------------------
+-- Proculas Chat Commands
 Proculas:RegisterChatCommand("proculas", "AboutProculas")
 function Proculas:AboutProculas()
 	DEFAULT_CHAT_FRAME:AddMessage("Proculas "..VERSION)
 	DEFAULT_CHAT_FRAME:AddMessage("Created by Clorell/Keruni of Argent Dawn [US]")
 end
 
-
----------------------------------------------
+-------------------------------------------------------
 -- Proculas Options Stuff
----------------------------------------------
 local options = {
 	type = "group",
 	name = "Proculas",
