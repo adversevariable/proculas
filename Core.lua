@@ -31,7 +31,7 @@ LSM:Register("sound", "Humm", [[Sound\Spells\SimonGame_Visual_GameStart.wav]])
 LSM:Register("sound", "Short Circuit", [[Sound\Spells\SimonGame_Visual_BadPress.wav]])
 LSM:Register("sound", "Fel Portal", [[Sound\Spells\Sunwell_Fel_PortalStand.wav]])
 LSM:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.wav]])
-LSM:Register("sound", "You Will Die!", [[Sound\Creature\CThun\CThunYouWillDIe.wav]])
+LSM:Register("sound", "You Will Die!", [[Sound\Creature\CThun\CThunYouWillDie.wav]])
 
 -------------------------------------------------------
 -- Default options
@@ -58,6 +58,13 @@ local buffClearcastPriest = GetSpellInfo(34754)
 local buffQuickShots = GetSpellInfo(6150)
 local buffRotU = GetSpellInfo(33649) -- Rage of the Unraveller
 local buffSoL = GetSpellInfo(33151) -- Surge of Light
+local buffWFlurry = GetSpellInfo(12966) -- Warrior Flurry
+local buffWEnrage1 = GetSpellInfo(12880) -- Warrior Enrage Rank 1
+local buffWEnrage2 = GetSpellInfo(12880) -- Warrior Enrage Rank 2
+local buffWEnrage3 = GetSpellInfo(12880) -- Warrior Enrage Rank 3
+local buffWEnrage4 = GetSpellInfo(12880) -- Warrior Enrage Rank 4
+local buffWEnrage5 = GetSpellInfo(12880) -- Warrior Enrage Rank 5
+
 local active = {}
 
 -------------------------------------------------------
@@ -69,6 +76,8 @@ local PROC = {
 			clearcasting = "Clearcasting",
 			rotu = "Rage of the Unraveller",
 			sol = "Surge of Light",
+			flurry = "Flurry",
+			enrage = "Enrage",
 			}
 
 -------------------------------------------------------
@@ -175,6 +184,50 @@ function Proculas:COMBAT_LOG_EVENT()
 	elseif (not self:HasBuff(buffSoL)) then
 		active["sol"] = nil
 	end
+	---------------------------------------------------
+	-- Warrior Flurry
+	if (self:HasBuff(buffWFlurry) and active["wflurry"] == nil) then
+		self:Postproc("flurry")
+		active["wflurry"] = true
+	elseif (not self:HasBuff(buffWFlurry)) then
+		active["wflurry"] = nil
+	end
+	---------------------------------------------------
+	-- Warrior Enrage Rank 1
+	if (self:HasBuff(buffWEnrage1) and active["wenrage"] == nil) then
+		self:Postproc("enrage")
+		active["wenrage"] = true
+	elseif (not self:HasBuff(buffWEnrage1)) then
+		active["wenrage"] = nil
+	end
+	-- Warrior Enrage Rank 2
+	if (self:HasBuff(buffWEnrage2) and active["wenrage"] == nil) then
+		self:Postproc("enrage")
+		active["wenrage"] = true
+	elseif (not self:HasBuff(buffWEnrage2)) then
+		active["wenrage"] = nil
+	end
+	-- Warrior Enrage Rank 3
+	if (self:HasBuff(buffWEnrage3) and active["wenrage"] == nil) then
+		self:Postproc("enrage")
+		active["wenrage"] = true
+	elseif (not self:HasBuff(buffWEnrage3)) then
+		active["wenrage"] = nil
+	end
+	-- Warrior Enrage Rank 4
+	if (self:HasBuff(buffWEnrage4) and active["wenrage"] == nil) then
+		self:Postproc("enrage")
+		active["wenrage"] = true
+	elseif (not self:HasBuff(buffWEnrage4)) then
+		active["wenrage"] = nil
+	end
+	-- Warrior Enrage Rank 5
+	if (self:HasBuff(buffWEnrage5) and active["wenrage"] == nil) then
+		self:Postproc("enrage")
+		active["wenrage"] = true
+	elseif (not self:HasBuff(buffWEnrage5)) then
+		active["wenrage"] = nil
+	end
 end
 
 -------------------------------------------------------
@@ -182,16 +235,16 @@ end
 function Proculas:Postproc(proc)
 	if (db.Post) then
 		-- Chat Frame
-		self:Print("Bam, "..PROC[proc].." Procced!")
+		self:Print(PROC[proc].." Procced!")
 		-- Error Frame
 		UIErrorsFrame:AddMessage("|cff00ffff".. PROC[proc] .. " procced!", 1.0, 1.0, 1.0, 1.0, 2);
 		-- Party
 		if (db.Postparty) then
-			SendChatMessage("[Proculas]: Bam, "..PROC[proc].." Procced!", "PARTY");
+			SendChatMessage("[Proculas]: "..PROC[proc].." Procced!", "PARTY");
 		end
 		-- Raid Warining
 		if (db.Postrw) then
-			SendChatMessage("Bam, "..PROC[proc].." Procced!", "RAID_WARNING");
+			SendChatMessage(PROC[proc].." Procced!", "RAID_WARNING");
 		end
 	end
 	if (db.Sound.Playsound) then
