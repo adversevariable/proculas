@@ -56,7 +56,8 @@ local buffClearcastShaman = GetSpellInfo(16246)
 local buffClearcastDruid = GetSpellInfo(16870)
 local buffClearcastPriest = GetSpellInfo(34754)
 local buffQuickShots = GetSpellInfo(6150)
-local buffRotU = GetSpellInfo(33649)
+local buffRotU = GetSpellInfo(33649) -- Rage of the Unraveller
+local buffSoL = GetSpellInfo(33151) -- Surge of Light
 local active = {}
 
 -------------------------------------------------------
@@ -67,6 +68,7 @@ local PROC = {
 			cobrastrikes = "Cobra Strikes",
 			clearcasting = "Clearcasting",
 			rotu = "Rage of the Unraveller",
+			sol = "Surge of Light",
 			}
 
 -------------------------------------------------------
@@ -158,12 +160,20 @@ function Proculas:COMBAT_LOG_EVENT()
 		active["ccpriest"] = nil
 	end
 	---------------------------------------------------
-	-- Rage of the Unraveller [Trinker]
+	-- Rage of the Unraveller [Trinket]
 	if (self:HasBuff(buffRotU) and active["rotu"] == nil) then
 		self:Postproc("rotu")
 		active["rotu"] = true
 	elseif (not self:HasBuff(buffRotU)) then
 		active["rotu"] = nil
+	end
+	---------------------------------------------------
+	-- Surge of Light
+	if (self:HasBuff(buffSoL) and active["sol"] == nil) then
+		self:Postproc("sol")
+		active["sol"] = true
+	elseif (not self:HasBuff(buffSoL)) then
+		active["sol"] = nil
 	end
 end
 
