@@ -64,6 +64,11 @@ local buffWEnrage2 = GetSpellInfo(12880) -- Warrior Enrage Rank 2
 local buffWEnrage3 = GetSpellInfo(12880) -- Warrior Enrage Rank 3
 local buffWEnrage4 = GetSpellInfo(12880) -- Warrior Enrage Rank 4
 local buffWEnrage5 = GetSpellInfo(12880) -- Warrior Enrage Rank 5
+local buffCombatGallantry = GetSpellInfo(41263) -- Airman's Ribbon of Gallantry Trinket
+local buffIotA = GetSpellInfo(40483) -- Ashtongue Talisman of Insight
+local buffPotA = GetSpellInfo(40480) -- Ashtongue Talisman of Shadows
+local buffDeadlyAim = GetSpellInfo(40487) -- Ashtongue Talisman of Swiftness
+local buffFireBlood = GetSpellInfo(40459) -- Ashtongue Talisman of Valor
 
 local active = {}
 
@@ -78,6 +83,11 @@ local PROC = {
 			sol = "Surge of Light",
 			flurry = "Flurry",
 			enrage = "Enrage",
+			combatgallantry = "Airman's Ribbon of Gallantry",
+			iota = "Ashtongue Talisman of Insight",
+			pota = "Ashtongue Talisman of Shadows",
+			atos = "Ashtongue Talisman of Swiftness",
+			atov = "Ashtongue Talisman of Valor",
 			}
 
 -------------------------------------------------------
@@ -175,6 +185,46 @@ function Proculas:COMBAT_LOG_EVENT()
 		active["rotu"] = true
 	elseif (not self:HasBuff(buffRotU)) then
 		active["rotu"] = nil
+	end
+	---------------------------------------------------
+	-- Airman's Ribbon of Gallantry Trinket [Trinket]
+	if (self:HasBuff(buffCombatGallantry) and active["combatgallantry"] == nil) then
+		self:Postproc("combatgallantry")
+		active["combatgallantry"] = true
+	elseif (not self:HasBuff(buffCombatGallantry)) then
+		active["combatgallantry"] = nil
+	end
+	---------------------------------------------------
+	-- Ashtongue Talisman of Insight [Trinket]
+	if (self:HasBuff(buffIotA) and active["iota"] == nil) then
+		self:Postproc("atoi")
+		active["iota"] = true
+	elseif (not self:HasBuff(buffIotA)) then
+		active["iota"] = nil
+	end
+	---------------------------------------------------
+	-- Ashtongue Talisman of Shadows [Trinket]
+	if (self:HasBuff(buffPotA) and active["pota"] == nil) then
+		self:Postproc("pota")
+		active["pota"] = true
+	elseif (not self:HasBuff(buffPotA)) then
+		active["pota"] = nil
+	end
+	---------------------------------------------------
+	-- Ashtongue Talisman of Swiftness [Trinket]
+	if (self:HasBuff(buffDeadlyAim) and active["deadlyaim"] == nil) then
+		self:Postproc("atos")
+		active["deadlyaim"] = true
+	elseif (not self:HasBuff(buffDeadlyAim)) then
+		active["deadlyaim"] = nil
+	end
+	---------------------------------------------------
+	-- Ashtongue Talisman of Valor [Trinket]
+	if (self:HasBuff(buffFireBlood) and active["fireblood"] == nil) then
+		self:Postproc("atov")
+		active["fireblood"] = true
+	elseif (not self:HasBuff(buffFireBlood)) then
+		active["fireblood"] = nil
 	end
 	---------------------------------------------------
 	-- Surge of Light
