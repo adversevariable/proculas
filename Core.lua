@@ -14,7 +14,7 @@ local db
 -------------------------------------------------------
 -- Proculas Version
 Proculas.revision = tonumber(("$Rev$"):match("%d+"))
-Proculas.version = "0.6 r" .. (Proculas.revision or 0)
+Proculas.version = "0.7 r" .. (Proculas.revision or 0)
 local VERSION = Proculas.version
 
 -------------------------------------------------------
@@ -69,6 +69,16 @@ local buffIotA = GetSpellInfo(40483) -- Ashtongue Talisman of Insight
 local buffPotA = GetSpellInfo(40480) -- Ashtongue Talisman of Shadows
 local buffDeadlyAim = GetSpellInfo(40487) -- Ashtongue Talisman of Swiftness
 local buffFireBlood = GetSpellInfo(40459) -- Ashtongue Talisman of Valor
+local buffBattleTrance = GetSpellInfo(45040) -- Blackened Naaru Sliver
+local buffDSF = GetSpellInfo(34775) -- Dragonspine Trophy
+local buffForcefulStrike = GetSpellInfo(40477) -- Madness of the Betrayer
+local buffMoT = GetSpellInfo(37656) -- Memento of Tyrande
+local buffSoUC = GetSpellInfo(38348) -- Sextant of Unstable Currents
+local buffSgSC = GetSpellInfo(41261) -- Skyguard Silver Cross
+local buffToFR = GetSpellInfo(37198) -- Tome of Fiery Redemption
+local buffTsuT = GetSpellInfo(42084) -- Tsunami Talisman
+local buffWaSC = GetSpellInfo(37174) -- Warp-Spring Coil
+local buffBoEB = GetSpellInfo(38346) -- Bangle of Endless Blessings
 
 local active = {}
 
@@ -88,6 +98,16 @@ local PROC = {
 			pota = "Ashtongue Talisman of Shadows",
 			atos = "Ashtongue Talisman of Swiftness",
 			atov = "Ashtongue Talisman of Valor",
+			battletrance = "Blackened Naaru Sliver",
+			dragonspineflurry = "Dragonspine Trophy",
+			motb = "Madness of the Betrayer",
+			mot = "Memento of Tyrande",
+			souc = "Sextant of Unstable Currents",
+			sgsc = "Skyguard Silver Cross",
+			tofr = "Tome of Fiery Redemption",
+			tsut = "Tsunami Talisman",
+			wasc = "Warp-Spring Coil",
+			boeb = "Bangle of Endless Blessings",
 			}
 
 -------------------------------------------------------
@@ -225,6 +245,86 @@ function Proculas:COMBAT_LOG_EVENT()
 		active["fireblood"] = true
 	elseif (not self:HasBuff(buffFireBlood)) then
 		active["fireblood"] = nil
+	end
+	---------------------------------------------------
+	-- Blackened Naaru Sliver [Trinket]
+	if (self:HasBuff(buffBattleTrance) and active["battletrance"] == nil) then
+		self:Postproc("battletrance")
+		active["battletrance"] = true
+	elseif (not self:HasBuff(buffBattleTrance)) then
+		active["battletrance"] = nil
+	end
+	---------------------------------------------------
+	-- Dragonspine Trophy [Trinket]
+	if (self:HasBuff(buffDSF) and active["dragonspineflurry"] == nil) then
+		self:Postproc("dragonspineflurry")
+		active["dragonspineflurry"] = true
+	elseif (not self:HasBuff(buffDSF)) then
+		active["dragonspineflurry"] = nil
+	end
+	---------------------------------------------------
+	-- Madness of the Betrayer [Trinket]
+	if (self:HasBuff(buffForcefulStrike) and active["forcefulstrike"] == nil) then
+		self:Postproc("motb")
+		active["forcefulstrike"] = true
+	elseif (not self:HasBuff(buffDSF)) then
+		active["forcefulstrike"] = nil
+	end
+	---------------------------------------------------
+	-- Memento of Tyrande [Trinket]
+	if (self:HasBuff(buffMoT) and active["mot"] == nil) then
+		self:Postproc("mot")
+		active["mot"] = true
+	elseif (not self:HasBuff(buffMoT)) then
+		active["mot"] = nil
+	end
+	---------------------------------------------------
+	-- Sextant of Unstable Currents [Trinket]
+	if (self:HasBuff(buffSoUC) and active["souc"] == nil) then
+		self:Postproc("souc")
+		active["souc"] = true
+	elseif (not self:HasBuff(buffSoUC)) then
+		active["souc"] = nil
+	end
+	---------------------------------------------------
+	-- Skyguard Silver Cross [Trinket]
+	if (self:HasBuff(buffSgSC) and active["sgsc"] == nil) then
+		self:Postproc("sgsc")
+		active["sgsc"] = true
+	elseif (not self:HasBuff(buffSgSC)) then
+		active["sgsc"] = nil
+	end
+	---------------------------------------------------
+	-- Tome of Fiery Redemption [Trinket]
+	if (self:HasBuff(buffToFR) and active["tofr"] == nil) then
+		self:Postproc("tofr")
+		active["tofr"] = true
+	elseif (not self:HasBuff(buffToFR)) then
+		active["tofr"] = nil
+	end
+	---------------------------------------------------
+	-- Tsunami Talisman [Trinket]
+	if (self:HasBuff(buffTsuT) and active["tsut"] == nil) then
+		self:Postproc("tsut")
+		active["tsut"] = true
+	elseif (not self:HasBuff(buffTsuT)) then
+		active["tsut"] = nil
+	end
+	---------------------------------------------------
+	-- Warp-Spring Coil [Trinket]
+	if (self:HasBuff(buffWaSC) and active["wasc"] == nil) then
+		self:Postproc("wasc")
+		active["wasc"] = true
+	elseif (not self:HasBuff(buffWaSC)) then
+		active["wasc"] = nil
+	end
+	---------------------------------------------------
+	-- Bangle of Endless Blessings [Trinket]
+	if (self:HasBuff(buffBoEB) and active["boeb"] == nil) then
+		self:Postproc("boeb")
+		active["boeb"] = true
+	elseif (not self:HasBuff(buffBoEB)) then
+		active["boeb"] = nil
 	end
 	---------------------------------------------------
 	-- Surge of Light

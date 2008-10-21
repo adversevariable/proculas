@@ -2,7 +2,7 @@
 ## Title: Proculas
 ## Notes: Tells you when Mongoose procs.
 ## Author: Clorell [US Argent Dawn]
-## Version: 0.6
+## Version: 0.7
 ## SavedVariables: ProculasDB
 ## Created by Clorell/Keruni of Argent Dawn [US]
 
