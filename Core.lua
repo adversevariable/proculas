@@ -49,65 +49,39 @@ local defaults = {
 
 -------------------------------------------------------
 -- Proc buffs
-local buffMongoose = GetSpellInfo(28093)
-local buffCobraStrikes = GetSpellInfo(53257)
-local buffClearcastMage = GetSpellInfo(12536)
-local buffClearcastShaman = GetSpellInfo(16246)
-local buffClearcastDruid = GetSpellInfo(16870)
-local buffClearcastPriest = GetSpellInfo(34754)
-local buffQuickShots = GetSpellInfo(6150)
-local buffRotU = GetSpellInfo(33649) -- Rage of the Unraveller
-local buffSoL = GetSpellInfo(33151) -- Surge of Light
-local buffWFlurry = GetSpellInfo(12966) -- Warrior Flurry
-local buffWEnrage1 = GetSpellInfo(12880) -- Warrior Enrage Rank 1
-local buffWEnrage2 = GetSpellInfo(12880) -- Warrior Enrage Rank 2
-local buffWEnrage3 = GetSpellInfo(12880) -- Warrior Enrage Rank 3
-local buffWEnrage4 = GetSpellInfo(12880) -- Warrior Enrage Rank 4
-local buffWEnrage5 = GetSpellInfo(12880) -- Warrior Enrage Rank 5
-local buffCombatGallantry = GetSpellInfo(41263) -- Airman's Ribbon of Gallantry Trinket
-local buffIotA = GetSpellInfo(40483) -- Ashtongue Talisman of Insight
-local buffPotA = GetSpellInfo(40480) -- Ashtongue Talisman of Shadows
-local buffDeadlyAim = GetSpellInfo(40487) -- Ashtongue Talisman of Swiftness
-local buffFireBlood = GetSpellInfo(40459) -- Ashtongue Talisman of Valor
-local buffBattleTrance = GetSpellInfo(45040) -- Blackened Naaru Sliver
-local buffDSF = GetSpellInfo(34775) -- Dragonspine Trophy
-local buffForcefulStrike = GetSpellInfo(40477) -- Madness of the Betrayer
-local buffMoT = GetSpellInfo(37656) -- Memento of Tyrande
-local buffSoUC = GetSpellInfo(38348) -- Sextant of Unstable Currents
-local buffSgSC = GetSpellInfo(41261) -- Skyguard Silver Cross
-local buffToFR = GetSpellInfo(37198) -- Tome of Fiery Redemption
-local buffTsuT = GetSpellInfo(42084) -- Tsunami Talisman
-local buffWaSC = GetSpellInfo(37174) -- Warp-Spring Coil
-local buffBoEB = GetSpellInfo(38346) -- Bangle of Endless Blessings
-
 local active = {}
-
--------------------------------------------------------
--- Proc names
-local PROC = {
-			mongoose = "Mongoose",
-			quickshots = "Quick Shots",
-			cobrastrikes = "Cobra Strikes",
-			clearcasting = "Clearcasting",
-			rotu = "Rage of the Unraveller",
-			sol = "Surge of Light",
-			flurry = "Flurry",
-			enrage = "Enrage",
-			combatgallantry = "Airman's Ribbon of Gallantry",
-			iota = "Ashtongue Talisman of Insight",
-			pota = "Ashtongue Talisman of Shadows",
-			atos = "Ashtongue Talisman of Swiftness",
-			atov = "Ashtongue Talisman of Valor",
-			battletrance = "Blackened Naaru Sliver",
-			dragonspineflurry = "Dragonspine Trophy",
-			motb = "Madness of the Betrayer",
-			mot = "Memento of Tyrande",
-			souc = "Sextant of Unstable Currents",
-			sgsc = "Skyguard Silver Cross",
-			tofr = "Tome of Fiery Redemption",
-			tsut = "Tsunami Talisman",
-			wasc = "Warp-Spring Coil",
-			boeb = "Bangle of Endless Blessings",
+local ProcBuffs = {
+			{28093,"Mongoose"},
+			{6150,"Quick Shots"},
+			{53257,"Cobra Strikes"},
+			{12536,"Clearcasting"},
+			{16246,"Clearcasting"},
+			{16870,"Clearcasting"},
+			{34754,"Clearcasting"},
+			{33649,"Hourglass of the Unraveller"},
+			{33151,"Surge of Light"},
+			{12966,"Flurry"},
+			{12880,"Enrage"},
+			{41263,"Airman's Ribbon of Gallantry"},
+			{40483,"Ashtongue Talisman of Insight"},
+			{40480,"Ashtongue Talisman of Shadows"},
+			{40487,"Ashtongue Talisman of Swiftness"},
+			{40459,"Ashtongue Talisman of Valor"},
+			{45040,"Blackened Naaru Sliver"},
+			{34775,"Dragonspine Trophy"},
+			{40477,"Madness of the Betrayer"},
+			{37656,"Memento of Tyrande"},
+			{38348,"Sextant of Unstable Currents"},
+			{41261,"Skyguard Silver Cross"},
+			{37198,"Tome of Fiery Redemption"},
+			{42084,"Tsunami Talisman"},
+			{37174,"Warp-Spring Coil"},
+			{38346,"Bangle of Endless Blessings"},
+			{60065,"Mirror of Truth"},
+			{60064,"Sundial of the Exiled"},
+			{60062,"Essence of Life"},
+			{33370,"Quagmirran's Eye"},
+			{34321,"Shiffar's Nexus-Horn"},
 			}
 
 -------------------------------------------------------
@@ -142,241 +116,13 @@ end
 -------------------------------------------------------
 -- Buff Monitoring to check for when procs buff the player
 function Proculas:COMBAT_LOG_EVENT()
-	---------------------------------------------------
-	-- Mongoose
-	if (self:HasBuff(buffMongoose) and active["mongoose"] == nil) then
-		self:Postproc("mongoose")
-		active["mongoose"] = true
-	elseif (not self:HasBuff(buffMongoose)) then
-		active["mongoose"] = nil
-	end
-	---------------------------------------------------
-	-- Cobra Strikes
-	if (self:HasBuff(buffCobraStrikes) and active["cobrastrikes"] == nil) then
-		self:Postproc("cobrastrikes")
-		active["cobrastrikes"] = true
-	elseif (not self:HasBuff(buffCobraStrikes)) then
-		active["cobrastrikes"] = nil
-	end
-	---------------------------------------------------
-	-- Quick Strikes
-	if (self:HasBuff(buffQuickShots) and active["quickshots"] == nil) then
-		self:Postproc("quickshots")
-		active["quickshots"] = true
-	elseif (not self:HasBuff(buffQuickShots)) then
-		active["quickshots"] = nil
-	end
-	---------------------------------------------------
-	-- Clearcasting [Mage]
-	if (self:HasBuff(buffClearcastMage) and active["ccmage"] == nil) then
-		self:Postproc("clearcasting")
-		active["ccmage"] = true
-	elseif (not self:HasBuff(buffClearcastMage)) then
-		active["ccmage"] = nil
-	end
-	---------------------------------------------------
-	-- Clearcasting [Shaman]
-	if (self:HasBuff(buffClearcastShaman) and active["ccshaman"] == nil) then
-		self:Postproc("clearcasting")
-		active["ccshaman"] = true
-	elseif (not self:HasBuff(buffClearcastShaman)) then
-		active["ccshaman"] = nil
-	end
-	---------------------------------------------------
-	-- Clearcasting [Druid]
-	if (self:HasBuff(buffClearcastDruid) and active["ccdruid"] == nil) then
-		self:Postproc("clearcasting")
-		active["ccdruid"] = true
-	elseif (not self:HasBuff(buffClearcastDruid)) then
-		active["ccdruid"] = nil
-	end
-	---------------------------------------------------
-	-- Clearcasting [Priest]
-	if (self:HasBuff(buffClearcastPriest) and active["ccpriest"] == nil) then
-		self:Postproc("clearcasting")
-		active["ccpriest"] = true
-	elseif (not self:HasBuff(buffClearcastPriest)) then
-		active["ccpriest"] = nil
-	end
-	---------------------------------------------------
-	-- Rage of the Unraveller [Trinket]
-	if (self:HasBuff(buffRotU) and active["rotu"] == nil) then
-		self:Postproc("rotu")
-		active["rotu"] = true
-	elseif (not self:HasBuff(buffRotU)) then
-		active["rotu"] = nil
-	end
-	---------------------------------------------------
-	-- Airman's Ribbon of Gallantry Trinket [Trinket]
-	if (self:HasBuff(buffCombatGallantry) and active["combatgallantry"] == nil) then
-		self:Postproc("combatgallantry")
-		active["combatgallantry"] = true
-	elseif (not self:HasBuff(buffCombatGallantry)) then
-		active["combatgallantry"] = nil
-	end
-	---------------------------------------------------
-	-- Ashtongue Talisman of Insight [Trinket]
-	if (self:HasBuff(buffIotA) and active["iota"] == nil) then
-		self:Postproc("atoi")
-		active["iota"] = true
-	elseif (not self:HasBuff(buffIotA)) then
-		active["iota"] = nil
-	end
-	---------------------------------------------------
-	-- Ashtongue Talisman of Shadows [Trinket]
-	if (self:HasBuff(buffPotA) and active["pota"] == nil) then
-		self:Postproc("pota")
-		active["pota"] = true
-	elseif (not self:HasBuff(buffPotA)) then
-		active["pota"] = nil
-	end
-	---------------------------------------------------
-	-- Ashtongue Talisman of Swiftness [Trinket]
-	if (self:HasBuff(buffDeadlyAim) and active["deadlyaim"] == nil) then
-		self:Postproc("atos")
-		active["deadlyaim"] = true
-	elseif (not self:HasBuff(buffDeadlyAim)) then
-		active["deadlyaim"] = nil
-	end
-	---------------------------------------------------
-	-- Ashtongue Talisman of Valor [Trinket]
-	if (self:HasBuff(buffFireBlood) and active["fireblood"] == nil) then
-		self:Postproc("atov")
-		active["fireblood"] = true
-	elseif (not self:HasBuff(buffFireBlood)) then
-		active["fireblood"] = nil
-	end
-	---------------------------------------------------
-	-- Blackened Naaru Sliver [Trinket]
-	if (self:HasBuff(buffBattleTrance) and active["battletrance"] == nil) then
-		self:Postproc("battletrance")
-		active["battletrance"] = true
-	elseif (not self:HasBuff(buffBattleTrance)) then
-		active["battletrance"] = nil
-	end
-	---------------------------------------------------
-	-- Dragonspine Trophy [Trinket]
-	if (self:HasBuff(buffDSF) and active["dragonspineflurry"] == nil) then
-		self:Postproc("dragonspineflurry")
-		active["dragonspineflurry"] = true
-	elseif (not self:HasBuff(buffDSF)) then
-		active["dragonspineflurry"] = nil
-	end
-	---------------------------------------------------
-	-- Madness of the Betrayer [Trinket]
-	if (self:HasBuff(buffForcefulStrike) and active["forcefulstrike"] == nil) then
-		self:Postproc("motb")
-		active["forcefulstrike"] = true
-	elseif (not self:HasBuff(buffDSF)) then
-		active["forcefulstrike"] = nil
-	end
-	---------------------------------------------------
-	-- Memento of Tyrande [Trinket]
-	if (self:HasBuff(buffMoT) and active["mot"] == nil) then
-		self:Postproc("mot")
-		active["mot"] = true
-	elseif (not self:HasBuff(buffMoT)) then
-		active["mot"] = nil
-	end
-	---------------------------------------------------
-	-- Sextant of Unstable Currents [Trinket]
-	if (self:HasBuff(buffSoUC) and active["souc"] == nil) then
-		self:Postproc("souc")
-		active["souc"] = true
-	elseif (not self:HasBuff(buffSoUC)) then
-		active["souc"] = nil
-	end
-	---------------------------------------------------
-	-- Skyguard Silver Cross [Trinket]
-	if (self:HasBuff(buffSgSC) and active["sgsc"] == nil) then
-		self:Postproc("sgsc")
-		active["sgsc"] = true
-	elseif (not self:HasBuff(buffSgSC)) then
-		active["sgsc"] = nil
-	end
-	---------------------------------------------------
-	-- Tome of Fiery Redemption [Trinket]
-	if (self:HasBuff(buffToFR) and active["tofr"] == nil) then
-		self:Postproc("tofr")
-		active["tofr"] = true
-	elseif (not self:HasBuff(buffToFR)) then
-		active["tofr"] = nil
-	end
-	---------------------------------------------------
-	-- Tsunami Talisman [Trinket]
-	if (self:HasBuff(buffTsuT) and active["tsut"] == nil) then
-		self:Postproc("tsut")
-		active["tsut"] = true
-	elseif (not self:HasBuff(buffTsuT)) then
-		active["tsut"] = nil
-	end
-	---------------------------------------------------
-	-- Warp-Spring Coil [Trinket]
-	if (self:HasBuff(buffWaSC) and active["wasc"] == nil) then
-		self:Postproc("wasc")
-		active["wasc"] = true
-	elseif (not self:HasBuff(buffWaSC)) then
-		active["wasc"] = nil
-	end
-	---------------------------------------------------
-	-- Bangle of Endless Blessings [Trinket]
-	if (self:HasBuff(buffBoEB) and active["boeb"] == nil) then
-		self:Postproc("boeb")
-		active["boeb"] = true
-	elseif (not self:HasBuff(buffBoEB)) then
-		active["boeb"] = nil
-	end
-	---------------------------------------------------
-	-- Surge of Light
-	if (self:HasBuff(buffSoL) and active["sol"] == nil) then
-		self:Postproc("sol")
-		active["sol"] = true
-	elseif (not self:HasBuff(buffSoL)) then
-		active["sol"] = nil
-	end
-	---------------------------------------------------
-	-- Warrior Flurry
-	if (self:HasBuff(buffWFlurry) and active["wflurry"] == nil) then
-		self:Postproc("flurry")
-		active["wflurry"] = true
-	elseif (not self:HasBuff(buffWFlurry)) then
-		active["wflurry"] = nil
-	end
-	---------------------------------------------------
-	-- Warrior Enrage Rank 1
-	if (self:HasBuff(buffWEnrage1) and active["wenrage"] == nil) then
-		self:Postproc("enrage")
-		active["wenrage"] = true
-	elseif (not self:HasBuff(buffWEnrage1)) then
-		active["wenrage"] = nil
-	end
-	-- Warrior Enrage Rank 2
-	if (self:HasBuff(buffWEnrage2) and active["wenrage"] == nil) then
-		self:Postproc("enrage")
-		active["wenrage"] = true
-	elseif (not self:HasBuff(buffWEnrage2)) then
-		active["wenrage"] = nil
-	end
-	-- Warrior Enrage Rank 3
-	if (self:HasBuff(buffWEnrage3) and active["wenrage"] == nil) then
-		self:Postproc("enrage")
-		active["wenrage"] = true
-	elseif (not self:HasBuff(buffWEnrage3)) then
-		active["wenrage"] = nil
-	end
-	-- Warrior Enrage Rank 4
-	if (self:HasBuff(buffWEnrage4) and active["wenrage"] == nil) then
-		self:Postproc("enrage")
-		active["wenrage"] = true
-	elseif (not self:HasBuff(buffWEnrage4)) then
-		active["wenrage"] = nil
-	end
-	-- Warrior Enrage Rank 5
-	if (self:HasBuff(buffWEnrage5) and active["wenrage"] == nil) then
-		self:Postproc("enrage")
-		active["wenrage"] = true
-	elseif (not self:HasBuff(buffWEnrage5)) then
-		active["wenrage"] = nil
+	for _,v in ipairs(ProcBuffs) do
+		if (self:HasBuff(GetSpellInfo(v[1])) and active[v[1]] == nil) then
+			self:Postproc(v[2])
+			active[v[1]] = true
+		elseif (not self:HasBuff(GetSpellInfo(v[1]))) then
+			active[v[1]] = nil
+		end
 	end
 end
 
@@ -385,16 +131,16 @@ end
 function Proculas:Postproc(proc)
 	if (db.Post) then
 		-- Chat Frame
-		self:Print(PROC[proc].." Procced!")
+		self:Print(proc.." Procced!")
 		-- Error Frame
-		UIErrorsFrame:AddMessage("|cff00ffff".. PROC[proc] .. " procced!", 1.0, 1.0, 1.0, 1.0, 2);
+		UIErrorsFrame:AddMessage("|cff00ffff".. proc .. " procced!", 1.0, 1.0, 1.0, 1.0, 2);
 		-- Party
 		if (db.Postparty) then
-			SendChatMessage("[Proculas]: "..PROC[proc].." Procced!", "PARTY");
+			SendChatMessage("[Proculas]: "..proc.." Procced!", "PARTY");
 		end
 		-- Raid Warining
 		if (db.Postrw) then
-			SendChatMessage(PROC[proc].." Procced!", "RAID_WARNING");
+			SendChatMessage(proc.." Procced!", "RAID_WARNING");
 		end
 	end
 	if (db.Sound.Playsound) then

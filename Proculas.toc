@@ -1,6 +1,6 @@
 ## Interface: 30000
 ## Title: Proculas
-## Notes: Tells you when Mongoose procs.
+## Notes: Tells you when things like Mongoose procs.
 ## Author: Clorell [US Argent Dawn]
 ## Version: 0.7
 ## SavedVariables: ProculasDB
