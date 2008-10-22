@@ -58,10 +58,11 @@ local ProcBuffs = {
 			{16246,"Clearcasting"},
 			{16870,"Clearcasting"},
 			{34754,"Clearcasting"},
-			{33649,"Hourglass of the Unraveller"},
 			{33151,"Surge of Light"},
 			{12966,"Flurry"},
 			{12880,"Enrage"},
+			
+			{33649,"Hourglass of the Unraveller"},
 			{41263,"Airman's Ribbon of Gallantry"},
 			{40483,"Ashtongue Talisman of Insight"},
 			{40480,"Ashtongue Talisman of Shadows"},
@@ -77,11 +78,38 @@ local ProcBuffs = {
 			{42084,"Tsunami Talisman"},
 			{37174,"Warp-Spring Coil"},
 			{38346,"Bangle of Endless Blessings"},
-			{60065,"Mirror of Truth"},
-			{60064,"Sundial of the Exiled"},
-			{60062,"Essence of Life"},
 			{33370,"Quagmirran's Eye"},
 			{34321,"Shiffar's Nexus-Horn"},
+
+			{60062,"Essence of Life"},
+			{60065,"Mirror of Truth"},
+			{60064,"Sundial of the Exiled"},
+			{44401,"Missile Barrage"},
+			{44544,"Fingers of Frost"},
+			{57761,"Brain Freeze"},
+			{60494,"Dying Curse"},
+			{60492,"Embrace of the Spider"},
+			{60314,"Fury of the Five Flights"},
+			{60436,"Grim Toll"},
+			{49623,"Je'Tze's Bell"},
+			{60218,"Essence of Gossamer"},
+			{60479,"Forge Ember"},
+			{60302,"Meteorite Whetstone"},
+			{60520,"Spark of Life"},
+			
+			{60318,"Signet of Edward the Odd"},
+			
+			{43740,"Idol of the Unseen Moon"},
+			{52021,"Idol of the Wastes"},
+			
+			{60819,"Libram of Reciprocation"},
+			{43747,"Libram of Divine Judgement"},
+			
+			{43751,"Skycall Totem"},
+			{43749,"Stonebreaker's Totem"},
+			{48838,"Totem of the Tundra"},
+			
+			{60828,"Sigil of Haunted Dreams"},
 			}
 
 -------------------------------------------------------
@@ -132,14 +160,14 @@ function Proculas:Postproc(proc)
 	if (db.Post) then
 		-- Chat Frame
 		self:Print(proc.." Procced!")
-		-- Error Frame
-		UIErrorsFrame:AddMessage("|cff00ffff".. proc .. " procced!", 1.0, 1.0, 1.0, 1.0, 2);
+		-- Blizzard Combat Text
+		CombatText_AddMessage(proc.." procced", "", 2, 96, 206, "crit", false);
 		-- Party
-		if (db.Postparty) then
+		if (db.Postparty and GetNumPartyMembers()>0) then
 			SendChatMessage("[Proculas]: "..proc.." Procced!", "PARTY");
 		end
 		-- Raid Warining
-		if (db.Postrw) then
+		if (db.Postrw and GetNumPartyMembers()>0) then
 			SendChatMessage(proc.." Procced!", "RAID_WARNING");
 		end
 	end
