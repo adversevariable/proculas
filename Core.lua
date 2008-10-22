@@ -38,6 +38,7 @@ LSM:Register("sound", "You Will Die!", [[Sound\Creature\CThun\CThunYouWillDie.wa
 local defaults = {
 	profile = {
 		Post = true,
+		PostCT = true,
 		Postparty = false,
 		Postrw = false,
 		Sound = {
@@ -127,6 +128,16 @@ end
 function Proculas:OnEnable()
 	self:Print("v"..VERSION.." running.")
 	self:RegisterEvent("COMBAT_LOG_EVENT")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED")
+	self:RegisterEvent("PLAYER_REGEN_DISABLED")
+end
+
+function Proculas:PLAYER_REGEN_ENABLED()
+	self.track = false
+end
+
+function Proculas:PLAYER_REGEN_DISABLED()
+	self.track = true
 end
 
 function Proculas:HasBuff(buff)
@@ -144,12 +155,14 @@ end
 -------------------------------------------------------
 -- Buff Monitoring to check for when procs buff the player
 function Proculas:COMBAT_LOG_EVENT()
-	for _,v in ipairs(ProcBuffs) do
-		if (self:HasBuff(GetSpellInfo(v[1])) and active[v[1]] == nil) then
-			self:Postproc(v[2])
-			active[v[1]] = true
-		elseif (not self:HasBuff(GetSpellInfo(v[1]))) then
-			active[v[1]] = nil
+	if (self.track == true) then
+		for _,v in ipairs(ProcBuffs) do
+			if (self:HasBuff(GetSpellInfo(v[1])) and active[v[1]] == nil) then
+				self:Postproc(v[2])
+				active[v[1]] = true
+			elseif (not self:HasBuff(GetSpellInfo(v[1]))) then
+				active[v[1]] = nil
+			end
 		end
 	end
 end
@@ -161,7 +174,9 @@ function Proculas:Postproc(proc)
 		-- Chat Frame
 		self:Print(proc.." Procced!")
 		-- Blizzard Combat Text
-		CombatText_AddMessage(proc.." procced", "", 2, 96, 206, "crit", false);
+		if (db.PostCT) then
+			CombatText_AddMessage(proc.." procced", "", 2, 96, 206, "crit", false);
+		end
 		-- Party
 		if (db.Postparty and GetNumPartyMembers()>0) then
 			SendChatMessage("[Proculas]: "..proc.." Procced!", "PARTY");
@@ -217,6 +232,12 @@ local options = {
 					order = 4,
 					name = "Party Chat",
 					desc = "Post procs to party chat?",
+					type = "toggle",
+				},
+				PostCT = {
+					order = 4,
+					name = "Combat Text",
+					desc = "Post procs to combat text?",
 					type = "toggle",
 				},
 				Postrw = {
