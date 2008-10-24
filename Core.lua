@@ -14,7 +14,7 @@ local db
 -------------------------------------------------------
 -- Proculas Version
 Proculas.revision = tonumber(("$Rev$"):match("%d+"))
-Proculas.version = "0.7 r" .. (Proculas.revision or 0)
+Proculas.version = "0.8 r" .. (Proculas.revision or 0)
 local VERSION = Proculas.version
 
 -------------------------------------------------------
@@ -45,24 +45,62 @@ local defaults = {
 			Playsound = true,
 			SoundFile = "Explosion",
 		},
+		Procs = {
+			Enchants = true,
+			Trinkets = true,
+			Rings = true,
+			Relics = true
+		},
 	},
 }
 
 -------------------------------------------------------
 -- Proc buffs
 local active = {}
-local ProcBuffs = {
+Proculas.ProcBuffs = {
+	{'Enchants',
+		{
 			{28093,"Mongoose"},
+		},
+	},
+	{'Hunter',
+		{
 			{6150,"Quick Shots"},
 			{53257,"Cobra Strikes"},
-			{12536,"Clearcasting"},
+		},
+	},
+	{'Shaman',
+		{
 			{16246,"Clearcasting"},
+		},
+	},
+	{'Druid',
+		{
 			{16870,"Clearcasting"},
-			{34754,"Clearcasting"},
+		},
+	},
+	{'Priest',
+		{
 			{33151,"Surge of Light"},
+			{34754,"Clearcasting"},
+		},
+	},
+	{'Warrior',
+		{
 			{12966,"Flurry"},
 			{12880,"Enrage"},
-			
+		},
+	},
+	{'Mage',
+		{
+			{44401,"Missile Barrage"},
+			{44544,"Fingers of Frost"},
+			{57761,"Brain Freeze"},
+			{12536,"Clearcasting"},
+		},
+	},
+	{'Trinkets',
+		{
 			{33649,"Hourglass of the Unraveller"},
 			{41263,"Airman's Ribbon of Gallantry"},
 			{40483,"Ashtongue Talisman of Insight"},
@@ -81,13 +119,11 @@ local ProcBuffs = {
 			{38346,"Bangle of Endless Blessings"},
 			{33370,"Quagmirran's Eye"},
 			{34321,"Shiffar's Nexus-Horn"},
-
+	
 			{60062,"Essence of Life"},
 			{60065,"Mirror of Truth"},
 			{60064,"Sundial of the Exiled"},
-			{44401,"Missile Barrage"},
-			{44544,"Fingers of Frost"},
-			{57761,"Brain Freeze"},
+	
 			{60494,"Dying Curse"},
 			{60492,"Embrace of the Spider"},
 			{60314,"Fury of the Five Flights"},
@@ -97,21 +133,38 @@ local ProcBuffs = {
 			{60479,"Forge Ember"},
 			{60302,"Meteorite Whetstone"},
 			{60520,"Spark of Life"},
-			
+		},
+	},
+	{'Rings',
+		{
 			{60318,"Signet of Edward the Odd"},
-			
+		},
+	},
+	{'Idols',
+		{
 			{43740,"Idol of the Unseen Moon"},
 			{52021,"Idol of the Wastes"},
-			
+		},
+	},
+	{'Librams',
+		{
 			{60819,"Libram of Reciprocation"},
 			{43747,"Libram of Divine Judgement"},
-			
+		}
+	},
+	{'Totems',
+		{
 			{43751,"Skycall Totem"},
 			{43749,"Stonebreaker's Totem"},
 			{48838,"Totem of the Tundra"},
-			
+		}
+	},
+	{'Sigials',
+		{
 			{60828,"Sigil of Haunted Dreams"},
-			}
+		}
+	},
+}
 
 -------------------------------------------------------
 -- Just some required things...
@@ -130,6 +183,39 @@ function Proculas:OnEnable()
 	self:RegisterEvent("COMBAT_LOG_EVENT")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	self.playerClass = UnitClass("player")
+	self.opt.Procs.Totem = false
+	self.opt.Procs.Idol = false
+	self.opt.Procs.Libram = false
+	self.opt.Procs.Sigil = false
+	if (self.playerClass == "Warrior") then
+		self.opt.Procs.Warrior = true
+	elseif (self.playerClass == "Mage") then
+		self.opt.Procs.Mage = true
+	elseif (self.playerClass == "Shaman") then
+		self.opt.Procs.Shaman = true
+		if (self.opt.Procs.Relics) then
+			self.opt.Procs.Totem = true
+		end
+	elseif (self.playerClass == "Druid") then
+		self.opt.Procs.Druid = true
+		if (self.opt.Procs.Relics) then
+			self.opt.Procs.Idol = true
+		end
+	elseif (self.playerClass == "Priest") then
+		self.opt.Procs.Priest = true
+	elseif (self.playerClass == "Hunter") then
+		self.opt.Procs.Hunter = true
+	elseif (self.playerClass == "Paladin") then
+		if (self.opt.Procs.Relics) then
+			self.opt.Procs.Libram = true
+		end
+	elseif (self.opt.Procs.Relics == false) then
+		self.opt.Procs.Totem = false
+		self.opt.Procs.Idol = false
+		self.opt.Procs.Libram = false
+		self.opt.Procs.Sigil = false
+	end
 end
 
 function Proculas:PLAYER_REGEN_ENABLED()
@@ -149,6 +235,8 @@ end
 -- Proculas Profiles Stuff
 function Proculas:OnProfileChanged(event, database, newProfileKey)
 	db = database.profile
+	self.opt = db
+	self.db = db
 	self:Print("Profile changed.")
 end
 
@@ -156,12 +244,16 @@ end
 -- Buff Monitoring to check for when procs buff the player
 function Proculas:COMBAT_LOG_EVENT()
 	if (self.track == true) then
-		for _,v in ipairs(ProcBuffs) do
-			if (self:HasBuff(GetSpellInfo(v[1])) and active[v[1]] == nil) then
-				self:Postproc(v[2])
-				active[v[1]] = true
-			elseif (not self:HasBuff(GetSpellInfo(v[1]))) then
-				active[v[1]] = nil
+		for _,v in ipairs(self.ProcBuffs) do
+			if (self.opt.Procs[v[1]] == true) then
+				for _,v in ipairs(v[2]) do
+					if (self:HasBuff(GetSpellInfo(v[1])) and active[v[1]] == nil) then
+						self:Postproc(v[2])
+						active[v[1]] = true
+					elseif (not self:HasBuff(GetSpellInfo(v[1]))) then
+						active[v[1]] = nil
+					end
+				end
 			end
 		end
 	end
@@ -279,6 +371,47 @@ local options = {
 				},
 			},
 		}, -- Sound
+		Procs = {
+			order = 3,
+			type = "group",
+			name = "Proc Settings",
+			desc = "Proc Settings",
+			get = function(info) return db.Procs[ info[#info] ] end,
+			set = function(info, value)
+				db.Procs[ info[#info] ] = value
+			end,
+			args = {
+				intro = {
+					order = 1,
+					type = "description",
+					name = "Configure what procs to enable or disable.",
+				},
+				Enchants = {
+					type = "toggle",
+					order = 2,
+					name = "Enchant Procs",
+					desc = "If enabled, Proculas will display Enchant procs.",
+				},
+				Trinkets = {
+					type = "toggle",
+					order = 2,
+					name = "Trinket Procs",
+					desc = "If enabled, Proculas will display Trinket procs.",
+				},
+				Rings = {
+					type = "toggle",
+					order = 2,
+					name = "Ring Procs",
+					desc = "If enabled, Proculas will display Ring procs.",
+				},
+				Relics = {
+					type = "toggle",
+					order = 2,
+					name = "Relic Procs",
+					desc = "If enabled, Proculas will display Libram, Idol, Totem, Sigil procs.",
+				},
+			},
+		}
 	},
 }
 Proculas.options = options
@@ -293,6 +426,7 @@ function Proculas:SetupOptions()
 	-- The ordering here matters, it determines the order in the Blizzard Interface Options
 	self.optionsFrames.Proculas = ACD3:AddToBlizOptions("Proculas", nil, nil, "General")
 	self.optionsFrames.Sound = ACD3:AddToBlizOptions("Proculas", "Sound Settings", "Proculas", "Sound")
+	self.optionsFrames.Procs = ACD3:AddToBlizOptions("Proculas", "Proc Settings", "Proculas", "Procs")
 	self:RegisterModuleOptions("Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db), "Profiles")
 end
 
