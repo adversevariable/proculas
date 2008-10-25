@@ -41,6 +41,8 @@ local defaults = {
 		PostCT = true,
 		Postparty = false,
 		Postrw = false,
+		PostGuild = false,
+		PostRaid = false,
 		Sound = {
 			Playsound = true,
 			SoundFile = "Explosion",
@@ -159,7 +161,7 @@ Proculas.ProcBuffs = {
 			{48838,"Totem of the Tundra"},
 		}
 	},
-	{'Sigials',
+	{'Sigils',
 		{
 			{60828,"Sigil of Haunted Dreams"},
 		}
@@ -183,11 +185,8 @@ function Proculas:OnEnable()
 	self:RegisterEvent("COMBAT_LOG_EVENT")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	-- Player stuff
 	self.playerClass = UnitClass("player")
-	self.opt.Procs.Totem = false
-	self.opt.Procs.Idol = false
-	self.opt.Procs.Libram = false
-	self.opt.Procs.Sigil = false
 	if (self.playerClass == "Warrior") then
 		self.opt.Procs.Warrior = true
 	elseif (self.playerClass == "Mage") then
@@ -277,6 +276,14 @@ function Proculas:Postproc(proc)
 		if (db.Postrw and GetNumPartyMembers()>0) then
 			SendChatMessage(proc.." Procced!", "RAID_WARNING");
 		end
+		-- Guild Chat
+		if (db.PostGuild) then
+			SendChatMessage("[Proculas]: "..proc.." Procced!", "GUILD");
+		end
+		-- Raid Chat
+		if (db.PostRaid) then
+			SendChatMessage("[Proculas]: "..proc.." Procced!", "RAID");
+		end
 	end
 	if (db.Sound.Playsound) then
 		PlaySoundFile(LSM:Fetch("sound", db.Sound.SoundFile))
@@ -336,6 +343,18 @@ local options = {
 					order = 4,
 					name = "Raid Warning",
 					desc = "Post procs to raid warning?",
+					type = "toggle",
+				},
+				PostGuild = {
+					order = 4,
+					name = "Guild Chat",
+					desc = "Post procs to guild chat?",
+					type = "toggle",
+				},
+				PostRaid = {
+					order = 4,
+					name = "Raid Chat",
+					desc = "Post procs to raid chat?",
 					type = "toggle",
 				},
 			},
