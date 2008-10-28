@@ -51,7 +51,10 @@ local defaults = {
 			Enchants = true,
 			Trinkets = true,
 			Rings = true,
-			Relics = true
+			Relics = true,
+			Class = true,
+			Amulets = true,
+			Weapons = true,
 		},
 	},
 }
@@ -99,7 +102,13 @@ Proculas.ProcBuffs = {
 			{44544,"Fingers of Frost"},
 			{57761,"Brain Freeze"},
 			{12536,"Clearcasting"},
+			{48108,"Hot Streak"},
 		},
+	},
+	{'Warlock',
+		{
+			{17941,"Nightfall"},
+		}
 	},
 	{'Trinkets',
 		{
@@ -166,6 +175,18 @@ Proculas.ProcBuffs = {
 			{60828,"Sigil of Haunted Dreams"},
 		}
 	},
+	{'Amulets',
+		{
+			{45478,"Shattered Sun Pendant of Restoration"},
+			{45430,"Shattered Sun Pendant of Restoration"},
+			{45432,"Shattered Sun Pendant of Resolve"},
+			{45431,"Shattered Sun Pendant of Resolve"},
+			{45480,"Shattered Sun Pendant of Might"},
+			{45428,"Shattered Sun Pendant of Might"},
+			{45479,"Shattered Sun Pendant of Acumen"},
+			{45429,"Shattered Sun Pendant of Acumen"},
+		}
+	},
 }
 
 -------------------------------------------------------
@@ -214,6 +235,17 @@ function Proculas:OnEnable()
 		self.opt.Procs.Idol = false
 		self.opt.Procs.Libram = false
 		self.opt.Procs.Sigil = false
+	end
+	if (self.opt.Procs.Class == false) then
+		self.opt.Procs.Warrior = false
+		self.opt.Procs.Mage = false
+		self.opt.Procs.Priest = false
+		self.opt.Procs.Paladin = false
+		self.opt.Procs.Druid = false
+		self.opt.Procs.Shaman = false
+		self.opt.Procs.Hunter = false
+		self.opt.Procs.Rogue = false
+		self.opt.Procs.Warlock = false
 	end
 end
 
@@ -291,7 +323,7 @@ function Proculas:Postproc(proc)
 end
 -------------------------------------------------------
 -- Proculas Chat Commands
-Proculas:RegisterChatCommand("proculas", "AboutProculas")
+--Proculas:RegisterChatCommand("proculas", "AboutProculas")
 function Proculas:AboutProculas()
 	DEFAULT_CHAT_FRAME:AddMessage("Proculas "..VERSION)
 	DEFAULT_CHAT_FRAME:AddMessage("Created by Clorell/Keruni of Argent Dawn [US]")
@@ -405,6 +437,12 @@ local options = {
 					type = "description",
 					name = "Configure what procs to enable or disable.",
 				},
+				Class = {
+					type = "toggle",
+					order = 2,
+					name = "Class Procs",
+					desc = "If enabled, Proculas will display procs specific to your players class.",
+				},
 				Enchants = {
 					type = "toggle",
 					order = 2,
@@ -423,6 +461,18 @@ local options = {
 					name = "Ring Procs",
 					desc = "If enabled, Proculas will display Ring procs.",
 				},
+				Amulets = {
+					type = "toggle",
+					order = 2,
+					name = "Neck/Amulet Procs",
+					desc = "Enable to display Neck/Amulet procs.",
+				},
+				Weapons = {
+					type = "toggle",
+					order = 2,
+					name = "Weapon Procs",
+					desc = "Enable to display Weapon procs.",
+				},
 				Relics = {
 					type = "toggle",
 					order = 2,
@@ -435,11 +485,40 @@ local options = {
 }
 Proculas.options = options
 
+-- Option table for the slash command only
+local optionsSlash = {
+	type = "group",
+	name = "Slash Command",
+	order = -3,
+	args = {
+		about = {
+			type = "execute",
+			name = "About",
+			desc = "About Proculas (/proculas about)",
+			func = function()
+				Proculas:AboutProculas()
+			end,
+			guiHidden = true,
+		},
+		config = {
+			type = "execute",
+			name = "Configure",
+			desc = "Open the configuration dialog (/proculas config)",
+			func = function()
+				Proculas:ShowConfig()
+			end,
+			guiHidden = true,
+		},
+	},
+}
+Proculas.optionsSlash = optionsSlash
+
 function Proculas:SetupOptions()
 	self.optionsFrames = {}
 
 	-- setup options table
 	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("Proculas", options)
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("Proculas Commands", optionsSlash, "proculas")
 	local ACD3 = LibStub("AceConfigDialog-3.0")
 
 	-- The ordering here matters, it determines the order in the Blizzard Interface Options
@@ -452,4 +531,10 @@ end
 function Proculas:RegisterModuleOptions(name, optionTbl, displayName)
 	options.args[name] = (type(optionTbl) == "function") and optionTbl() or optionTbl
 	self.optionsFrames[name] = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Proculas", displayName, "Proculas", name)
+end
+
+function Proculas:ShowConfig()
+	-- Open the profiles tab before, so the menu expands
+	InterfaceOptionsFrame_OpenToCategory(self.optionsFrames.Profiles)
+	InterfaceOptionsFrame_OpenToCategory(self.optionsFrames.Proculas)
 end
