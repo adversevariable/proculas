@@ -4,12 +4,13 @@
 --	Created by Clorell/Keruni of Argent Dawn [US]
 --	$Id$
 --
-
+--LoadAddOn("Ace3")
+--LoadAddOn("LibSharedMedia-3.0")
+--LoadAddOn("AceGUI-3.0-SharedMediaWidgets")
 -------------------------------------------------------
 -- Proculas
 Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0")
 local LSM = LibStub("LibSharedMedia-3.0")
-local db
 
 -------------------------------------------------------
 -- Proculas Version
@@ -197,7 +198,6 @@ function Proculas:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
-	db = self.db.profile
 	self:SetupOptions()
 end
 
@@ -266,9 +266,8 @@ end
 -------------------------------------------------------
 -- Proculas Profiles Stuff
 function Proculas:OnProfileChanged(event, database, newProfileKey)
-	db = database.profile
-	self.opt = db
 	self.db = db
+	self.opt = db.profile
 	self:Print("Profile changed.")
 end
 
@@ -296,32 +295,32 @@ end
 -------------------------------------------------------
 -- Used to post procs to chat, play sounds, etc
 function Proculas:Postproc(proc)
-	if (db.Post) then
+	if (self.opt.Post) then
 		-- Chat Frame
 		self:Print(proc.." Procced!")
 		-- Blizzard Combat Text
-		if (db.PostCT) then
+		if (self.opt.PostCT) then
 			CombatText_AddMessage(proc.." procced", "", 2, 96, 206, "crit", false);
 		end
 		-- Party
-		if (db.PostParty and GetNumPartyMembers()>0) then
+		if (self.opt.PostParty and GetNumPartyMembers()>0) then
 			SendChatMessage("[Proculas]: "..proc.." Procced!", "PARTY");
 		end
 		-- Raid Warining
-		if (db.PostRW and GetNumPartyMembers()>0) then
+		if (self.opt.PostRW and GetNumPartyMembers()>0) then
 			SendChatMessage(proc.." Procced!", "RAID_WARNING");
 		end
 		-- Guild Chat
-		if (db.PostGuild) then
+		if (self.opt.PostGuild) then
 			SendChatMessage("[Proculas]: "..proc.." Procced!", "GUILD");
 		end
 		-- Raid Chat
-		if (db.PostRaid) then
+		if (self.opt.PostRaid) then
 			SendChatMessage("[Proculas]: "..proc.." Procced!", "RAID");
 		end
 	end
-	if (db.Sound.Playsound) then
-		PlaySoundFile(LSM:Fetch("sound", db.Sound.SoundFile))
+	if (self.opt.Sound.Playsound) then
+		PlaySoundFile(LSM:Fetch("sound", self.opt.Sound.SoundFile))
 	end
 end
 
@@ -337,8 +336,8 @@ end
 local options = {
 	type = "group",
 	name = "Proculas",
-	get = function(info) return db[ info[#info] ] end,
-	set = function(info, value) db[ info[#info] ] = value end,
+	get = function(info) return Proculas.opt[ info[#info] ] end,
+	set = function(info, value) Proculas.opt[ info[#info] ] = value end,
 	args = {
 		General = {
 			order = 1,
@@ -399,9 +398,9 @@ local options = {
 			type = "group",
 			name = "Sound Settings",
 			desc = "Sound Settings",
-			get = function(info) return db.Sound[ info[#info] ] end,
+			get = function(info) return Proculas.opt.Sound[ info[#info] ] end,
 			set = function(info, value)
-				db.Sound[ info[#info] ] = value
+				Proculas.opt.Sound[ info[#info] ] = value
 			end,
 			args = {
 				intro = {
@@ -421,7 +420,7 @@ local options = {
 					name = "Sound to play",
 					desc = "Sound to play",
 					values = AceGUIWidgetLSMlists.sound,
-					disabled = function() return not db.Sound.Playsound end,
+					disabled = function() return not Proculas.opt.Sound.Playsound end,
 				},
 			},
 		}, -- Sound
@@ -430,9 +429,9 @@ local options = {
 			type = "group",
 			name = "Proc Settings",
 			desc = "Proc Settings",
-			get = function(info) return db.Procs[ info[#info] ] end,
+			get = function(info) return Proculas.opt.Procs[ info[#info] ] end,
 			set = function(info, value)
-				db.Procs[ info[#info] ] = value
+				Proculas.opt.Procs[ info[#info] ] = value
 			end,
 			args = {
 				intro = {

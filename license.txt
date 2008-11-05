@@ -1,6 +1,8 @@
-Proculas License v1
+Proculas License v1.1
 Created by Clorell/Keruni of Argent Dawn [US]
 
-You may change, modify and redistribute Proculas as long as you keep
-the above credit in all files and documenatation that came with Proculas,
-and do not call any derivatives the exact same name.
+The "Project" is the name of the project.
+
+You may change, modify and redistribute the Project as long as you keep
+the above credit in all files and documenatation that came with the Project,
+any derivatives must be under this license version or higher.
