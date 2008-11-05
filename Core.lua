@@ -39,8 +39,8 @@ local defaults = {
 	profile = {
 		Post = true,
 		PostCT = true,
-		Postparty = false,
-		Postrw = false,
+		PostParty = false,
+		PostRW = false,
 		PostGuild = false,
 		PostRaid = false,
 		Sound = {
@@ -208,6 +208,7 @@ function Proculas:OnEnable()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	-- Player stuff
 	self.playerClass = UnitClass("player")
+	self.playerName = UnitName("player")
 	if (self.playerClass == "Warrior") then
 		self.opt.Procs.Warrior = true
 	elseif (self.playerClass == "Mage") then
@@ -273,21 +274,23 @@ end
 
 -------------------------------------------------------
 -- Buff Monitoring to check for when procs buff the player
-function Proculas:COMBAT_LOG_EVENT()
-	if (self.track == true) then
-		for _,v in ipairs(self.ProcBuffs) do
-			if (self.opt.Procs[v[1]] == true) then
-				for _,v in ipairs(v[2]) do
-					if (self:HasBuff(GetSpellInfo(v[1])) and active[v[1]] == nil) then
-						self:Postproc(v[2])
-						active[v[1]] = true
-					elseif (not self:HasBuff(GetSpellInfo(v[1]))) then
-						active[v[1]] = nil
-					end
-				end
-			end
-		end
-	end
+function Proculas:COMBAT_LOG_EVENT(event,msg,type,msg3,name)
+	if(type == "SPELL_AURA_APPLIED" and name == self.playerName) then
+		if (self.track == true) then
+			for _,v in ipairs(self.ProcBuffs) do
+				if (self.opt.Procs[v[1]] == true) then
+					for _,v in ipairs(v[2]) do
+						if (self:HasBuff(GetSpellInfo(v[1])) and active[v[1]] == nil) then
+							self:Postproc(v[2])
+							active[v[1]] = true
+						elseif (not self:HasBuff(GetSpellInfo(v[1]))) then
+							active[v[1]] = nil
+						end
+					end -- loop through buffs
+				end -- check if Proc category is enabled
+			end	-- loop through ProcBuffs categories
+		end -- if tracking
+	end -- check type
 end
 
 -------------------------------------------------------
@@ -301,11 +304,11 @@ function Proculas:Postproc(proc)
 			CombatText_AddMessage(proc.." procced", "", 2, 96, 206, "crit", false);
 		end
 		-- Party
-		if (db.Postparty and GetNumPartyMembers()>0) then
+		if (db.PostParty and GetNumPartyMembers()>0) then
 			SendChatMessage("[Proculas]: "..proc.." Procced!", "PARTY");
 		end
 		-- Raid Warining
-		if (db.Postrw and GetNumPartyMembers()>0) then
+		if (db.PostRW and GetNumPartyMembers()>0) then
 			SendChatMessage(proc.." Procced!", "RAID_WARNING");
 		end
 		-- Guild Chat
@@ -321,12 +324,12 @@ function Proculas:Postproc(proc)
 		PlaySoundFile(LSM:Fetch("sound", db.Sound.SoundFile))
 	end
 end
+
 -------------------------------------------------------
--- Proculas Chat Commands
---Proculas:RegisterChatCommand("proculas", "AboutProculas")
+-- About Proculas
 function Proculas:AboutProculas()
-	DEFAULT_CHAT_FRAME:AddMessage("Proculas "..VERSION)
-	DEFAULT_CHAT_FRAME:AddMessage("Created by Clorell/Keruni of Argent Dawn [US]")
+	self:Print("Version "..VERSION)
+	self:Print("Created by Clorell/Keruni of Argent Dawn [US]")
 end
 
 -------------------------------------------------------
@@ -359,7 +362,7 @@ local options = {
 					type = "description",
 					name = "Where should Proculas post procs?",
 				},
-				Postparty = {
+				PostParty = {
 					order = 4,
 					name = "Party Chat",
 					desc = "Post procs to party chat?",
@@ -371,7 +374,7 @@ local options = {
 					desc = "Post procs to combat text?",
 					type = "toggle",
 				},
-				Postrw = {
+				PostRW = {
 					order = 4,
 					name = "Raid Warning",
 					desc = "Post procs to raid warning?",
