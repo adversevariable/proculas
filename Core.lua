@@ -4,9 +4,7 @@
 --	Created by Clorell/Keruni of Argent Dawn [US]
 --	$Id$
 --
---LoadAddOn("Ace3")
---LoadAddOn("LibSharedMedia-3.0")
---LoadAddOn("AceGUI-3.0-SharedMediaWidgets")
+
 -------------------------------------------------------
 -- Proculas
 Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0")
@@ -14,8 +12,12 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 -------------------------------------------------------
 -- Proculas Version
-Proculas.revision = tonumber(("$Rev$"):match("%d+"))
-Proculas.version = "0.8 r" .. (Proculas.revision or 0)
+-- This may need some changing to be more simple...
+Proculas.revision = tonumber(("@project-revision@"):match("%d+"))
+Proculas.version = "0.8" .. " r" .. (Proculas.revision or 0)
+if(Proculas.revision == nil) then
+	Proculas.version = string.gsub(Proculas.version, " r0", "-dev")
+end
 local VERSION = Proculas.version
 
 -------------------------------------------------------
@@ -78,6 +80,7 @@ Proculas.ProcBuffs = {
 	{'Shaman',
 		{
 			{16246,"Clearcasting"},
+			{16257,"Flurry"},
 		},
 	},
 	{'Druid',
@@ -95,6 +98,7 @@ Proculas.ProcBuffs = {
 		{
 			{12966,"Flurry"},
 			{12880,"Enrage"},
+			{46916,"Bloodsurge"},
 		},
 	},
 	{'Mage',
@@ -106,10 +110,16 @@ Proculas.ProcBuffs = {
 			{48108,"Hot Streak"},
 		},
 	},
+	{'Paladin',
+		{
+			{53489,"The Art of War"},
+			{57669,"Replenishment"},
+		},
+	},
 	{'Warlock',
 		{
 			{17941,"Nightfall"},
-		}
+		},
 	},
 	{'Trinkets',
 		{
@@ -162,14 +172,14 @@ Proculas.ProcBuffs = {
 		{
 			{60819,"Libram of Reciprocation"},
 			{43747,"Libram of Divine Judgement"},
-		}
+		},
 	},
 	{'Totems',
 		{
 			{43751,"Skycall Totem"},
 			{43749,"Stonebreaker's Totem"},
 			{48838,"Totem of the Tundra"},
-		}
+		},
 	},
 	{'Sigils',
 		{
@@ -186,7 +196,7 @@ Proculas.ProcBuffs = {
 			{45428,"Shattered Sun Pendant of Might"},
 			{45479,"Shattered Sun Pendant of Acumen"},
 			{45429,"Shattered Sun Pendant of Acumen"},
-		}
+		},
 	},
 }
 
@@ -228,6 +238,7 @@ function Proculas:OnEnable()
 	elseif (self.playerClass == "Hunter") then
 		self.opt.Procs.Hunter = true
 	elseif (self.playerClass == "Paladin") then
+		self.opt.Procs.Paladin = true
 		if (self.opt.Procs.Relics) then
 			self.opt.Procs.Libram = true
 		end
@@ -275,7 +286,8 @@ end
 -- Buff Monitoring to check for when procs buff the player
 function Proculas:COMBAT_LOG_EVENT(event,msg,type,msg3,name)
 	if(type == "SPELL_AURA_APPLIED" and name == self.playerName) then
-		if (self.track == true) then
+		--disabled the PLAYER_REGEN_DISABLED check, might use it again, might not.
+		--if (self.track == true) then
 			for _,v in ipairs(self.ProcBuffs) do
 				if (self.opt.Procs[v[1]] == true) then
 					for _,v in ipairs(v[2]) do
@@ -288,7 +300,7 @@ function Proculas:COMBAT_LOG_EVENT(event,msg,type,msg3,name)
 					end -- loop through buffs
 				end -- check if Proc category is enabled
 			end	-- loop through ProcBuffs categories
-		end -- if tracking
+		--end -- if tracking
 	end -- check type
 end
 
