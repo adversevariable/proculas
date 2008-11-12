@@ -41,6 +41,7 @@ LSM:Register("sound", "You Will Die!", [[Sound\Creature\CThun\CThunYouWillDie.wa
 local defaults = {
 	profile = {
 		Post = true,
+		PostChatFrame = true,
 		PostCT = true,
 		PostParty = false,
 		PostRW = false,
@@ -108,6 +109,7 @@ Proculas.ProcBuffs = {
 			{57761,"Brain Freeze"},
 			{12536,"Clearcasting"},
 			{48108,"Hot Streak"},
+			{54741,"Firestarter"},
 		},
 	},
 	{'Paladin',
@@ -309,7 +311,9 @@ end
 function Proculas:Postproc(proc)
 	if (self.opt.Post) then
 		-- Chat Frame
-		self:Print(proc.." Procced!")
+		if (self.opt.PostChatFrame) then
+			self:Print(proc.." Procced!")
+		end
 		-- Blizzard Combat Text
 		if (self.opt.PostCT) then
 			CombatText_AddMessage(proc.." procced", "", 2, 96, 206, "crit", false);
@@ -372,6 +376,12 @@ local options = {
 					order = 3,
 					type = "description",
 					name = "Where should Proculas post procs?",
+				},
+				PostChatFrame = {
+					order = 4,
+					name = "Chat Frame",
+					desc = "Post procs to the chat frame?",
+					type = "toggle",
 				},
 				PostParty = {
 					order = 4,
