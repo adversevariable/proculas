@@ -63,7 +63,7 @@ local defaults = {
 
 -------------------------------------------------------
 -- Proc buffs
-local active = {}
+Proculas.active = {}
 Proculas.ProcBuffs = {
 	{'Enchants',
 		{
@@ -80,6 +80,11 @@ Proculas.ProcBuffs = {
 		{
 			{16246,"Clearcasting"},
 			{16257,"Flurry"},
+			{16281,"Flurry"},
+			{16282,"Flurry"},
+			{16283,"Flurry"},
+			{16284,"Flurry"},
+			{16280,"Flurry"},
 		},
 	},
 	{'Druid',
@@ -96,7 +101,15 @@ Proculas.ProcBuffs = {
 	{'Warrior',
 		{
 			{12966,"Flurry"},
+			{12967,"Flurry"},
+			{12968,"Flurry"},
+			{12969,"Flurry"},
+			{12970,"Flurry"},
 			{12880,"Enrage"},
+			{14201,"Enrage"},
+			{14202,"Enrage"},
+			{14203,"Enrage"},
+			{14204,"Enrage"},
 			{46916,"Bloodsurge"},
 		},
 	},
@@ -113,7 +126,9 @@ Proculas.ProcBuffs = {
 	{'Paladin',
 		{
 			{53489,"The Art of War"},
-			{57669,"Replenishment"},
+			{59578,"The Art of War"},
+			{31930,"Judgements of the Wise"},
+			{54203,"Sheath of Light"},
 		},
 	},
 	{'Warlock',
@@ -298,54 +313,61 @@ function Proculas:OnProfileChanged(event, database, newProfileKey)
 end
 
 -------------------------------------------------------
--- Buff Monitoring to check for when procs buff the player
-function Proculas:COMBAT_LOG_EVENT(event,msg,type,msg3,name)
-	if(type == "SPELL_AURA_APPLIED" and name == self.playerName) then
-		--disabled the PLAYER_REGEN_DISABLED check, might use it again, might not.
-		--if (self.track == true) then
-			for _,v in ipairs(self.ProcBuffs) do
-				if (self.opt.Procs[v[1]] == true) then
-					for _,v in ipairs(v[2]) do
-						if (self:HasBuff(GetSpellInfo(v[1])) and active[v[1]] == nil) then
-							self:Postproc(v[2])
-							active[v[1]] = true
-						elseif (not self:HasBuff(GetSpellInfo(v[1]))) then
-							active[v[1]] = nil
-						end
-					end -- loop through buffs
-				end -- check if Proc category is enabled
-			end	-- loop through ProcBuffs categories
-		--end -- if tracking
-	end -- check type
+-- Time to check for some Procs!
+function Proculas:COMBAT_LOG_EVENT(event,...)
+	local msg,type,msg3,name = select(1, ...)
+	local spellId, spellName, spellSchool = select(9, ...)
+	if(type == "SPELL_AURA_APPLIED" or type == "SPELL_AURA_REFRESH" or type == "SPELL_ENERGIZE" and name == self.playerName) then
+		self:checkProcs(self.ProcBuffs,...)
+	end
+	if(type == "SPELL_AURA_REMOVED" and name == self.playerName) then
+		if (self.active[spellId] == true) then
+			self.active[spellId] = nil
+		end
+	end
+end
+function Proculas:checkProcs(procs,...)
+	local spellId, spellName, spellSchool = select(9, ...)
+	for _,v in ipairs(procs) do
+		if (self.opt.Procs[v[1]] == true) then
+			for _,v in ipairs(v[2]) do
+				if (spellId == v[1]) then -- and self.active[v[1]] == nil) then
+					self:Postproc(v[2],spellId)
+					self.active[v[1]] = true
+				end
+			end -- loop through procs
+		end -- check if Proc category is enabled
+	end	-- loop through categories
 end
 
 -------------------------------------------------------
 -- Used to post procs to chat, play sounds, etc
-function Proculas:Postproc(proc)
+function Proculas:Postproc(procName,spellId)
+	spellName = GetSpellInfo(spellId)
 	if (self.opt.Post) then
 		-- Chat Frame
 		if (self.opt.PostChatFrame) then
-			self:Print(proc.." Procced!")
+			self:Print(procName.." Procced! (\124cff71d5ff\124Hspell:"..spellId.."\124h["..spellName.."]\124h\124r)")
 		end
 		-- Blizzard Combat Text
 		if (self.opt.PostCT) then
-			CombatText_AddMessage(proc.." procced", "", 2, 96, 206, "crit", false);
+			CombatText_AddMessage(procName.." procced", "", 2, 96, 206, "crit", false);
 		end
 		-- Party
 		if (self.opt.PostParty and GetNumPartyMembers()>0) then
-			SendChatMessage("[Proculas]: "..proc.." Procced!", "PARTY");
+			SendChatMessage("[Proculas]: "..procName.." Procced!", "PARTY");
 		end
 		-- Raid Warining
 		if (self.opt.PostRW and GetNumPartyMembers()>0) then
-			SendChatMessage(proc.." Procced!", "RAID_WARNING");
+			SendChatMessage(procName.." Procced!", "RAID_WARNING");
 		end
 		-- Guild Chat
 		if (self.opt.PostGuild) then
-			SendChatMessage("[Proculas]: "..proc.." Procced!", "GUILD");
+			SendChatMessage("[Proculas]: "..procName.." Procced!", "GUILD");
 		end
 		-- Raid Chat
 		if (self.opt.PostRaid) then
-			SendChatMessage("[Proculas]: "..proc.." Procced!", "RAID");
+			SendChatMessage("[Proculas]: "..procName.." Procced!", "RAID");
 		end
 	end
 	if (self.opt.Sound.Playsound) then
