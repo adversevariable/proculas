@@ -12,11 +12,10 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 -------------------------------------------------------
 -- Proculas Version
--- This may need some changing to be more simple...
 Proculas.revision = tonumber(("@project-revision@"):match("%d+"))
-Proculas.version = "0.8" .. " r" .. (Proculas.revision or 0)
+Proculas.version = GetAddOnMetadata('Proculas', 'Version')
 if(Proculas.revision == nil) then
-	Proculas.version = string.gsub(Proculas.version, " r0", "-dev")
+	Proculas.version = string.gsub(Proculas.version, "@".."project--revision@", "dev")
 end
 local VERSION = Proculas.version
 
@@ -34,7 +33,6 @@ LSM:Register("sound", "Humm", [[Sound\Spells\SimonGame_Visual_GameStart.wav]])
 LSM:Register("sound", "Short Circuit", [[Sound\Spells\SimonGame_Visual_BadPress.wav]])
 LSM:Register("sound", "Fel Portal", [[Sound\Spells\Sunwell_Fel_PortalStand.wav]])
 LSM:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.wav]])
-LSM:Register("sound", "You Will Die!", [[Sound\Creature\CThun\CThunYouWillDie.wav]])
 
 -------------------------------------------------------
 -- Default options
@@ -200,6 +198,17 @@ Proculas.ProcBuffs = {
 			{45429,"Shattered Sun Pendant of Acumen"},
 		},
 	},
+	{'Weapons',
+		{
+			{11790,"Toxic Revenger"},
+			{3742,"Gahz'rilla Fang"},
+			{12685,"Stealthblade"},
+			{8348,"Julie's Dagger"},
+			{16551,"Felstriker"},
+			{38307,"The Night Blade"},
+			{59043,"The Dusk Blade"},
+		},
+	},
 }
 
 -------------------------------------------------------
@@ -244,6 +253,10 @@ function Proculas:OnEnable()
 		if (self.opt.Procs.Relics) then
 			self.opt.Procs.Libram = true
 		end
+	elseif (self.playerClass == "Warlock") then
+		self.opt.Procs.Warlock = true
+	elseif (self.playerClass == "Rogue") then
+		self.opt.Procs.Rogue = true
 	elseif (self.opt.Procs.Relics == false) then
 		self.opt.Procs.Totem = false
 		self.opt.Procs.Idol = false
