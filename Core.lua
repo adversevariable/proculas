@@ -62,9 +62,10 @@ local defaults = {
 }
 
 -------------------------------------------------------
--- Proc buffs
+-- Procs that give buffs
 Proculas.active = {}
-Proculas.ProcBuffs = {
+Proculas.Procs = {}
+Proculas.Procs.Buffs = {
 	{'Enchants',
 		{
 			{28093,"Mongoose"},
@@ -90,6 +91,8 @@ Proculas.ProcBuffs = {
 	{'Druid',
 		{
 			{16870,"Clearcasting"},
+			{48518,"Eclipse"},
+			{48517,"Eclipse"},
 		},
 	},
 	{'Priest',
@@ -134,6 +137,9 @@ Proculas.ProcBuffs = {
 	{'Warlock',
 		{
 			{17941,"Nightfall"},
+			{54274,"Backdraft"},
+			{54276,"Backdraft"},
+			{54277,"Backdraft"},
 		},
 	},
 	{'Trinkets',
@@ -156,6 +162,7 @@ Proculas.ProcBuffs = {
 			{38346,"Bangle of Endless Blessings"},
 			{33370,"Quagmirran's Eye"},
 			{34321,"Shiffar's Nexus-Horn"},
+			{37658,"The Lightning Capacitor"},
 	
 			{60062,"Essence of Life"},
 			{60065,"Mirror of Truth"},
@@ -222,6 +229,50 @@ Proculas.ProcBuffs = {
 			{16551,"Felstriker"},
 			{38307,"The Night Blade"},
 			{59043,"The Dusk Blade"},
+			{36478,"Infinity Blade"},
+			{35353,"Riftmaker"},
+			{17331,"Fang of the Crystal Spider"},
+			{19755,"Frightalon"},
+			{16528,"Keris of Zul'Serak"},
+			{13526,"Corrosive Poison"},
+			
+			{16928,"Annihilator"},
+			{16603,"Demonfork"},
+			{17506,"Soul Breaker"},
+		},
+	},
+}
+-- Procs that do damage
+Proculas.Procs.Damage = {
+	{'Weapons',
+		{
+			{23267,"Perdition's Blade"},
+			{24993,"Emerald Dragonfang"},
+			{21151,"Gutgore Ripper"},
+			{24388,"The Lobotomizer"},
+			{23592,"Electrified Dagger"},
+			{18833,"Alcor's Sunrazor"},
+			{21978,"Blade of Eternal Darkness"},
+			{16454,"Searing Needle"},
+			{18107,"Gut Ripper"},
+			
+			{18104,"Axe of the Deep Woods"},
+		},
+	},
+}
+-- Procs that summon things!
+Proculas.Procs.Summon = {
+	{'Weapons',
+		{
+			{40393,"Shard of Azzinoth"},
+		},
+	},
+}
+-- Procs that Leech or Drain from people
+Proculas.Procs.LeechDrain = {
+	{'Weapons',
+		{
+			{16414,"Wraith Scythe"},
 		},
 	},
 }
@@ -240,8 +291,6 @@ end
 function Proculas:OnEnable()
 	self:Print("v"..VERSION.." running.")
 	self:RegisterEvent("COMBAT_LOG_EVENT")
-	self:RegisterEvent("PLAYER_REGEN_ENABLED")
-	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	-- Player stuff
 	self.playerClass = UnitClass("player")
 	self.playerName = UnitName("player")
@@ -291,14 +340,6 @@ function Proculas:OnEnable()
 	end
 end
 
-function Proculas:PLAYER_REGEN_ENABLED()
-	self.track = false
-end
-
-function Proculas:PLAYER_REGEN_DISABLED()
-	self.track = true
-end
-
 function Proculas:HasBuff(buff)
 	local name = UnitBuff("player", buff) or nil
 	return name ~= nil
@@ -317,14 +358,24 @@ end
 function Proculas:COMBAT_LOG_EVENT(event,...)
 	local msg,type,msg3,name = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
+	-- Proc Buffs
 	if(type == "SPELL_AURA_APPLIED" or type == "SPELL_AURA_REFRESH" or type == "SPELL_ENERGIZE" and name == self.playerName) then
-		self:checkProcs(self.ProcBuffs,...)
+		self:checkProcs(self.Procs.Buffs,...)
 	end
-	if(type == "SPELL_AURA_REMOVED" and name == self.playerName) then
-		if (self.active[spellId] == true) then
-			self.active[spellId] = nil
-		end
+	-- Damage Procs
+	if(type == "SPELL_DAMAGE" and name == self.playerName) then
+		self:checkProcs(self.Procs.Damage,...)
 	end
+	-- Summon Procs
+	if(type == "SPELL_SUMMON" and name == self.playerName) then
+		self:checkProcs(self.Procs.Summon,...)
+	end
+	-- Leech and Drain Procs
+	if(type == "SPELL_LEECH" or type == "SPELL_DRAIN" and name == self.playerName) then
+		self:checkProcs(self.Procs.LeechDrain,...)
+	end
+	-- Update the active procs table
+	-- this part needs work, new code soon?
 end
 function Proculas:checkProcs(procs,...)
 	local spellId, spellName, spellSchool = select(9, ...)
@@ -347,7 +398,8 @@ function Proculas:Postproc(procName,spellId)
 	if (self.opt.Post) then
 		-- Chat Frame
 		if (self.opt.PostChatFrame) then
-			self:Print(procName.." Procced! (\124cff71d5ff\124Hspell:"..spellId.."\124h["..spellName.."]\124h\124r)")
+			--self:Print(procName.." Procced! (\124cff71d5ff\124Hspell:"..spellId.."\124h["..spellName.."]\124h\124r)")
+			self:Print(procName.." procced!")
 		end
 		-- Blizzard Combat Text
 		if (self.opt.PostCT) then
@@ -355,19 +407,19 @@ function Proculas:Postproc(procName,spellId)
 		end
 		-- Party
 		if (self.opt.PostParty and GetNumPartyMembers()>0) then
-			SendChatMessage("[Proculas]: "..procName.." Procced!", "PARTY");
+			SendChatMessage("[Proculas]: "..procName.." procced!", "PARTY");
 		end
 		-- Raid Warining
 		if (self.opt.PostRW and GetNumPartyMembers()>0) then
-			SendChatMessage(procName.." Procced!", "RAID_WARNING");
+			SendChatMessage(procName.." procced!", "RAID_WARNING");
 		end
 		-- Guild Chat
 		if (self.opt.PostGuild) then
-			SendChatMessage("[Proculas]: "..procName.." Procced!", "GUILD");
+			SendChatMessage("[Proculas]: "..procName.." procced!", "GUILD");
 		end
 		-- Raid Chat
 		if (self.opt.PostRaid) then
-			SendChatMessage("[Proculas]: "..procName.." Procced!", "RAID");
+			SendChatMessage("[Proculas]: "..procName.." procced!", "RAID");
 		end
 	end
 	if (self.opt.Sound.Playsound) then
