@@ -71,13 +71,13 @@ Proculas.Procs.Buffs = {
 			{28093,"Mongoose"},
 		},
 	},
-	{'Hunter',
+	{'HUNTER',
 		{
 			{6150,"Quick Shots"},
 			{53257,"Cobra Strikes"},
 		},
 	},
-	{'Shaman',
+	{'SHAMAN',
 		{
 			{16246,"Clearcasting"},
 			{16257,"Flurry"},
@@ -88,20 +88,20 @@ Proculas.Procs.Buffs = {
 			{16280,"Flurry"},
 		},
 	},
-	{'Druid',
+	{'DRUID',
 		{
 			{16870,"Clearcasting"},
 			{48518,"Eclipse"},
 			{48517,"Eclipse"},
 		},
 	},
-	{'Priest',
+	{'PRIEST',
 		{
 			{33151,"Surge of Light"},
 			{34754,"Clearcasting"},
 		},
 	},
-	{'Warrior',
+	{'WARRIOR',
 		{
 			{12966,"Flurry"},
 			{12967,"Flurry"},
@@ -116,7 +116,7 @@ Proculas.Procs.Buffs = {
 			{46916,"Bloodsurge"},
 		},
 	},
-	{'Mage',
+	{'MAGE',
 		{
 			{44401,"Missile Barrage"},
 			{44544,"Fingers of Frost"},
@@ -126,15 +126,14 @@ Proculas.Procs.Buffs = {
 			{54741,"Firestarter"},
 		},
 	},
-	{'Paladin',
+	{'PALADIN',
 		{
 			{53489,"The Art of War"},
 			{59578,"The Art of War"},
-			{31930,"Judgements of the Wise"},
 			{54203,"Sheath of Light"},
 		},
 	},
-	{'Warlock',
+	{'WARLOCK',
 		{
 			{17941,"Nightfall"},
 			{54274,"Backdraft"},
@@ -239,6 +238,29 @@ Proculas.Procs.Buffs = {
 			{16928,"Annihilator"},
 			{16603,"Demonfork"},
 			{17506,"Soul Breaker"},
+			
+			{40293,"Syphon of the Nathrezim"},
+			{36483,"Cosmic Infuser"},
+			{40972,"Crystal Spire of Karabor"},
+			{33489,"Blackout Truncheon"},
+			{18803,"Hand of Edward the Odd"},
+			{15494,"Ironfoe"},
+			{18203,"Venomspitter"},
+			{13534,"The Shatterer"},
+			{13496,"Mug O' Hurt"},
+		},
+	},
+}
+-- Procs that energize
+Proculas.Procs.Energize = {
+	{'PALADIN',
+		{
+			{31930,"Judgements of the Wise"},
+		},
+	},
+	{'Weapons',
+		{
+			{21951,"Fist of Stone"},
 		},
 	},
 }
@@ -257,6 +279,10 @@ Proculas.Procs.Damage = {
 			{18107,"Gut Ripper"},
 			
 			{18104,"Axe of the Deep Woods"},
+			
+			{24254,"Sceptre of Smiting"},
+			{18082,"Volcanic Hammer"},
+			{18083,"Galgann's Firehammer"},
 		},
 	},
 }
@@ -273,6 +299,16 @@ Proculas.Procs.LeechDrain = {
 	{'Weapons',
 		{
 			{16414,"Wraith Scythe"},
+			
+			{18084,"Fist of the Damned"},
+		},
+	},
+}
+-- Procs that Dispel things
+Proculas.Procs.Dispel = {
+	{'Weapons',
+		{
+			{16908,"Serenity"},
 		},
 	},
 }
@@ -292,35 +328,36 @@ function Proculas:OnEnable()
 	self:Print("v"..VERSION.." running.")
 	self:RegisterEvent("COMBAT_LOG_EVENT")
 	-- Player stuff
-	self.playerClass = UnitClass("player")
+	playerClass0, playerClass1 = UnitClass("player")
+	self.playerClass = playerClass1
 	self.playerName = UnitName("player")
-	if (self.playerClass == "Warrior") then
-		self.opt.Procs.Warrior = true
-	elseif (self.playerClass == "Mage") then
-		self.opt.Procs.Mage = true
-	elseif (self.playerClass == "Shaman") then
-		self.opt.Procs.Shaman = true
+	if (self.playerClass == "WARRIOR") then
+		self.opt.Procs.WARRIOR = true
+	elseif (self.playerClass == "MAGE") then
+		self.opt.Procs.MAGE = true
+	elseif (self.playerClass == "SHAMAN") then
+		self.opt.Procs.SHAMAN = true
 		if (self.opt.Procs.Relics) then
 			self.opt.Procs.Totem = true
 		end
-	elseif (self.playerClass == "Druid") then
-		self.opt.Procs.Druid = true
+	elseif (self.playerClass == "DRUID") then
+		self.opt.Procs.DRUID = true
 		if (self.opt.Procs.Relics) then
 			self.opt.Procs.Idol = true
 		end
-	elseif (self.playerClass == "Priest") then
-		self.opt.Procs.Priest = true
-	elseif (self.playerClass == "Hunter") then
-		self.opt.Procs.Hunter = true
-	elseif (self.playerClass == "Paladin") then
-		self.opt.Procs.Paladin = true
+	elseif (self.playerClass == "PRIEST") then
+		self.opt.Procs.PRIEST = true
+	elseif (self.playerClass == "HUNTER") then
+		self.opt.Procs.HUNTER = true
+	elseif (self.playerClass == "PALADIN") then
+		self.opt.Procs.PALADIN = true
 		if (self.opt.Procs.Relics) then
 			self.opt.Procs.Libram = true
 		end
-	elseif (self.playerClass == "Warlock") then
-		self.opt.Procs.Warlock = true
-	elseif (self.playerClass == "Rogue") then
-		self.opt.Procs.Rogue = true
+	elseif (self.playerClass == "WARLOCK") then
+		self.opt.Procs.WARLOCK = true
+	elseif (self.playerClass == "ROGUE") then
+		self.opt.Procs.ROGUE = true
 	elseif (self.opt.Procs.Relics == false) then
 		self.opt.Procs.Totem = false
 		self.opt.Procs.Idol = false
@@ -328,15 +365,15 @@ function Proculas:OnEnable()
 		self.opt.Procs.Sigil = false
 	end
 	if (self.opt.Procs.Class == false) then
-		self.opt.Procs.Warrior = false
-		self.opt.Procs.Mage = false
-		self.opt.Procs.Priest = false
-		self.opt.Procs.Paladin = false
-		self.opt.Procs.Druid = false
-		self.opt.Procs.Shaman = false
-		self.opt.Procs.Hunter = false
-		self.opt.Procs.Rogue = false
-		self.opt.Procs.Warlock = false
+		self.opt.Procs.WARRIOR = false
+		self.opt.Procs.MAGE = false
+		self.opt.Procs.PRIEST = false
+		self.opt.Procs.PALADIN = false
+		self.opt.Procs.DRUID = false
+		self.opt.Procs.SHAMAN = false
+		self.opt.Procs.HUNTER = false
+		self.opt.Procs.ROGUE = false
+		self.opt.Procs.WARLOCK = false
 	end
 end
 
@@ -359,8 +396,13 @@ function Proculas:COMBAT_LOG_EVENT(event,...)
 	local msg,type,msg3,name = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
 	-- Proc Buffs
-	if(type == "SPELL_AURA_APPLIED" or type == "SPELL_AURA_REFRESH" or type == "SPELL_ENERGIZE" and name == self.playerName) then
+	if(type == "SPELL_AURA_APPLIED" and name == self.playerName
+	or type == "SPELL_AURA_REFRESH" and name == self.playerName) then
 		self:checkProcs(self.Procs.Buffs,...)
+	end
+	-- Energize Procs
+	if (type == "SPELL_ENERGIZE" and name == self.playerName) then
+		self:checkProcs(self.Procs.Energize,...)
 	end
 	-- Damage Procs
 	if(type == "SPELL_DAMAGE" and name == self.playerName) then
@@ -371,8 +413,13 @@ function Proculas:COMBAT_LOG_EVENT(event,...)
 		self:checkProcs(self.Procs.Summon,...)
 	end
 	-- Leech and Drain Procs
-	if(type == "SPELL_LEECH" or type == "SPELL_DRAIN" and name == self.playerName) then
+	if(type == "SPELL_LEECH" and name == self.playerName
+	or type == "SPELL_DRAIN" and name == self.playerName) then
 		self:checkProcs(self.Procs.LeechDrain,...)
+	end
+	-- Dispel procs
+	if(type == "SPELL_DISPEL" and name == self.playerName) then
+		self:checkProcs(self.Procs.Dispel,...)
 	end
 	-- Update the active procs table
 	-- this part needs work, new code soon?
