@@ -114,6 +114,7 @@ Proculas.Procs.Buffs = {
 			{14203,"Enrage"},
 			{14204,"Enrage"},
 			{46916,"Bloodsurge"},
+			{20230,"Retaliation"},
 		},
 	},
 	{'MAGE',
@@ -139,6 +140,20 @@ Proculas.Procs.Buffs = {
 			{54274,"Backdraft"},
 			{54276,"Backdraft"},
 			{54277,"Backdraft"},
+		},
+	},
+	{'DEATHKNIGHT',
+		{
+			{50466,"Death Trance!"},
+			{53136,"Abominable Might"},
+			{50447,"Bloody Vengeance"},
+			{50448,"Bloody Vengeance"},
+			{50449,"Bloody Vengeance"},
+			{52424,"Retaliation"},
+			{50421,"Scent of Blood"},
+			{51789,"Blade Barrier"},
+			
+			{55744,"The Dead Walk"},
 		},
 	},
 	{'Trinkets',
@@ -358,6 +373,9 @@ function Proculas:OnEnable()
 		self.opt.Procs.WARLOCK = true
 	elseif (self.playerClass == "ROGUE") then
 		self.opt.Procs.ROGUE = true
+	elseif (self.playerClass == "DEATHKNIGHT") then
+		self.opt.Procs.DEATHKNIGHT = true
+		self.opt.Procs.Sigil = true
 	elseif (self.opt.Procs.Relics == false) then
 		self.opt.Procs.Totem = false
 		self.opt.Procs.Idol = false
@@ -374,6 +392,7 @@ function Proculas:OnEnable()
 		self.opt.Procs.HUNTER = false
 		self.opt.Procs.ROGUE = false
 		self.opt.Procs.WARLOCK = false
+		self.opt.Procs.DEATHKNIGHT = false
 	end
 end
 
