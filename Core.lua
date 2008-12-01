@@ -58,9 +58,18 @@ local defaults = {
 			Amulets = true,
 			Weapons = true,
 		},
+		procstats = {
+			procs = {
+				total = {},
+			},
+		},
 	},
 }
-
+--procstats = {
+--			procs = {
+--				total = {},
+--			},
+--		},
 -------------------------------------------------------
 -- Procs that give buffs
 Proculas.active = {}
@@ -114,7 +123,6 @@ Proculas.Procs.Buffs = {
 			{14203,"Enrage"},
 			{14204,"Enrage"},
 			{46916,"Bloodsurge"},
-			{20230,"Retaliation"},
 		},
 	},
 	{'MAGE',
@@ -145,7 +153,6 @@ Proculas.Procs.Buffs = {
 	{'DEATHKNIGHT',
 		{
 			{50466,"Death Trance!"},
-			{53136,"Abominable Might"},
 			{50447,"Bloody Vengeance"},
 			{50448,"Bloody Vengeance"},
 			{50449,"Bloody Vengeance"},
@@ -266,6 +273,14 @@ Proculas.Procs.Buffs = {
 		},
 	},
 }
+-- Procs that buff the group
+Proculas.Procs.GroupBuffs = {
+	{'DEATHKNIGHT',
+		{
+			{53136,"Abominable Might"},
+		},
+	},
+}
 -- Procs that energize
 Proculas.Procs.Energize = {
 	{'PALADIN',
@@ -333,6 +348,7 @@ Proculas.Procs.Dispel = {
 function Proculas:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", defaults)
 	self.opt = self.db.profile
+	self.procstats = self.db.profile.procstats
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
@@ -412,12 +428,17 @@ end
 -------------------------------------------------------
 -- Time to check for some Procs!
 function Proculas:COMBAT_LOG_EVENT(event,...)
-	local msg,type,msg3,name = select(1, ...)
+	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
 	-- Proc Buffs
 	if(type == "SPELL_AURA_APPLIED" and name == self.playerName
 	or type == "SPELL_AURA_REFRESH" and name == self.playerName) then
 		self:checkProcs(self.Procs.Buffs,...)
+	end
+	-- Proc Group Buffs - self
+	if(type == "SPELL_AURA_APPLIED" and name == self.playerName and name2 == self.playerName
+	or type == "SPELL_AURA_REFRESH" and name == self.playerName and name2 == self.playerName) then
+		self:checkProcs(self.Procs.GroupBuffs,...)
 	end
 	-- Energize Procs
 	if (type == "SPELL_ENERGIZE" and name == self.playerName) then
@@ -461,6 +482,9 @@ end
 -- Used to post procs to chat, play sounds, etc
 function Proculas:Postproc(procName,spellId)
 	spellName = GetSpellInfo(spellId)
+	-- Log Proc
+	self:logProc(procName,spellId);
+	-- Post Proc
 	if (self.opt.Post) then
 		-- Chat Frame
 		if (self.opt.PostChatFrame) then
@@ -488,8 +512,33 @@ function Proculas:Postproc(procName,spellId)
 			SendChatMessage("[Proculas]: "..procName.." procced!", "RAID");
 		end
 	end
+	-- Play Sound
 	if (self.opt.Sound.Playsound) then
 		PlaySoundFile(LSM:Fetch("sound", self.opt.Sound.SoundFile))
+	end
+end
+
+-- Used to Log the Proc for stats tracking
+function Proculas:logProc(procName,spellID)
+	--print(procName.."|"..self.procstats.procs.total[spellID][1]);
+	if(self.procstats.procs.total[spellID]) then
+		self.procstats.procs.total[spellID][2] = self.procstats.procs.total[spellID][2]+1;
+	else
+		self.procstats.procs.total[spellID] = {spellID,procName,1};
+	end
+end
+local procstats = {
+	procs = {
+		total = {
+			{123,"Test",131},
+		},
+	},
+}
+-- Used to print the Proc stats
+function Proculas:procStats()
+	self:Print("Proc Stats: Total Procs");
+	for _,v in pairs(self.procstats.procs.total) do
+		self:Print(v[1]..": "..v[2].." times");
 	end
 end
 
@@ -683,6 +732,15 @@ local optionsSlash = {
 			desc = "Open the configuration dialog (/proculas config)",
 			func = function()
 				Proculas:ShowConfig()
+			end,
+			guiHidden = true,
+		},
+		procstats = {
+			type = "execute",
+			name = "Proc Stats",
+			desc = "Show Proc Stats (/proculas procstats)",
+			func = function()
+				Proculas:procStats()
 			end,
 			guiHidden = true,
 		},
