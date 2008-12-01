@@ -65,11 +65,6 @@ local defaults = {
 		},
 	},
 }
---procstats = {
---			procs = {
---				total = {},
---			},
---		},
 -------------------------------------------------------
 -- Procs that give buffs
 Proculas.active = {}
@@ -527,13 +522,6 @@ function Proculas:logProc(procName,spellID)
 		self.procstats.procs.total[spellID] = {spellID,procName,1};
 	end
 end
-local procstats = {
-	procs = {
-		total = {
-			{123,"Test",131},
-		},
-	},
-}
 -- Used to print the Proc stats
 function Proculas:procStats()
 	self:Print("Proc Stats: Total Procs");
