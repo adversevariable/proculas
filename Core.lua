@@ -517,7 +517,7 @@ end
 function Proculas:logProc(procName,spellID)
 	--print(procName.."|"..self.procstats.procs.total[spellID][1]);
 	if(self.procstats.procs.total[spellID]) then
-		self.procstats.procs.total[spellID][2] = self.procstats.procs.total[spellID][2]+1;
+		self.procstats.procs.total[spellID][3] = self.procstats.procs.total[spellID][3]+1;
 	else
 		self.procstats.procs.total[spellID] = {spellID,procName,1};
 	end
