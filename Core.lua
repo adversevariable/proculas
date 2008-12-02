@@ -67,7 +67,6 @@ local defaults = {
 }
 -------------------------------------------------------
 -- Procs that give buffs
-Proculas.active = {}
 Proculas.Procs = {}
 Proculas.Procs.Buffs = {
 	{'Enchants',
@@ -344,6 +343,7 @@ function Proculas:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", defaults)
 	self.opt = self.db.profile
 	self.procstats = self.db.profile.procstats
+	self.procstats.procs.session = {}
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
@@ -407,11 +407,6 @@ function Proculas:OnEnable()
 	end
 end
 
-function Proculas:HasBuff(buff)
-	local name = UnitBuff("player", buff) or nil
-	return name ~= nil
-end
-
 -------------------------------------------------------
 -- Proculas Profiles Stuff
 function Proculas:OnProfileChanged(event, database, newProfileKey)
@@ -456,17 +451,14 @@ function Proculas:COMBAT_LOG_EVENT(event,...)
 	if(type == "SPELL_DISPEL" and name == self.playerName) then
 		self:checkProcs(self.Procs.Dispel,...)
 	end
-	-- Update the active procs table
-	-- this part needs work, new code soon?
 end
 function Proculas:checkProcs(procs,...)
 	local spellId, spellName, spellSchool = select(9, ...)
 	for _,v in ipairs(procs) do
 		if (self.opt.Procs[v[1]] == true) then
 			for _,v in ipairs(v[2]) do
-				if (spellId == v[1]) then -- and self.active[v[1]] == nil) then
+				if (spellId == v[1]) then
 					self:Postproc(v[2],spellId)
-					self.active[v[1]] = true
 				end
 			end -- loop through procs
 		end -- check if Proc category is enabled
@@ -515,17 +507,30 @@ end
 
 -- Used to Log the Proc for stats tracking
 function Proculas:logProc(procName,spellID)
-	--print(procName.."|"..self.procstats.procs.total[spellID][1]);
+	-- Total
 	if(self.procstats.procs.total[spellID]) then
 		self.procstats.procs.total[spellID][3] = self.procstats.procs.total[spellID][3]+1;
 	else
 		self.procstats.procs.total[spellID] = {spellID,procName,1};
 	end
+	-- Session
+	if(self.procstats.procs.session[spellID]) then
+		self.procstats.procs.session[spellID][3] = self.procstats.procs.session[spellID][3]+1;
+	else
+		self.procstats.procs.session[spellID] = {spellID,procName,1};
+	end
 end
+
 -- Used to print the Proc stats
 function Proculas:procStats()
+	self:Print("-------------------------------");
 	self:Print("Proc Stats: Total Procs");
 	for _,v in pairs(self.procstats.procs.total) do
+		self:Print(v[1]..": "..v[2].." times");
+	end
+	self:Print("-------------------------------");
+	self:Print("Proc Stats: Procs This Session");
+	for _,v in pairs(self.procstats.procs.session) do
 		self:Print(v[1]..": "..v[2].." times");
 	end
 end
