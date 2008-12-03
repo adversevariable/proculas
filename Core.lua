@@ -57,6 +57,7 @@ local defaults = {
 			Class = true,
 			Amulets = true,
 			Weapons = true,
+			Gems= true,
 		},
 		procstats = {
 			procs = {
@@ -192,6 +193,13 @@ Proculas.Procs.Buffs = {
 			{60479,"Forge Ember"},
 			{60302,"Meteorite Whetstone"},
 			{60520,"Spark of Life"},
+			
+			{55748,"Horn of Argent Fury"},
+		},
+	},
+	{'Gems',
+		{
+			{55382,"Insightful Earthsiege Diamond"},
 		},
 	},
 	{'Rings',
@@ -526,12 +534,12 @@ function Proculas:procStats()
 	self:Print("-------------------------------");
 	self:Print("Proc Stats: Total Procs");
 	for _,v in pairs(self.procstats.procs.total) do
-		self:Print(v[1]..": "..v[2].." times");
+		self:Print(v[2]..": "..v[3].." times");
 	end
 	self:Print("-------------------------------");
 	self:Print("Proc Stats: Procs This Session");
 	for _,v in pairs(self.procstats.procs.session) do
-		self:Print(v[1]..": "..v[2].." times");
+		self:Print(v[2]..": "..v[3].." times");
 	end
 end
 
@@ -673,6 +681,12 @@ local options = {
 					order = 2,
 					name = "Trinket Procs",
 					desc = "If enabled, Proculas will display Trinket procs.",
+				},
+				Gems = {
+					type = "toggle",
+					order = 2,
+					name = "Gem Procs",
+					desc = "If enabled, Proculas will display Gem procs.",
 				},
 				Rings = {
 					type = "toggle",
