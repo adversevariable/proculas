@@ -245,6 +245,7 @@ Proculas.Procs.Buffs = {
 	},
 	{'Weapons',
 		{
+			-- Daggers
 			{11790,"Toxic Revenger"},
 			{3742,"Gahz'rilla Fang"},
 			{12685,"Stealthblade"},
@@ -259,10 +260,12 @@ Proculas.Procs.Buffs = {
 			{16528,"Keris of Zul'Serak"},
 			{13526,"Corrosive Poison"},
 			
+			-- 1H Axes
 			{16928,"Annihilator"},
 			{16603,"Demonfork"},
 			{17506,"Soul Breaker"},
 			
+			-- 1H Maces
 			{40293,"Syphon of the Nathrezim"},
 			{36483,"Cosmic Infuser"},
 			{40972,"Crystal Spire of Karabor"},
@@ -272,6 +275,9 @@ Proculas.Procs.Buffs = {
 			{18203,"Venomspitter"},
 			{13534,"The Shatterer"},
 			{13496,"Mug O' Hurt"},
+			
+			-- 2H Axes
+			{9632,"Ravager"},
 		},
 	},
 }
@@ -292,6 +298,7 @@ Proculas.Procs.Energize = {
 	},
 	{'Weapons',
 		{
+			-- 1H Maces
 			{21951,"Fist of Stone"},
 		},
 	},
@@ -300,6 +307,7 @@ Proculas.Procs.Energize = {
 Proculas.Procs.Damage = {
 	{'Weapons',
 		{
+			-- Daggers
 			{23267,"Perdition's Blade"},
 			{24993,"Emerald Dragonfang"},
 			{21151,"Gutgore Ripper"},
@@ -310,11 +318,16 @@ Proculas.Procs.Damage = {
 			{16454,"Searing Needle"},
 			{18107,"Gut Ripper"},
 			
+			-- 1H Axes
 			{18104,"Axe of the Deep Woods"},
 			
+			-- 1H Maces
 			{24254,"Sceptre of Smiting"},
 			{18082,"Volcanic Hammer"},
 			{18083,"Galgann's Firehammer"},
+			
+			-- Enchants
+			{50265,"Fiery Weapon"},
 		},
 	},
 }
@@ -322,6 +335,7 @@ Proculas.Procs.Damage = {
 Proculas.Procs.Summon = {
 	{'Weapons',
 		{
+			-- Daggers
 			{40393,"Shard of Azzinoth"},
 		},
 	},
@@ -330,8 +344,10 @@ Proculas.Procs.Summon = {
 Proculas.Procs.LeechDrain = {
 	{'Weapons',
 		{
+			-- 1H Axes
 			{16414,"Wraith Scythe"},
 			
+			-- 1H Maces
 			{18084,"Fist of the Damned"},
 		},
 	},
@@ -340,6 +356,7 @@ Proculas.Procs.LeechDrain = {
 Proculas.Procs.Dispel = {
 	{'Weapons',
 		{
+			-- 1H Maces
 			{16908,"Serenity"},
 		},
 	},
