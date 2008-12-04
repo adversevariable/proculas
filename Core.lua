@@ -7,7 +7,7 @@
 
 -------------------------------------------------------
 -- Proculas
-Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0")
+Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0", "LibSink-2.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
 -------------------------------------------------------
@@ -505,7 +505,8 @@ function Proculas:Postproc(procName,spellId)
 		end
 		-- Blizzard Combat Text
 		if (self.opt.PostCT) then
-			CombatText_AddMessage(procName.." procced", "", 2, 96, 206, "crit", false);
+			--CombatText_AddMessage(procName.." procced", "", 2, 96, 206, "crit", false);
+			self:Pour(procName.." procced", 2, 96, 206, nil, 24, "OUTLINE", true);
 		end
 		-- Party
 		if (self.opt.PostParty and GetNumPartyMembers()>0) then
