@@ -2,7 +2,7 @@
 ## Title: Proculas
 ## Notes: Tells you when things like Mongoose procs.
 ## Author: Clorell [US Argent Dawn]
-## Version: 0.11.6.@project-revision@
+## Version: 0.11.7.@project-revision@
 ## SavedVariables: ProculasDB
 ## Created by Clorell/Keruni of Argent Dawn [US]
 

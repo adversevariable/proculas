@@ -7,7 +7,7 @@
 
 -------------------------------------------------------
 -- Proculas
-Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0", "LibSink-2.0")
+Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "LibSink-2.0")
 local LSM = LibStub("LibSharedMedia-3.0")
 
 -------------------------------------------------------
@@ -369,10 +369,20 @@ function Proculas:OnInitialize()
 	self.opt = self.db.profile
 	self.procstats = self.db.profile.procstats
 	self.procstats.procs.session = {}
+	self.procstats.procs.lastminute = {}
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
+	self:ScheduleRepeatingTimer("resetLastMinuteProc", 60)
 	self:SetupOptions()
+end
+
+-------------------------------------------------------
+-- Timer Functions
+
+-- Empties the Procs Last Minute Array.
+function Proculas:resetLastMinuteProc()
+	self.procstats.procs.lastminute = {}
 end
 
 function Proculas:OnEnable()
@@ -496,6 +506,7 @@ function Proculas:Postproc(procName,spellId)
 	spellName = GetSpellInfo(spellId)
 	-- Log Proc
 	self:logProc(procName,spellId);
+	self:logLastMinuteProc(procName,spellId);
 	-- Post Proc
 	if (self.opt.Post) then
 		-- Chat Frame
@@ -547,6 +558,15 @@ function Proculas:logProc(procName,spellID)
 	end
 end
 
+-- Used to log procs for the last minute
+function Proculas:logLastMinuteProc(procName,spellID)
+	if(self.procstats.procs.lastminute[spellID]) then
+		self.procstats.procs.lastminute[spellID][3] = self.procstats.procs.lastminute[spellID][3]+1;
+	else
+		self.procstats.procs.lastminute[spellID] = {spellID,procName,1};
+	end
+end
+
 -- Used to print the Proc stats
 function Proculas:procStats()
 	self:Print("-------------------------------");
@@ -557,6 +577,11 @@ function Proculas:procStats()
 	self:Print("-------------------------------");
 	self:Print("Proc Stats: Procs This Session");
 	for _,v in pairs(self.procstats.procs.session) do
+		self:Print(v[2]..": "..v[3].." times");
+	end
+	self:Print("-------------------------------");
+	self:Print("Proc Stats: Procs Last Minute");
+	for _,v in pairs(self.procstats.procs.lastminute) do
 		self:Print(v[2]..": "..v[3].." times");
 	end
 end
