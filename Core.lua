@@ -45,6 +45,10 @@ local defaults = {
 		PostRW = false,
 		PostGuild = false,
 		PostRaid = false,
+		Messages = {
+			before = "",
+			after = " procced!",
+		},
 		Sound = {
 			Playsound = true,
 			SoundFile = "Explosion",
@@ -512,28 +516,28 @@ function Proculas:Postproc(procName,spellId)
 		-- Chat Frame
 		if (self.opt.PostChatFrame) then
 			--self:Print(procName.." Procced! (\124cff71d5ff\124Hspell:"..spellId.."\124h["..spellName.."]\124h\124r)")
-			self:Print(procName.." procced!")
+			self:Print(self.opt.Messages.before..procName..self.opt.Messages.after)
 		end
 		-- Blizzard Combat Text
 		if (self.opt.PostCT) then
 			--CombatText_AddMessage(procName.." procced", "", 2, 96, 206, "crit", false);
-			self:Pour(procName.." procced", 2, 96, 206, nil, 24, "OUTLINE", true);
+			self:Pour(self.opt.Messages.before..procName..self.opt.Messages.after, 2, 96, 206, nil, 24, "OUTLINE", true);
 		end
 		-- Party
 		if (self.opt.PostParty and GetNumPartyMembers()>0) then
-			SendChatMessage("[Proculas]: "..procName.." procced!", "PARTY");
+			SendChatMessage("[Proculas]: "..self.opt.Messages.before..procName..self.opt.Messages.after, "PARTY");
 		end
 		-- Raid Warining
 		if (self.opt.PostRW and GetNumPartyMembers()>0) then
-			SendChatMessage(procName.." procced!", "RAID_WARNING");
+			SendChatMessage(self.opt.Messages.before..procName..self.opt.Messages.after, "RAID_WARNING");
 		end
 		-- Guild Chat
 		if (self.opt.PostGuild) then
-			SendChatMessage("[Proculas]: "..procName.." procced!", "GUILD");
+			SendChatMessage("[Proculas]: "..self.opt.Messages.before..procName..self.opt.Messages.after, "GUILD");
 		end
 		-- Raid Chat
 		if (self.opt.PostRaid) then
-			SendChatMessage("[Proculas]: "..procName.." procced!", "RAID");
+			SendChatMessage("[Proculas]: "..self.opt.Messages.before..procName..self.opt.Messages.after, "RAID");
 		end
 	end
 	-- Play Sound
@@ -661,8 +665,37 @@ local options = {
 				},
 			},
 		}, -- General
-		Sound = {
+		Messages = {
 			order = 2,
+			type = "group",
+			name = "Messages",
+			desc = "Proc Messages",
+			get = function(info) return Proculas.opt.Messages[ info[#info] ] end,
+			set = function(info, value)
+				Proculas.opt.Messages[ info[#info] ] = value
+			end,
+			args = {
+				intro = {
+					order = 1,
+					type = "description",
+					name = "Configure message when things proc.",
+				},
+				before = {
+					type = "input",
+					order = 2,
+					name = "Before",
+					desc = "Text before the Proc Name.",
+				},
+				after = {
+					type = "input",
+					order = 3,
+					name = "After",
+					desc = "Text after the Proc Name.",
+				},
+			},
+		}, -- Messages
+		Sound = {
+			order = 3,
 			type = "group",
 			name = "Sound Settings",
 			desc = "Sound Settings",
@@ -693,7 +726,7 @@ local options = {
 			},
 		}, -- Sound
 		Procs = {
-			order = 3,
+			order = 4,
 			type = "group",
 			name = "Proc Settings",
 			desc = "Proc Settings",
@@ -756,7 +789,7 @@ local options = {
 					desc = "If enabled, Proculas will display Libram, Idol, Totem, Sigil procs.",
 				},
 			},
-		}
+		} -- Procs
 	},
 }
 Proculas.options = options
@@ -808,6 +841,7 @@ function Proculas:SetupOptions()
 
 	-- The ordering here matters, it determines the order in the Blizzard Interface Options
 	self.optionsFrames.Proculas = ACD3:AddToBlizOptions("Proculas", nil, nil, "General")
+	self.optionsFrames.Sound = ACD3:AddToBlizOptions("Proculas", "Messages", "Proculas", "Messages")
 	self.optionsFrames.Sound = ACD3:AddToBlizOptions("Proculas", "Sound Settings", "Proculas", "Sound")
 	self.optionsFrames.Procs = ACD3:AddToBlizOptions("Proculas", "Proc Settings", "Proculas", "Procs")
 	self:RegisterModuleOptions("Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db), "Profiles")
