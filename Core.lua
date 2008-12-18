@@ -126,6 +126,36 @@ Proculas.Procs.Enchants = {
 		-- name: Executioner 
 		-- type: enchant 
 	},
+	[3241] = {
+		spellID = 44578,
+		name = "Lifeward",
+		types = {"SPELL_HEAL"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 154 
+		-- name: Lifeward 
+		-- type: enchant 
+	},
+	[3790] = {
+		spellID = 59626,
+		name = "Black Magic",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 155 
+		-- name: Black Magic 
+		-- type: enchant 
+	},
+	[3790] = {
+		spellID = 59620,
+		name = "Berserking",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 156 
+		-- name: Berserking 
+		-- type: enchant 
+	},
 }
 Proculas.Procs.Items = {
 	[12798] = {
