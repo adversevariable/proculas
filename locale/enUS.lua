@@ -36,5 +36,7 @@ L["ABOUT_CMD"] = "About";
 L["ABOUT_CMD_DESC"] = "About Proculas (/proculas about)";
 L["CONFIGURE_CMD"] = "Configure";
 L["CONFIGURE_CMD_DESC"] = "Open the configuration dialog (/proculas config)";
+L["STATS_CMD"] = "Stats";
+L["STATS_CMD_DESC"] = "Displays proc stats.";
 L["STICKY_COMBAT_TEXT"] = "Sticky Combat Text";
 L["STICKY_COMBAT_TEXT_DESC"] = "Display Combat Text message as Sticky/Crit?";

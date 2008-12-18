@@ -8,6 +8,7 @@
 -------------------------------------------------------
 -- Proculas
 Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "LibSink-2.0")
+local L = LibStub("AceLocale-3.0"):GetLocale("Proculas", false)
 local LSM = LibStub("LibSharedMedia-3.0")
 
 -------------------------------------------------------
@@ -45,6 +46,7 @@ local defaults = {
 		PostRW = false,
 		PostGuild = false,
 		PostRaid = false,
+		StickyCT = true,
 		Messages = {
 			before = "",
 			after = " procced!",
@@ -53,332 +55,1545 @@ local defaults = {
 			Playsound = true,
 			SoundFile = "Explosion",
 		},
-		Procs = {
-			Enchants = true,
-			Trinkets = true,
-			Rings = true,
-			Relics = true,
-			Class = true,
-			Amulets = true,
-			Weapons = true,
-			Gems= true,
-		},
 		procstats = {
-			procs = {
-				total = {},
-			},
+			total = {},
+			session = {},
+			lastminute = {},
+			ppm = {},
 		},
+		tracked = {},
 	},
 }
 -------------------------------------------------------
--- Procs that give buffs
-Proculas.Procs = {}
-Proculas.Procs.Buffs = {
-	{'Enchants',
-		{
-			{28093,"Mongoose"},
-		},
+-- Procs
+Proculas.Procs = {
+	Enchants = {},
+	Trinkets = {},
+	Rings = {},
+	Weapons = {},
+	Gems = {},
+	Class = {},
+	Items = {},
+}
+Proculas.Procs.Enchants = {
+	[803] = {
+		spellID = 50265,
+		name = "Fiery Weapon",
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 103 
+		-- name: Fiery Weapon 
+		-- type: enchant 
 	},
-	{'HUNTER',
-		{
-			{6150,"Quick Shots"},
-			{53257,"Cobra Strikes"},
-		},
+	[2673] = {
+		spellID = 28093,
+		name = "Mongoose",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 145 
+		-- name: Mongoose 
+		-- type: enchant 
 	},
-	{'SHAMAN',
-		{
-			{16246,"Clearcasting"},
-			{16257,"Flurry"},
-			{16281,"Flurry"},
-			{16282,"Flurry"},
-			{16283,"Flurry"},
-			{16284,"Flurry"},
-			{16280,"Flurry"},
-		},
+	[2674] = {
+		spellID = 27996,
+		name = "Spellsurge",
+		types = {"SPELL_ENERGIZE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 146 
+		-- name: Spellsurge 
+		-- type: enchant 
 	},
-	{'DRUID',
-		{
-			{16870,"Clearcasting"},
-			{48518,"Eclipse"},
-			{48517,"Eclipse"},
-		},
+	[1900] = {
+		spellID = 20007,
+		name = "Crusader",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 147 
+		-- name: Crusader 
+		-- type: enchant 
 	},
-	{'PRIEST',
-		{
-			{33151,"Surge of Light"},
-			{34754,"Clearcasting"},
-		},
-	},
-	{'WARRIOR',
-		{
-			{12966,"Flurry"},
-			{12967,"Flurry"},
-			{12968,"Flurry"},
-			{12969,"Flurry"},
-			{12970,"Flurry"},
-			{12880,"Enrage"},
-			{14201,"Enrage"},
-			{14202,"Enrage"},
-			{14203,"Enrage"},
-			{14204,"Enrage"},
-			{46916,"Bloodsurge"},
-		},
-	},
-	{'MAGE',
-		{
-			{44401,"Missile Barrage"},
-			{44544,"Fingers of Frost"},
-			{57761,"Brain Freeze"},
-			{12536,"Clearcasting"},
-			{48108,"Hot Streak"},
-			{54741,"Firestarter"},
-		},
-	},
-	{'PALADIN',
-		{
-			{53489,"The Art of War"},
-			{59578,"The Art of War"},
-			{54203,"Sheath of Light"},
-		},
-	},
-	{'WARLOCK',
-		{
-			{17941,"Nightfall"},
-			{54274,"Backdraft"},
-			{54276,"Backdraft"},
-			{54277,"Backdraft"},
-		},
-	},
-	{'DEATHKNIGHT',
-		{
-			{50466,"Death Trance!"},
-			{50447,"Bloody Vengeance"},
-			{50448,"Bloody Vengeance"},
-			{50449,"Bloody Vengeance"},
-			{52424,"Retaliation"},
-			{50421,"Scent of Blood"},
-			{51789,"Blade Barrier"},
-			
-			{55744,"The Dead Walk"},
-		},
-	},
-	{'Trinkets',
-		{
-			{33649,"Hourglass of the Unraveller"},
-			{41263,"Airman's Ribbon of Gallantry"},
-			{40483,"Ashtongue Talisman of Insight"},
-			{40480,"Ashtongue Talisman of Shadows"},
-			{40487,"Ashtongue Talisman of Swiftness"},
-			{40459,"Ashtongue Talisman of Valor"},
-			{45040,"Blackened Naaru Sliver"},
-			{34775,"Dragonspine Trophy"},
-			{40477,"Madness of the Betrayer"},
-			{37656,"Memento of Tyrande"},
-			{38348,"Sextant of Unstable Currents"},
-			{41261,"Skyguard Silver Cross"},
-			{37198,"Tome of Fiery Redemption"},
-			{42084,"Tsunami Talisman"},
-			{37174,"Warp-Spring Coil"},
-			{38346,"Bangle of Endless Blessings"},
-			{33370,"Quagmirran's Eye"},
-			{34321,"Shiffar's Nexus-Horn"},
-			{37658,"The Lightning Capacitor"},
-	
-			{60062,"Essence of Life"},
-			{60065,"Mirror of Truth"},
-			{60064,"Sundial of the Exiled"},
-	
-			{60494,"Dying Curse"},
-			{60492,"Embrace of the Spider"},
-			{60314,"Fury of the Five Flights"},
-			{60436,"Grim Toll"},
-			{49623,"Je'Tze's Bell"},
-			{60218,"Essence of Gossamer"},
-			{60479,"Forge Ember"},
-			{60302,"Meteorite Whetstone"},
-			{60520,"Spark of Life"},
-			
-			{55748,"Horn of Argent Fury"},
-		},
-	},
-	{'Gems',
-		{
-			{55382,"Insightful Earthsiege Diamond"},
-		},
-	},
-	{'Rings',
-		{
-			{60318,"Signet of Edward the Odd"},
-		},
-	},
-	{'Idols',
-		{
-			{43740,"Idol of the Unseen Moon"},
-			{52021,"Idol of the Wastes"},
-		},
-	},
-	{'Librams',
-		{
-			{60819,"Libram of Reciprocation"},
-			{43747,"Libram of Divine Judgement"},
-		},
-	},
-	{'Totems',
-		{
-			{43751,"Skycall Totem"},
-			{43749,"Stonebreaker's Totem"},
-			{48838,"Totem of the Tundra"},
-		},
-	},
-	{'Sigils',
-		{
-			{60828,"Sigil of Haunted Dreams"},
-		}
-	},
-	{'Amulets',
-		{
-			{45478,"Shattered Sun Pendant of Restoration"},
-			{45430,"Shattered Sun Pendant of Restoration"},
-			{45432,"Shattered Sun Pendant of Resolve"},
-			{45431,"Shattered Sun Pendant of Resolve"},
-			{45480,"Shattered Sun Pendant of Might"},
-			{45428,"Shattered Sun Pendant of Might"},
-			{45479,"Shattered Sun Pendant of Acumen"},
-			{45429,"Shattered Sun Pendant of Acumen"},
-		},
-	},
-	{'Weapons',
-		{
-			-- Daggers
-			{11790,"Toxic Revenger"},
-			{3742,"Gahz'rilla Fang"},
-			{12685,"Stealthblade"},
-			{8348,"Julie's Dagger"},
-			{16551,"Felstriker"},
-			{38307,"The Night Blade"},
-			{59043,"The Dusk Blade"},
-			{36478,"Infinity Blade"},
-			{35353,"Riftmaker"},
-			{17331,"Fang of the Crystal Spider"},
-			{19755,"Frightalon"},
-			{16528,"Keris of Zul'Serak"},
-			{13526,"Corrosive Poison"},
-			
-			-- 1H Axes
-			{16928,"Annihilator"},
-			{16603,"Demonfork"},
-			{17506,"Soul Breaker"},
-			
-			-- 1H Maces
-			{40293,"Syphon of the Nathrezim"},
-			{36483,"Cosmic Infuser"},
-			{40972,"Crystal Spire of Karabor"},
-			{33489,"Blackout Truncheon"},
-			{18803,"Hand of Edward the Odd"},
-			{15494,"Ironfoe"},
-			{18203,"Venomspitter"},
-			{13534,"The Shatterer"},
-			{13496,"Mug O' Hurt"},
-			
-			-- 2H Axes
-			{9632,"Ravager"},
-		},
+	[3225] = {
+		spellID = 42976,
+		name = "Executioner",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 148 
+		-- name: Executioner 
+		-- type: enchant 
 	},
 }
--- Procs that buff the group
-Proculas.Procs.GroupBuffs = {
-	{'DEATHKNIGHT',
-		{
-			{53136,"Abominable Might"},
-		},
+Proculas.Procs.Items = {
+	[12798] = {
+		spellID = 16928,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 73 
+		-- name: Annihilator 
+		-- type: 1haxe 
 	},
-}
--- Procs that energize
-Proculas.Procs.Energize = {
-	{'PALADIN',
-		{
-			{31930,"Judgements of the Wise"},
-		},
-	},
-	{'Weapons',
-		{
-			-- 1H Maces
-			{21951,"Fist of Stone"},
-		},
-	},
-}
--- Procs that do damage
-Proculas.Procs.Damage = {
-	{'Weapons',
-		{
-			-- Daggers
-			{23267,"Perdition's Blade"},
-			{24993,"Emerald Dragonfang"},
-			{21151,"Gutgore Ripper"},
-			{24388,"The Lobotomizer"},
-			{23592,"Electrified Dagger"},
-			{18833,"Alcor's Sunrazor"},
-			{21978,"Blade of Eternal Darkness"},
-			{16454,"Searing Needle"},
-			{18107,"Gut Ripper"},
-			
-			-- 1H Axes
-			{18104,"Axe of the Deep Woods"},
-			
-			-- 1H Maces
-			{24254,"Sceptre of Smiting"},
-			{18082,"Volcanic Hammer"},
-			{18083,"Galgann's Firehammer"},
-			
-			-- Enchants
-			{50265,"Fiery Weapon"},
-		},
-	},
-}
--- Procs that summon things!
-Proculas.Procs.Summon = {
-	{'Weapons',
-		{
-			-- Daggers
-			{40393,"Shard of Azzinoth"},
-		},
-	},
-}
--- Procs that Leech or Drain from people
-Proculas.Procs.LeechDrain = {
-	{'Weapons',
-		{
-			-- 1H Axes
-			{16414,"Wraith Scythe"},
-			
-			-- 1H Maces
-			{18084,"Fist of the Damned"},
-		},
-	},
-}
--- Procs that Dispel things
-Proculas.Procs.Dispel = {
-	{'Weapons',
-		{
-			-- 1H Maces
-			{16908,"Serenity"},
-		},
-	},
-}
 
+	[12621] = {
+		spellID = 16603,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 74 
+		-- name: Demonfork 
+		-- type: 1haxe 
+	},
+
+	[13408] = {
+		spellID = 17506,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 75 
+		-- name: Soul Breaker 
+		-- type: 1haxe 
+	},
+
+	[811] = {
+		spellID = 18104,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 99 
+		-- name: Axe of the Deep Woods 
+		-- type: 1haxe 
+	},
+
+	[19908] = {
+		spellID = 24254,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 100 
+		-- name: Sceptre of Smiting 
+		-- type: 1haxe 
+	},
+
+	[12792] = {
+		spellID = 18082,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 101 
+		-- name: Volcanic Hammer 
+		-- type: 1haxe 
+	},
+
+	[9419] = {
+		spellID = 18083,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 102 
+		-- name: Galgann's Firehammer 
+		-- type: 1haxe 
+	},
+
+	[11920] = {
+		spellID = 16414,
+		types = {"SPELL_LEECH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 105 
+		-- name: Wraith Scythe 
+		-- type: 1haxe 
+	},
+
+	[32262] = {
+		spellID = 40293,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 76 
+		-- name: Syphon of the Nathrezim 
+		-- type: 1hmace 
+	},
+
+	[30317] = {
+		spellID = 36483,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 77 
+		-- name: Cosmic Infuser 
+		-- type: 1hmace 
+	},
+
+	[32500] = {
+		spellID = 40972,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 78 
+		-- name: Crystal Spire of Karabor 
+		-- type: 1hmace 
+	},
+
+	[27901] = {
+		spellID = 33489,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 79 
+		-- name: Blackout Truncheon 
+		-- type: 1hmace 
+	},
+
+	[2243] = {
+		spellID = 18803,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 80 
+		-- name: Hand of Edward the Odd 
+		-- type: 1hmace 
+	},
+
+	[11684] = {
+		spellID = 15494,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 81 
+		-- name: Ironfoe 
+		-- type: 1hmace 
+	},
+
+	[13183] = {
+		spellID = 18203,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 82 
+		-- name: Venomspitter 
+		-- type: 1hmace 
+	},
+
+	[7954] = {
+		spellID = 13534,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 83 
+		-- name: The Shatterer 
+		-- type: 1hmace 
+	},
+
+	[4090] = {
+		spellID = 13496,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 84 
+		-- name: Mug O' Hurt 
+		-- type: 1hmace 
+	},
+
+	[17943] = {
+		spellID = 21951,
+		types = {"SPELL_ENERGIZE"},
+		selfOnly = 1,
+		-- Proc Info
+		-- ID: 88 
+		-- name: Fist of Stone 
+		-- type: 1hmace 
+	},
+
+	[17733] = {
+		spellID = 21951,
+		types = {"SPELL_ENERGIZE"},
+		selfOnly = 1,
+		-- Proc Info
+		-- ID: 89 
+		-- name: Fist of Stone 
+		-- type: 1hmace 
+	},
+
+	[10804] = {
+		spellID = 18084,
+		types = {"SPELL_LEECH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 106 
+		-- name: Fist of the Damned 
+		-- type: 1hmace 
+	},
+
+	[12781] = {
+		spellID = 16908,
+		types = {"SPELL_DISPEL"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 107 
+		-- name: Serenity 
+		-- type: 1hmace 
+	},
+
+	[7717] = {
+		spellID = 9632,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 85 
+		-- name: Ravager 
+		-- type: 2haxe 
+	},
+
+	[9453] = {
+		spellID = 11790,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 58 
+		-- name: Toxic Revenger 
+		-- type: dagger 
+	},
+
+	[9467] = {
+		spellID = 3742,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 59 
+		-- name: Gahz'rilla Fang 
+		-- type: dagger 
+	},
+
+	[10625] = {
+		spellID = 12685,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 60 
+		-- name: Stealthblade 
+		-- type: dagger 
+	},
+
+	[6660] = {
+		spellID = 8348,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 61 
+		-- name: Julie's Dagger 
+		-- type: dagger 
+	},
+
+	[12590] = {
+		spellID = 16551,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 62 
+		-- name: Felstriker 
+		-- type: dagger 
+	},
+
+	[31331] = {
+		spellID = 38307,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 63 
+		-- name: The Night Blade 
+		-- type: dagger 
+	},
+
+	[43613] = {
+		spellID = 59043,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 64 
+		-- name: The Dusk Blade 
+		-- type: dagger 
+	},
+
+	[30312] = {
+		spellID = 36478,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 65 
+		-- name: Infinity Blade 
+		-- type: dagger 
+	},
+
+	[29182] = {
+		spellID = 35353,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 66 
+		-- name: Riftmaker 
+		-- type: dagger 
+	},
+
+	[13218] = {
+		spellID = 17331,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 67 
+		-- name: Fang of the Crystal Spider 
+		-- type: dagger 
+	},
+
+	[14024] = {
+		spellID = 19755,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 68 
+		-- name: Frightalon 
+		-- type: dagger 
+	},
+
+	[12582] = {
+		spellID = 16528,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 69 
+		-- name: Keris of Zul'Serak 
+		-- type: dagger 
+	},
+
+	[11635] = {
+		spellID = 13526,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 70 
+		-- name: Hookfang Shanker 
+		-- type: dagger 
+	},
+
+	[6909] = {
+		spellID = 13526,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 71 
+		-- name: Strike of the Hydra 
+		-- type: dagger 
+	},
+
+	[18816] = {
+		spellID = 23267,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 90 
+		-- name: Perdition's Blade 
+		-- type: dagger 
+	},
+
+	[20578] = {
+		spellID = 24993,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 91 
+		-- name: Emerald Dragonfang 
+		-- type: dagger 
+	},
+
+	[17071] = {
+		spellID = 21151,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 92 
+		-- name: Gutgore Ripper 
+		-- type: dagger 
+	},
+
+	[19324] = {
+		spellID = 24388,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 93 
+		-- name: The Lobotomizer 
+		-- type: dagger 
+	},
+
+	[19100] = {
+		spellID = 23592,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 94 
+		-- name: Electrified Dagger 
+		-- type: dagger 
+	},
+
+	[14555] = {
+		spellID = 18833,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 95 
+		-- name: Alcor's Sunrazor 
+		-- type: dagger 
+	},
+
+	[17780] = {
+		spellID = 21978,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 96 
+		-- name: Blade of Eternal Darkness 
+		-- type: dagger 
+	},
+
+	[12531] = {
+		spellID = 16454,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 97 
+		-- name: Searing Needle 
+		-- type: dagger 
+	},
+
+	[2164] = {
+		spellID = 18107,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 98 
+		-- name: Gut Ripper 
+		-- type: dagger 
+	},
+
+	[32471] = {
+		spellID = 40393,
+		types = {"SPELL_SUMMON"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 104 
+		-- name: Shard of Azzinoth 
+		-- type: dagger 
+	},
+
+	[33510] = {
+		spellID = 43740,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 43 
+		-- name: Idol of the Unseen Moon 
+		-- type: idol 
+	},
+
+	[38295] = {
+		spellID = 52021,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 44 
+		-- name: Idol of the Wastes 
+		-- type: idol 
+	},
+
+	[40706] = {
+		spellID = 60819,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 45 
+		-- name: Libram of Reciprocation 
+		-- type: libram 
+	},
+
+	[33503] = {
+		spellID = 43747,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 46 
+		-- name: Libram of Divine Judgement 
+		-- type: libram 
+	},
+
+	[34677] = {
+		spellID = 45478,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 51 
+		-- name: Shattered Sun Pendant of Restoration 
+		-- type: neck 
+	},
+
+	[34677] = {
+		spellID = 45430,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 52 
+		-- name: Shattered Sun Pendant of Restoration 
+		-- type: neck 
+	},
+
+	[34680] = {
+		spellID = 45432,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 53 
+		-- name: Shattered Sun Pendant of Resolve 
+		-- type: neck 
+	},
+
+	[34680] = {
+		spellID = 45431,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 54 
+		-- name: Shattered Sun Pendant of Resolve 
+		-- type: neck 
+	},
+
+	[34679] = {
+		spellID = 45480,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 55 
+		-- name: Shattered Sun Pendant of Might 
+		-- type: neck 
+	},
+
+	[34679] = {
+		spellID = 45428,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 56 
+		-- name: Shattered Sun Pendant of Might 
+		-- type: neck 
+	},
+
+	[34678] = {
+		spellID = 45479,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 57 
+		-- name: Shattered Sun Pendant of Acumen 
+		-- type: neck 
+	},
+
+	[34678] = {
+		spellID = 45429,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 72 
+		-- name: Shattered Sun Pendant of Acumen 
+		-- type: neck 
+	},
+
+	[44308] = {
+		spellID = 60318,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 41 
+		-- name: Signet of Edward the Odd 
+		-- type: ring 
+	},
+
+	[40715] = {
+		spellID = 60828,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 50 
+		-- name: Sigil of Haunted Dreams 
+		-- type: sigil 
+	},
+
+	[33506] = {
+		spellID = 43751,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 47 
+		-- name: Skycall Totem 
+		-- type: totem 
+	},
+
+	[33507] = {
+		spellID = 43749,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 48 
+		-- name: Stonebreaker's Totem 
+		-- type: totem 
+	},
+
+	[37575] = {
+		spellID = 48838,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 49 
+		-- name: Totem of the Tundra 
+		-- type: totem 
+	},
+
+	[28034] = {
+		spellID = 33649,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 9 
+		-- name: Hourglass of the Unraveller 
+		-- type: trinket 
+	},
+
+	[32771] = {
+		spellID = 41263,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 10 
+		-- name: Airman's Ribbon of Gallantry 
+		-- type: trinket 
+	},
+
+	[32488] = {
+		spellID = 40483,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 11 
+		-- name: Ashtongue Talisman of Insight 
+		-- type: trinket 
+	},
+
+	[32493] = {
+		spellID = 40480,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 12 
+		-- name: Ashtongue Talisman of Shadows 
+		-- type: trinket 
+	},
+
+	[32487] = {
+		spellID = 40487,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 13 
+		-- name: Ashtongue Talisman of Swiftness 
+		-- type: trinket 
+	},
+
+	[32485] = {
+		spellID = 40459,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 14 
+		-- name: Ashtongue Talisman of Valor 
+		-- type: trinket 
+	},
+
+	[34427] = {
+		spellID = 45040,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 15 
+		-- name: Blackened Naaru Sliver 
+		-- type: trinket 
+	},
+
+	[28830] = {
+		spellID = 34775,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 16 
+		-- name: Dragonspine Trophy 
+		-- type: trinket 
+	},
+
+	[32505] = {
+		spellID = 40477,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 17 
+		-- name: Madness of the Betrayer 
+		-- type: trinket 
+	},
+
+	[32496] = {
+		spellID = 37656,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 18 
+		-- name: Memento of Tyrande 
+		-- type: trinket 
+	},
+
+	[30626] = {
+		spellID = 38348,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 19 
+		-- name: Sextant of Unstable Currents 
+		-- type: trinket 
+	},
+
+	[32770] = {
+		spellID = 41261,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 20 
+		-- name: Skyguard Silver Cross 
+		-- type: trinket 
+	},
+
+	[30447] = {
+		spellID = 37198,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 21 
+		-- name: Tome of Fiery Redemption 
+		-- type: trinket 
+	},
+
+	[30627] = {
+		spellID = 42084,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 22 
+		-- name: Tsunami Talisman 
+		-- type: trinket 
+	},
+
+	[30450] = {
+		spellID = 37174,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 23 
+		-- name: Warp-Spring Coil 
+		-- type: trinket 
+	},
+
+	[28370] = {
+		spellID = 38346,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 24 
+		-- name: Bangle of Endless Blessings 
+		-- type: trinket 
+	},
+
+	[27683] = {
+		spellID = 33370,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 25 
+		-- name: Quagmirran's Eye 
+		-- type: trinket 
+	},
+
+	[28418] = {
+		spellID = 34321,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 26 
+		-- name: Shiffar's Nexus-Horn 
+		-- type: trinket 
+	},
+
+	[28785] = {
+		spellID = 37658,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 27 
+		-- name: The Lightning Capacitor 
+		-- type: trinket 
+	},
+
+	[40685] = {
+		spellID = 60062,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 28 
+		-- name: The Egg of Mortal Essence 
+		-- type: trinket 
+	},
+
+	[40684] = {
+		spellID = 60065,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 29 
+		-- name: Mirror of Truth 
+		-- type: trinket 
+	},
+
+	[40682] = {
+		spellID = 60064,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 30 
+		-- name: Sundial of the Exiled 
+		-- type: trinket 
+	},
+
+	[39229] = {
+		spellID = 60494,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 31 
+		-- name: Embrace of the Spider 
+		-- type: trinket 
+	},
+
+	[40431] = {
+		spellID = 60314,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 32 
+		-- name: Fury of the Five Flights 
+		-- type: trinket 
+	},
+
+	[40256] = {
+		spellID = 60437,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 33 
+		-- name: Grim Toll 
+		-- type: trinket 
+	},
+
+	[37835] = {
+		spellID = 49623,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 34 
+		-- name: Je'Tze's Bell 
+		-- type: trinket 
+	},
+
+	[37220] = {
+		spellID = 60218,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 35 
+		-- name: Essence of Gossamer 
+		-- type: trinket 
+	},
+
+	[37660] = {
+		spellID = 60479,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 36 
+		-- name: Forge Ember 
+		-- type: trinket 
+	},
+
+	[37390] = {
+		spellID = 60302,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 37 
+		-- name: Meteorite Whetstone 
+		-- type: trinket 
+	},
+
+	[37657] = {
+		spellID = 60520,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 38 
+		-- name: Spark of Life 
+		-- type: trinket 
+	},
+
+	[39889] = {
+		spellID = 55748,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 39 
+		-- name: Horn of Argent Fury 
+		-- type: trinket 
+	},
+
+	[28190] = {
+		spellID = 60062,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 40 
+		-- name: Scarab of the Infinite Cycle 
+		-- type: trinket 
+	},
+}
+Proculas.Procs.Class.PALADIN = {
+	[31930] = {
+		name = "Judgements of the Wise",
+		types = {"SPELL_ENERGIZE"},
+		selfOnly = 1,
+		-- Proc Info
+		-- ID: 87 
+		-- name: Judgements of the Wise 
+		-- type: PALADIN 
+	},
+	[53489] = {
+		name = "The Art of War",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 131 
+		-- name: The Art of War 
+		-- type: PALADIN 
+	},
+	[59578] = {
+		name = "The Art of War",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 132 
+		-- name: The Art of War 
+		-- type: PALADIN 
+	},
+	[54203] = {
+		name = "Sheath of Light",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 149 
+		-- name: Sheath of Light 
+		-- type: PALADIN 
+	},
+	[20050] = {
+		name = "Vengeance",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 150 
+		-- name: Vengeance 
+		-- type: PALADIN 
+	},
+	[20052] = {
+		name = "Vengeance",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 151 
+		-- name: Vengeance 
+		-- type: PALADIN 
+	},
+	[20053] = {
+		name = "Vengeance",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 152 
+		-- name: Vengeance 
+		-- type: PALADIN 
+	},
+	[61840] = {
+		name = "Righteous Vengeance",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 153 
+		-- name: Righteous Vengeance 
+		-- type: PALADIN 
+	},
+}
+Proculas.Procs.Class.DEATHKNIGHT = {
+	[50466] = {
+		name = "Death Trance!",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 1 
+		-- name: Death Trance! 
+		-- type: DEATHKNIGHT 
+	},
+	[50447] = {
+		name = "Bloody Vengeance",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 2 
+		-- name: Bloody Vengeance 
+		-- type: DEATHKNIGHT 
+	},
+	[50448] = {
+		name = "Bloody Vengeance",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 3 
+		-- name: Bloody Vengeance 
+		-- type: DEATHKNIGHT 
+	},
+	[50449] = {
+		name = "Bloody Vengeance",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 4 
+		-- name: Bloody Vengeance 
+		-- type: DEATHKNIGHT 
+	},
+	[52424] = {
+		name = "Retaliation",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 5 
+		-- name: Retaliation 
+		-- type: DEATHKNIGHT 
+	},
+	[50421] = {
+		name = "Scent of Blood",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 6 
+		-- name: Scent of Blood 
+		-- type: DEATHKNIGHT 
+	},
+	[51789] = {
+		name = "Blade Barrier",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 7 
+		-- name: Blade Barrier 
+		-- type: DEATHKNIGHT 
+	},
+	[55744] = {
+		name = "The Dead Walk",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 8 
+		-- name: The Dead Walk 
+		-- type: DEATHKNIGHT 
+	},
+	[53136] = {
+		name = "Abominable Might",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 1,
+		-- Proc Info
+		-- ID: 86 
+		-- name: Abominable Might 
+		-- type: DEATHKNIGHT 
+	},
+}
+Proculas.Procs.Class.HUNTER = {
+	[6150] = {
+		name = "Quick Shots",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 143 
+		-- name: Quick Shots 
+		-- type: HUNTER 
+	},
+	[53257] = {
+		name = "Cobra Strikes",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 144 
+		-- name: Cobra Strikes 
+		-- type: HUNTER 
+	},
+}
+Proculas.Procs.Class.SHAMAN = {
+	[16246] = {
+		name = "Clearcasting",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 136 
+		-- name: Clearcasting 
+		-- type: SHAMAN 
+	},
+	[16257] = {
+		name = "Flurry",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 137 
+		-- name: Flurry 
+		-- type: SHAMAN 
+	},
+	[16281] = {
+		name = "Flurry",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 138 
+		-- name: Flurry 
+		-- type: SHAMAN 
+	},
+	[16282] = {
+		name = "Flurry",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 139 
+		-- name: Flurry 
+		-- type: SHAMAN 
+	},
+	[16283] = {
+		name = "Flurry",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 140 
+		-- name: Flurry 
+		-- type: SHAMAN 
+	},
+	[16284] = {
+		name = "Flurry",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 141 
+		-- name: Flurry 
+		-- type: SHAMAN 
+	},
+	[16280] = {
+		name = "Flurry",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 142 
+		-- name: Flurry 
+		-- type: SHAMAN 
+	},
+}
+Proculas.Procs.Class.DRUID = {
+	[16870] = {
+		name = "Clearcasting",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 133 
+		-- name: Clearcasting 
+		-- type: DRUID 
+	},
+	[48518] = {
+		name = "Eclipse",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 134 
+		-- name: Eclipse 
+		-- type: DRUID 
+	},
+	[48517] = {
+		name = "Eclipse",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 135 
+		-- name: Eclipse 
+		-- type: DRUID 
+	},
+}
+Proculas.Procs.Class.PRIEST = {
+	[33151] = {
+		name = "Surge of Light",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 129 
+		-- name: Surge of Light 
+		-- type: PRIEST 
+	},
+	[34754] = {
+		name = "Clearcasting",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 130 
+		-- name: Clearcasting 
+		-- type: PRIEST 
+	},
+}
+Proculas.Procs.Class.WARRIOR = {
+	[12966] = {
+		name = "Flurry",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 118 
+		-- name: Flurry 
+		-- type: WARRIOR 
+	},
+	[12967] = {
+		name = "Flurry",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 119 
+		-- name: Flurry 
+		-- type: WARRIOR 
+	},
+	[12968] = {
+		name = "Flurry",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 120 
+		-- name: Flurry 
+		-- type: WARRIOR 
+	},
+	[12969] = {
+		name = "Flurry",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 121 
+		-- name: Flurry 
+		-- type: WARRIOR 
+	},
+	[12970] = {
+		name = "Flurry",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 122 
+		-- name: Flurry 
+		-- type: WARRIOR 
+	},
+	[12880] = {
+		name = "Enrage",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 123 
+		-- name: Enrage 
+		-- type: WARRIOR 
+	},
+	[14201] = {
+		name = "Enrage",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 124 
+		-- name: Enrage 
+		-- type: WARRIOR 
+	},
+	[14202] = {
+		name = "Enrage",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 125 
+		-- name: Enrage 
+		-- type: WARRIOR 
+	},
+	[14203] = {
+		name = "Enrage",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 126 
+		-- name: Enrage 
+		-- type: WARRIOR 
+	},
+	[14204] = {
+		name = "Enrage",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 127 
+		-- name: Enrage 
+		-- type: WARRIOR 
+	},
+	[46916] = {
+		name = "Bloodsurge",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 128 
+		-- name: Bloodsurge 
+		-- type: WARRIOR 
+	},
+}
+Proculas.Procs.Class.MAGE = {
+	[44401] = {
+		name = "Missile Barrage",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 112 
+		-- name: Missile Barrage 
+		-- type: MAGE 
+	},
+	[44544] = {
+		name = "Fingers of Frost",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 113 
+		-- name: Fingers of Frost 
+		-- type: MAGE 
+	},
+	[57761] = {
+		name = "Brain Freeze",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 114 
+		-- name: Brain Freeze 
+		-- type: MAGE 
+	},
+	[12536] = {
+		name = "Clearcasting",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 115 
+		-- name: Clearcasting 
+		-- type: MAGE 
+	},
+	[48108] = {
+		name = "Hot Streak",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 116 
+		-- name: Hot Streak 
+		-- type: MAGE 
+	},
+	[54741] = {
+		name = "Firestarter",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 117 
+		-- name: Firestarter 
+		-- type: MAGE 
+	},
+}
+Proculas.Procs.Class.WARLOCK = {
+	[17941] = {
+		name = "Nightfall",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 108 
+		-- name: Nightfall 
+		-- type: WARLOCK 
+	},
+	[54274] = {
+		name = "Backdraft",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 109 
+		-- name: Backdraft 
+		-- type: WARLOCK 
+	},
+	[54276] = {
+		name = "Backdraft",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 110 
+		-- name: Backdraft 
+		-- type: WARLOCK 
+	},
+	[54277] = {
+		name = "Backdraft",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 111 
+		-- name: Backdraft 
+		-- type: WARLOCK 
+	},
+}
 -------------------------------------------------------
 -- Just some required things...
 function Proculas:OnInitialize()
+	self:Print("v"..VERSION.." running.")
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", defaults)
 	self.opt = self.db.profile
 	self.procstats = self.db.profile.procstats
-	self.procstats.procs.session = {}
-	self.procstats.procs.lastminute = {}
+	self.procstats.session = {}
+	self.procstats.lastminute = {}
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
 	self:ScheduleRepeatingTimer("resetLastMinuteProc", 60)
 	self:SetupOptions()
+	self.combatTime = 0
+	self.lastCombatTime = 0
+end
+
+function Proculas:OnEnable()
+	self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED")
+	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	self:RegisterEvent("UNIT_INVENTORY_CHANGED")
+	changed = true
+	-- Player stuff
+	playerClass0, playerClass1 = UnitClass("player")
+	self.playerClass = playerClass1
+	self.playerName = UnitName("player")
+	-- Check for procs
+	self:scanForProcs()
 end
 
 -------------------------------------------------------
@@ -386,131 +1601,141 @@ end
 
 -- Empties the Procs Last Minute Array.
 function Proculas:resetLastMinuteProc()
-	self.procstats.procs.lastminute = {}
-end
-
-function Proculas:OnEnable()
-	self:Print("v"..VERSION.." running.")
-	self:RegisterEvent("COMBAT_LOG_EVENT")
-	-- Player stuff
-	playerClass0, playerClass1 = UnitClass("player")
-	self.playerClass = playerClass1
-	self.playerName = UnitName("player")
-	if (self.playerClass == "WARRIOR") then
-		self.opt.Procs.WARRIOR = true
-	elseif (self.playerClass == "MAGE") then
-		self.opt.Procs.MAGE = true
-	elseif (self.playerClass == "SHAMAN") then
-		self.opt.Procs.SHAMAN = true
-		if (self.opt.Procs.Relics) then
-			self.opt.Procs.Totem = true
-		end
-	elseif (self.playerClass == "DRUID") then
-		self.opt.Procs.DRUID = true
-		if (self.opt.Procs.Relics) then
-			self.opt.Procs.Idol = true
-		end
-	elseif (self.playerClass == "PRIEST") then
-		self.opt.Procs.PRIEST = true
-	elseif (self.playerClass == "HUNTER") then
-		self.opt.Procs.HUNTER = true
-	elseif (self.playerClass == "PALADIN") then
-		self.opt.Procs.PALADIN = true
-		if (self.opt.Procs.Relics) then
-			self.opt.Procs.Libram = true
-		end
-	elseif (self.playerClass == "WARLOCK") then
-		self.opt.Procs.WARLOCK = true
-	elseif (self.playerClass == "ROGUE") then
-		self.opt.Procs.ROGUE = true
-	elseif (self.playerClass == "DEATHKNIGHT") then
-		self.opt.Procs.DEATHKNIGHT = true
-		self.opt.Procs.Sigil = true
-	elseif (self.opt.Procs.Relics == false) then
-		self.opt.Procs.Totem = false
-		self.opt.Procs.Idol = false
-		self.opt.Procs.Libram = false
-		self.opt.Procs.Sigil = false
-	end
-	if (self.opt.Procs.Class == false) then
-		self.opt.Procs.WARRIOR = false
-		self.opt.Procs.MAGE = false
-		self.opt.Procs.PRIEST = false
-		self.opt.Procs.PALADIN = false
-		self.opt.Procs.DRUID = false
-		self.opt.Procs.SHAMAN = false
-		self.opt.Procs.HUNTER = false
-		self.opt.Procs.ROGUE = false
-		self.opt.Procs.WARLOCK = false
-		self.opt.Procs.DEATHKNIGHT = false
-	end
+	self.procstats.lastminute = {}
 end
 
 -------------------------------------------------------
--- Proculas Profiles Stuff
+-- Profiles Stuff
 function Proculas:OnProfileChanged(event, database, newProfileKey)
 	self.db = db
 	self.opt = db.profile
 	self:Print("Profile changed.")
 end
 
--------------------------------------------------------
--- Time to check for some Procs!
-function Proculas:COMBAT_LOG_EVENT(event,...)
-	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
-	local spellId, spellName, spellSchool = select(9, ...)
-	-- Proc Buffs
-	if(type == "SPELL_AURA_APPLIED" and name == self.playerName
-	or type == "SPELL_AURA_REFRESH" and name == self.playerName) then
-		self:checkProcs(self.Procs.Buffs,...)
+function Proculas:scanForProcs()
+	-- Reset tracked Procs
+	self.opt.tracked = {}
+
+	-- Find Procs
+	self:scanItem(GetInventorySlotInfo("MainHandSlot"))
+	self:scanItem(GetInventorySlotInfo("SecondaryHandSlot"))
+	self:scanItem(GetInventorySlotInfo("RangedSlot"))
+	self:scanItem(GetInventorySlotInfo("Trinket0Slot"))
+	self:scanItem(GetInventorySlotInfo("Trinket1Slot"))
+	self:scanItem(GetInventorySlotInfo("Finger0Slot"))
+	self:scanItem(GetInventorySlotInfo("Finger1Slot"))
+	
+	-- Add Class Procs
+	for index,procs in pairs(self.Procs.Class) do
+		if(index == self.playerClass) then
+			for spellID,procInfo in pairs(procs) do
+				procInfo.spellID = spellID
+				self:addProc(procInfo)
+			end
+		end
 	end
-	-- Proc Group Buffs - self
-	if(type == "SPELL_AURA_APPLIED" and name == self.playerName and name2 == self.playerName
-	or type == "SPELL_AURA_REFRESH" and name == self.playerName and name2 == self.playerName) then
-		self:checkProcs(self.Procs.GroupBuffs,...)
-	end
-	-- Energize Procs
-	if (type == "SPELL_ENERGIZE" and name == self.playerName) then
-		self:checkProcs(self.Procs.Energize,...)
-	end
-	-- Damage Procs
-	if(type == "SPELL_DAMAGE" and name == self.playerName) then
-		self:checkProcs(self.Procs.Damage,...)
-	end
-	-- Summon Procs
-	if(type == "SPELL_SUMMON" and name == self.playerName) then
-		self:checkProcs(self.Procs.Summon,...)
-	end
-	-- Leech and Drain Procs
-	if(type == "SPELL_LEECH" and name == self.playerName
-	or type == "SPELL_DRAIN" and name == self.playerName) then
-		self:checkProcs(self.Procs.LeechDrain,...)
-	end
-	-- Dispel procs
-	if(type == "SPELL_DISPEL" and name == self.playerName) then
-		self:checkProcs(self.Procs.Dispel,...)
-	end
-end
-function Proculas:checkProcs(procs,...)
-	local spellId, spellName, spellSchool = select(9, ...)
-	for _,v in ipairs(procs) do
-		if (self.opt.Procs[v[1]] == true) then
-			for _,v in ipairs(v[2]) do
-				if (spellId == v[1]) then
-					self:Postproc(v[2],spellId)
-				end
-			end -- loop through procs
-		end -- check if Proc category is enabled
-	end	-- loop through categories
 end
 
--------------------------------------------------------
--- Used to post procs to chat, play sounds, etc
-function Proculas:Postproc(procName,spellId)
-	spellName = GetSpellInfo(spellId)
+function Proculas:scanItem(slotID)
+	local itemlink = GetInventoryItemLink("player", slotID)
+	if itemlink ~= nil then
+		local found, _, itemstring = string.find(itemlink, "^|c%x+|H(.+)|h%[.+%]")
+		local _, itemId, enchantId, jewelId1, jewelId2, jewelId3, jewelId4, suffixId, uniqueId = strsplit(":", itemstring)
+		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(itemlink)
+		
+		-- Enchants
+		if tonumber(enchantId) ~= 0 then
+			local enchID = tonumber(enchantId)
+			if(self.Procs.Enchants[enchID]) then
+				local procInfo = self.Procs.Enchants[enchID]
+				self:addProc(procInfo)
+			end
+		end
+
+		-- Procs
+		itemId = tonumber(itemId)
+		if (self.Procs.Items[itemId]) then
+			local procInfo = self.Procs.Items[itemId];
+			procInfo.name = itemName
+			self:addProc(procInfo)
+		end
+	end
+end
+
+function Proculas:addProc(procInfo)
+	local proc = {
+		spellID = procInfo.spellID,
+		name = procInfo.name,
+		types = procInfo.types,
+		selfOnly = procInfo.selfOnly,
+		count = 0,
+	}
+	table.insert(self.opt.tracked, proc)
+end
+
+function Proculas:PLAYER_REGEN_DISABLED()
+	combatTickTimer = self:ScheduleRepeatingTimer("combatTick", 1)
+end
+
+function Proculas:PLAYER_REGEN_ENABLED()
+	self:CancelTimer(combatTickTimer)
+	self:updatePPM()
+	self.lastCombatTime = self.combatTime
+	self.combatTime = 0
+end
+
+function Proculas:updatePPM()
+	for a,b in pairs(self.procstats.lastminute) do
+		local spellID = b[1]
+		if(self.procstats.ppm[spellID]) then
+			if(b[3] > self.procstats.ppm[spellID][3]) then
+				self.procstats.ppm[spellID][3] = self.procstats.lastminute[spellID][3];
+			end
+		else
+			self.procstats.ppm[spellID] = {b[1],b[2],0};
+		end
+	end
+end
+
+function Proculas:combatTick()
+	self.combatTime = self.combatTime+1;
+end
+
+function Proculas:UNIT_INVENTORY_CHANGED(event,unit)
+	if unit == "player" then
+		self:scanForProcs()
+	end
+end
+
+function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
+	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
+	local spellId, spellName, spellSchool = select(9, ...)
+	
+	if(name == self.playerName) then
+		for _, procInfo in pairs(self.opt.tracked) do
+			if(procInfo.spellID == spellId) then
+				local isType = false
+				for _,proctype in ipairs(procInfo.types) do
+					if(type == proctype) then
+						isType = true
+					end
+				end
+				if(isType) then
+					if(procInfo.selfOnly and name2 == self.playerName) then
+						self:postProc(procInfo.spellID,procInfo.name)
+					else
+						self:postProc(procInfo.spellID,procInfo.name)
+					end
+				end
+			end
+		end
+	end
+end
+
+function Proculas:postProc(spellID,procName)
+	spellName = GetSpellInfo(spellID)
 	-- Log Proc
-	self:logProc(procName,spellId);
-	self:logLastMinuteProc(procName,spellId);
+	self:logProc(procName,spellID);
 	-- Post Proc
 	if (self.opt.Post) then
 		-- Chat Frame
@@ -521,7 +1746,7 @@ function Proculas:Postproc(procName,spellId)
 		-- Blizzard Combat Text
 		if (self.opt.PostCT) then
 			--CombatText_AddMessage(procName.." procced", "", 2, 96, 206, "crit", false);
-			self:Pour(self.opt.Messages.before..procName..self.opt.Messages.after, 2, 96, 206, nil, 24, "OUTLINE", true);
+			self:Pour(self.opt.Messages.before..procName..self.opt.Messages.after, 2, 96, 206, nil, 24, "OUTLINE", self.opt.StickyCT);
 		end
 		-- Party
 		if (self.opt.PostParty and GetNumPartyMembers()>0) then
@@ -549,45 +1774,44 @@ end
 -- Used to Log the Proc for stats tracking
 function Proculas:logProc(procName,spellID)
 	-- Total
-	if(self.procstats.procs.total[spellID]) then
-		self.procstats.procs.total[spellID][3] = self.procstats.procs.total[spellID][3]+1;
+	if(self.procstats.total[spellID]) then
+		self.procstats.total[spellID][3] = self.procstats.total[spellID][3]+1;
 	else
-		self.procstats.procs.total[spellID] = {spellID,procName,1};
+		self.procstats.total[spellID] = {spellID,procName,1};
 	end
 	-- Session
-	if(self.procstats.procs.session[spellID]) then
-		self.procstats.procs.session[spellID][3] = self.procstats.procs.session[spellID][3]+1;
+	if(self.procstats.session[spellID]) then
+		self.procstats.session[spellID][3] = self.procstats.session[spellID][3]+1;
 	else
-		self.procstats.procs.session[spellID] = {spellID,procName,1};
+		self.procstats.session[spellID] = {spellID,procName,1};
 	end
-end
-
--- Used to log procs for the last minute
-function Proculas:logLastMinuteProc(procName,spellID)
-	if(self.procstats.procs.lastminute[spellID]) then
-		self.procstats.procs.lastminute[spellID][3] = self.procstats.procs.lastminute[spellID][3]+1;
+	-- Last Minute
+	if(self.procstats.lastminute[spellID]) then
+		self.procstats.lastminute[spellID][3] = self.procstats.lastminute[spellID][3]+1;
 	else
-		self.procstats.procs.lastminute[spellID] = {spellID,procName,1};
+		self.procstats.lastminute[spellID] = {spellID,procName,1};
 	end
+	-- PPM
+	--self:updatePPM();
 end
 
 -- Used to print the Proc stats
 function Proculas:procStats()
 	self:Print("-------------------------------");
 	self:Print("Proc Stats: Total Procs");
-	for _,v in pairs(self.procstats.procs.total) do
+	for _,v in pairs(self.procstats.total) do
 		self:Print(v[2]..": "..v[3].." times");
 	end
 	self:Print("-------------------------------");
 	self:Print("Proc Stats: Procs This Session");
-	for _,v in pairs(self.procstats.procs.session) do
+	for _,v in pairs(self.procstats.session) do
 		self:Print(v[2]..": "..v[3].." times");
 	end
-	self:Print("-------------------------------");
-	self:Print("Proc Stats: Procs Last Minute");
-	for _,v in pairs(self.procstats.procs.lastminute) do
-		self:Print(v[2]..": "..v[3].." times");
-	end
+	--[[self:Print("-------------------------------");
+	self:Print("Proc Stats: Procs Per Minute");
+	for _,v in pairs(self.procstats.ppm) do
+		self:Print(v[2]..": "..v[3].." ppm");
+	end]]--
 end
 
 -------------------------------------------------------
@@ -608,59 +1832,65 @@ local options = {
 		General = {
 			order = 1,
 			type = "group",
-			name = "General Settings",
-			desc = "General Settings",
+			name = L["GENERAL_SETTINGS"],
+			desc = L["GENERAL_SETTINGS"],
 			args = {
 				enablepost = {
 					order = 1,
 					type = "description",
-					name = "Enable posting procs?",
+					name = L["ENABLE_POSTING"],
 				},
 				Post = {
 					order = 2,
-					name = "Post Procs",
-					desc = "Post procs?",
+					name = L["POST_PROCS"],
+					desc = L["POST_PROCS_DESC"],
 					type = "toggle",
 				},
 				postwhere = {
 					order = 3,
 					type = "description",
-					name = "Where should Proculas post procs?",
+					name = L["WHERE_TO_POST"],
 				},
 				PostChatFrame = {
 					order = 4,
-					name = "Chat Frame",
-					desc = "Post procs to the chat frame?",
+					name = L["CHAT_FRAME"],
+					desc = L["CHAT_FRAME_DESC"],
 					type = "toggle",
 				},
 				PostParty = {
-					order = 4,
-					name = "Party Chat",
-					desc = "Post procs to party chat?",
+					order = 5,
+					name = L["PARTY_CHAT"],
+					desc = L["PARTY_CHAT_DESC"],
 					type = "toggle",
 				},
 				PostCT = {
-					order = 4,
-					name = "Combat Text",
-					desc = "Post procs to combat text?",
+					order = 6,
+					name = L["COMBAT_TEXT"],
+					desc = L["COMBAT_TEXT_DESC"],
+					type = "toggle",
+				},
+				StickyCT = {
+					order = 7,
+					name = L["STICKY_COMBAT_TEXT"],
+					desc = L["STICKY_COMBAT_TEXT_DESC"],
 					type = "toggle",
 				},
 				PostRW = {
-					order = 4,
-					name = "Raid Warning",
-					desc = "Post procs to raid warning?",
+					order = 8,
+					name = L["RAID_WARNING"],
+					desc = L["RAID_WARNING_DESC"],
 					type = "toggle",
 				},
 				PostGuild = {
-					order = 4,
-					name = "Guild Chat",
-					desc = "Post procs to guild chat?",
+					order = 9,
+					name = L["GUILD_CHAT"],
+					desc = L["GUILD_CHAT_DESC"],
 					type = "toggle",
 				},
 				PostRaid = {
-					order = 4,
-					name = "Raid Chat",
-					desc = "Post procs to raid chat?",
+					order = 10,
+					name = L["RAID_CHAT"],
+					desc = L["RAID_CHAT_DESC"],
 					type = "toggle",
 				},
 			},
@@ -678,19 +1908,19 @@ local options = {
 				intro = {
 					order = 1,
 					type = "description",
-					name = "Configure message when things proc.",
+					name = L["CONFIG_PROC_MESSAGE"],
 				},
 				before = {
 					type = "input",
 					order = 2,
-					name = "Before",
-					desc = "Text before the Proc Name.",
+					name = L["BEFORE"],
+					desc = L["BEFORE_DESC"],
 				},
 				after = {
 					type = "input",
 					order = 3,
-					name = "After",
-					desc = "Text after the Proc Name.",
+					name = L["AFTER"],
+					desc = L["AFTER_DESC"],
 				},
 			},
 		}, -- Messages
@@ -707,89 +1937,24 @@ local options = {
 				intro = {
 					order = 1,
 					type = "description",
-					name = "Configure the sound settings for Proculas.",
+					name = L["CONFIG_PROC_SOUND"],
 				},
 				Playsound = {
 					type = "toggle",
 					order = 2,
-					name = "Enable Sound",
-					desc = "Causes Proculas to play a chosen sound effect when you proc.",
+					name = L["ENABLE_SOUND"],
+					desc = L["ENABLE_SOUND_DESC"],
 				},
 				SoundFile = {
 					type = "select", dialogControl = 'LSM30_Sound',
 					order = 4,
-					name = "Sound to play",
-					desc = "Sound to play",
+					name = L["SOUND_TO_PLAY"],
+					desc = L["SOUND_TO_PLAY"],
 					values = AceGUIWidgetLSMlists.sound,
 					disabled = function() return not Proculas.opt.Sound.Playsound end,
 				},
 			},
 		}, -- Sound
-		Procs = {
-			order = 4,
-			type = "group",
-			name = "Proc Settings",
-			desc = "Proc Settings",
-			get = function(info) return Proculas.opt.Procs[ info[#info] ] end,
-			set = function(info, value)
-				Proculas.opt.Procs[ info[#info] ] = value
-			end,
-			args = {
-				intro = {
-					order = 1,
-					type = "description",
-					name = "Configure what procs to enable or disable.",
-				},
-				Class = {
-					type = "toggle",
-					order = 2,
-					name = "Class Procs",
-					desc = "If enabled, Proculas will display procs specific to your players class.",
-				},
-				Enchants = {
-					type = "toggle",
-					order = 2,
-					name = "Enchant Procs",
-					desc = "If enabled, Proculas will display Enchant procs.",
-				},
-				Trinkets = {
-					type = "toggle",
-					order = 2,
-					name = "Trinket Procs",
-					desc = "If enabled, Proculas will display Trinket procs.",
-				},
-				Gems = {
-					type = "toggle",
-					order = 2,
-					name = "Gem Procs",
-					desc = "If enabled, Proculas will display Gem procs.",
-				},
-				Rings = {
-					type = "toggle",
-					order = 2,
-					name = "Ring Procs",
-					desc = "If enabled, Proculas will display Ring procs.",
-				},
-				Amulets = {
-					type = "toggle",
-					order = 2,
-					name = "Neck/Amulet Procs",
-					desc = "Enable to display Neck/Amulet procs.",
-				},
-				Weapons = {
-					type = "toggle",
-					order = 2,
-					name = "Weapon Procs",
-					desc = "Enable to display Weapon procs.",
-				},
-				Relics = {
-					type = "toggle",
-					order = 2,
-					name = "Relic Procs",
-					desc = "If enabled, Proculas will display Libram, Idol, Totem, Sigil procs.",
-				},
-			},
-		} -- Procs
 	},
 }
 Proculas.options = options
@@ -802,8 +1967,8 @@ local optionsSlash = {
 	args = {
 		about = {
 			type = "execute",
-			name = "About",
-			desc = "About Proculas (/proculas about)",
+			name = L["ABOUT_CMD"],
+			desc = L["ABOUT_CMD_DESC"],
 			func = function()
 				Proculas:AboutProculas()
 			end,
@@ -811,17 +1976,17 @@ local optionsSlash = {
 		},
 		config = {
 			type = "execute",
-			name = "Configure",
-			desc = "Open the configuration dialog (/proculas config)",
+			name = L["CONFIGURE_CMD"],
+			desc = L["CONFIGURE_CMD_DESC"],
 			func = function()
 				Proculas:ShowConfig()
 			end,
 			guiHidden = true,
 		},
-		procstats = {
+		stats = {
 			type = "execute",
-			name = "Proc Stats",
-			desc = "Show Proc Stats (/proculas procstats)",
+			name = L["STATS_CMD"],
+			desc = L["STATS_CMD_DESC"],
 			func = function()
 				Proculas:procStats()
 			end,
@@ -830,6 +1995,14 @@ local optionsSlash = {
 	},
 }
 Proculas.optionsSlash = optionsSlash
+
+function Proculas:trackedProcs()
+	return self.opt.tracked
+end
+
+function Proculas:getProcStats()
+	return self.opt.procstats
+end
 
 function Proculas:SetupOptions()
 	self.optionsFrames = {}
@@ -843,7 +2016,6 @@ function Proculas:SetupOptions()
 	self.optionsFrames.Proculas = ACD3:AddToBlizOptions("Proculas", nil, nil, "General")
 	self.optionsFrames.Sound = ACD3:AddToBlizOptions("Proculas", "Messages", "Proculas", "Messages")
 	self.optionsFrames.Sound = ACD3:AddToBlizOptions("Proculas", "Sound Settings", "Proculas", "Sound")
-	self.optionsFrames.Procs = ACD3:AddToBlizOptions("Proculas", "Proc Settings", "Proculas", "Procs")
 	self:RegisterModuleOptions("Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db), "Profiles")
 end
 
