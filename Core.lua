@@ -1594,6 +1594,17 @@ Proculas.Procs.Class.WARLOCK = {
 		-- type: WARLOCK 
 	},
 }
+Proculas.Procs.Gems = {
+	[55382] = {
+		itemID = 41401,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 42 
+		-- name: Insightful Earthsiege Diamond 
+		-- type: gem 
+	},
+}
 -------------------------------------------------------
 -- Just some required things...
 function Proculas:OnInitialize()
@@ -1654,6 +1665,16 @@ function Proculas:scanForProcs()
 	self:scanItem(GetInventorySlotInfo("Trinket1Slot"))
 	self:scanItem(GetInventorySlotInfo("Finger0Slot"))
 	self:scanItem(GetInventorySlotInfo("Finger1Slot"))
+	self:scanItem(GetInventorySlotInfo("HeadSlot"))
+	self:scanItem(GetInventorySlotInfo("NeckSlot"))
+	self:scanItem(GetInventorySlotInfo("ShoulderSlot"))
+	self:scanItem(GetInventorySlotInfo("BackSlot"))
+	self:scanItem(GetInventorySlotInfo("ChestSlot"))
+	self:scanItem(GetInventorySlotInfo("WristSlot"))
+	self:scanItem(GetInventorySlotInfo("HandsSlot"))
+	self:scanItem(GetInventorySlotInfo("WaistSlot"))
+	self:scanItem(GetInventorySlotInfo("LegsSlot"))
+	self:scanItem(GetInventorySlotInfo("FeetSlot"))
 	
 	-- Add Class Procs
 	for index,procs in pairs(self.Procs.Class) do
@@ -1670,8 +1691,18 @@ function Proculas:scanItem(slotID)
 	local itemlink = GetInventoryItemLink("player", slotID)
 	if itemlink ~= nil then
 		local found, _, itemstring = string.find(itemlink, "^|c%x+|H(.+)|h%[.+%]")
-		local _, itemId, enchantId, jewelId1, jewelId2, jewelId3, jewelId4, suffixId, uniqueId = strsplit(":", itemstring)
+		local _, itemId, enchantId, jewelId1, jewelId2, jewelId3, jewelId4, suffixId, uniqueId, fromLvl = strsplit(":", itemstring)
 		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(itemlink)
+		
+		-- Gems
+		--print("Gems for "..itemName..": "..jewelId1.."-"..jewelId2.."-"..jewelId3.."-"..jewelId4)
+		--[[
+		Finding the GemID is fraking hard, I've decided to try another way.
+		self:checkGemID(jewelId1)
+		self:checkGemID(jewelId2)
+		self:checkGemID(jewelId3)
+		self:checkGemID(jewelId4)
+		]]--
 		
 		-- Enchants
 		if tonumber(enchantId) ~= 0 then
@@ -1690,6 +1721,18 @@ function Proculas:scanItem(slotID)
 			self:addProc(procInfo)
 		end
 	end
+end
+
+function Proculas:checkGemID(ID)
+	if tonumber(ID) ~= 0 then
+			local gemID = tonumber(ID)
+			if(self.Procs.Gems[gemID]) then
+				local procInfo = self.Procs.Gems[gemID]
+				procInfo.name = GetItemInfo(procInfo.itemID)
+				self:addProc(procInfo)
+				--print("Gem Found: "..procInfo.name)
+			end
+		end
 end
 
 function Proculas:addProc(procInfo)
@@ -1740,7 +1783,29 @@ end
 function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
+	-- Gems
+	if(name == self.playerName) then
+		if(self.Procs.Gems[spellId]) then
+			local procInfo = self.Procs.Gems[spellId]
+			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(procInfo.itemID)
+			local isType = false
+			for _,proctype in ipairs(procInfo.types) do
+				if(type == proctype) then
+					isType = true
+					break;
+				end
+			end
+			if(isType) then
+				if(self.Procs.Gems[spellId].selfOnly and name2 == self.playerName) then
+						self:postProc(spellId,itemName)
+				else
+					self:postProc(spellId,itemName)
+				end
+			end
+		end
+	end
 	
+	-- Everything else
 	if(name == self.playerName) then
 		for _, procInfo in pairs(self.opt.tracked) do
 			if(procInfo.spellID == spellId) then
@@ -1748,6 +1813,7 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 				for _,proctype in ipairs(procInfo.types) do
 					if(type == proctype) then
 						isType = true
+						break;
 					end
 				end
 				if(isType) then
