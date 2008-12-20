@@ -1892,7 +1892,7 @@ function Proculas:logProc(procName,spellID)
 		self.procstats.lastminute[spellID] = {spellID,procName,1};
 	end
 	-- PPM
-	--self:updatePPM();
+	self:updatePPM();
 end
 
 -- Used to print the Proc stats
@@ -1907,11 +1907,11 @@ function Proculas:procStats()
 	for _,v in pairs(self.procstats.session) do
 		self:Print(v[2]..": "..v[3].." times");
 	end
-	--[[self:Print("-------------------------------");
+	self:Print("-------------------------------");
 	self:Print("Proc Stats: Procs Per Minute");
 	for _,v in pairs(self.procstats.ppm) do
 		self:Print(v[2]..": "..v[3].." ppm");
-	end]]--
+	end
 end
 
 -------------------------------------------------------
