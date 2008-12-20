@@ -47,6 +47,7 @@ local defaults = {
 		PostGuild = false,
 		PostRaid = false,
 		StickyCT = true,
+		SinkOptions = {},
 		Messages = {
 			before = "",
 			after = " procced!",
@@ -1618,6 +1619,7 @@ function Proculas:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
 	self:ScheduleRepeatingTimer("resetLastMinuteProc", 60)
+	self:SetSinkStorage(self.opt.SinkOptions)
 	self:SetupOptions()
 	self.combatTime = 0
 	self.lastCombatTime = 0
@@ -1817,8 +1819,10 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 					end
 				end
 				if(isType) then
-					if(procInfo.selfOnly and name2 == self.playerName) then
-						self:postProc(procInfo.spellID,procInfo.name)
+					if(procInfo.selfOnly) then
+						if(name2 == self.playerName) then
+							self:postProc(procInfo.spellID,procInfo.name)
+						end
 					else
 						self:postProc(procInfo.spellID,procInfo.name)
 					end
@@ -1989,6 +1993,7 @@ local options = {
 					desc = L["RAID_CHAT_DESC"],
 					type = "toggle",
 				},
+				--Output = Proculas:GetSinkAce3OptionsDataTable(),
 			},
 		}, -- General
 		Messages = {
@@ -2054,6 +2059,9 @@ local options = {
 	},
 }
 Proculas.options = options
+--options.args.General.args.Output.order = 10
+--options.args.General.args.Output.inline = true
+
 
 -- Option table for the slash command only
 local optionsSlash = {
