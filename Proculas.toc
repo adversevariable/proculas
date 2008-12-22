@@ -2,7 +2,7 @@
 ## Title: Proculas
 ## Notes: Tells you when things proc and logs proc stats.
 ## Author: Clorell [US Argent Dawn]
-## Version: 0.16.0.@project-revision@
+## Version: @project-version@
 ## SavedVariables: ProculasDB
 ## Created by Clorell/Keruni of Argent Dawn [US]
 
