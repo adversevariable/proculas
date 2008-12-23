@@ -6,7 +6,9 @@
 ## SavedVariables: ProculasDB
 ## Created by Clorell/Keruni of Argent Dawn [US]
 
+#@no-lib-strip@
 embeds.xml
+#@end-no-lib-strip@
 
 locale\enUS.lua
 

@@ -26,5 +26,7 @@ move-folders:
     Proculas/pullouts/Proculas_PaladinProcs: Proculas_PaladinProcs
     Proculas/pullouts/Proculas_PriestProcs: Proculas_PriestProcs
     Proculas/pullouts/Proculas_RelicProcs: Proculas_RelicProcs
+    Proculas/pullouts/Proculas_RingProcs: Proculas_RingProcs
+    Proculas/pullouts/Proculas_ShamanProcs: Proculas_ShamanProcs
     Proculas/pullouts/Proculas_WarriorProcs: Proculas_WarriorProcs
     Proculas/pullouts/Proculas_WeaponProcs: Proculas_WeaponProcs
