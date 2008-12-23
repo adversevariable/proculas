@@ -18,6 +18,7 @@ externals:
 move-folders:
     Proculas/pullouts/Proculas_AmuletProcs: Proculas_AmuletProcs
     Proculas/pullouts/Proculas_DeathKnightProcs: Proculas_DeathKnightProcs
+    Proculas/pullouts/Proculas_DruidProcs: Proculas_DruidProcs
     Proculas/pullouts/Proculas_PaladinProcs: Proculas_PaladinProcs
     Proculas/pullouts/Proculas_WarriorProcs: Proculas_WarriorProcs
     Proculas/pullouts/Proculas_WeaponProcs: Proculas_WeaponProcs
