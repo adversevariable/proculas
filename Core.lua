@@ -54,6 +54,7 @@ local defaults = {
 			SinkOptions = {},
 			before = "",
 			after = " procced!",
+			Flash = true,
 		},
 		Sound = {
 			Playsound = true,
@@ -353,6 +354,48 @@ function Proculas:postProc(spellID,procName)
 	if (self.opt.Sound.Playsound) then
 		PlaySoundFile(LSM:Fetch("sound", self.opt.Sound.SoundFile))
 	end
+	-- Flash Screen
+	if(self.opt.Messages.Flash) then
+		self:Flash()
+	end
+end
+
+-- Used to Flash the screen
+function Proculas:Flash()
+	if not self.FlashFrame then
+		local flasher = CreateFrame("Frame", "ProculasFlashFrame")
+		flasher:SetToplevel(true)
+		flasher:SetFrameStrata("FULLSCREEN_DIALOG")
+		flasher:SetAllPoints(UIParent)
+		flasher:EnableMouse(false)
+		flasher:Hide()
+		flasher.texture = flasher:CreateTexture(nil, "BACKGROUND")
+		flasher.texture:SetTexture("Interface\\FullScreenTextures\\LowHealth")
+		flasher.texture:SetAllPoints(UIParent)
+		flasher.texture:SetBlendMode("ADD")
+		flasher:SetScript("OnShow", function(self)
+			self.elapsed = 0
+			self:SetAlpha(0)
+		end)
+		flasher:SetScript("OnUpdate", function(self, elapsed)
+			elapsed = self.elapsed + elapsed
+			if elapsed < 2.6 then
+				local alpha = elapsed % 1.3
+				if alpha < 0.15 then
+					self:SetAlpha(alpha / 0.15)
+				elseif alpha < 0.9 then
+					self:SetAlpha(1 - (alpha - 0.15) / 0.6)
+				else
+					self:SetAlpha(0)
+				end
+			else
+				self:Hide()
+			end
+			self.elapsed = elapsed
+		end)
+		self.FlashFrame = flasher
+	end
+	self.FlashFrame:Show()
 end
 
 -- Used to Log the Proc for stats tracking
@@ -490,6 +533,12 @@ local options = {
 					desc = L["RAID_CHAT_DESC"],
 					type = "toggle",
 				},
+				Flash = {
+				order = 14,
+					name = L["FLASH_SCREEN"],
+					desc = L["FLASH_SCREEN_DESC"],
+					type = "toggle",
+				}
 				--Output = Proculas:GetSinkAce3OptionsDataTable(),
 			},
 		}, -- General
