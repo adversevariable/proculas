@@ -1,0 +1,9 @@
+## Interface: 30000
+## Title: Proculas: Trinket Procs
+## Notes: Contains all the Trinket Procs.
+## Author: Clorell [US Argent Dawn]
+## Version: @project-version@
+## RequiredDeps: Proculas
+## Created by Clorell/Keruni of Argent Dawn [US]
+
+includes.xml
