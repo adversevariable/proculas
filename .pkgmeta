@@ -18,5 +18,3 @@ externals:
 move-folders:
     Proculas/pullouts/Proculas_PaladinProcs: Proculas_PaladinProcs
 
-ignore:
-    - pullouts
