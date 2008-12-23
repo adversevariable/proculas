@@ -1,0 +1,9 @@
+## Interface: 30000
+## Title: Proculas: Relic Procs
+## Notes: Contains all the Libram/Sigil/Totem/Idol Procs.
+## Author: Clorell [US Argent Dawn]
+## Version: @project-version@
+## RequiredDeps: Proculas
+## Created by Clorell/Keruni of Argent Dawn [US]
+
+includes.xml
