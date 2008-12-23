@@ -18,3 +18,4 @@ externals:
 move-folders:
     Proculas/pullouts/Proculas_PaladinProcs: Proculas_PaladinProcs
     Proculas/pullouts/Proculas_WarriorProcs: Proculas_WarriorProcs
+    Proculas/pullouts/Proculas_WeaponProcs: Proculas_WeaponProcs
