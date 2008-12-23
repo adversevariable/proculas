@@ -1,0 +1,9 @@
+## Interface: 30000
+## Title: Proculas: Mage Procs
+## Notes: Contains all the Mage Procs.
+## Author: Clorell [US Argent Dawn]
+## Version: @project-version@
+## RequiredDeps: Proculas
+## Created by Clorell/Keruni of Argent Dawn [US]
+
+includes.xml
