@@ -83,9 +83,6 @@ Proculas.Procs = {
 	WARLOCK = {},
 	MAGE = {},
 }
-function Proculas:addProcList(list,procs)
-	self.Procs[list] = procs
-end
 -------------------------------------------------------
 -- Just some required things...
 local combatTime
@@ -136,6 +133,17 @@ function Proculas:OnProfileChanged(event, database, newProfileKey)
 	self:Print("Profile changed.")
 end
 
+-------------------------------------------------------
+-- Proc Stuff
+
+-- Adds Procs to the Proc List
+function Proculas:addProcList(list,procs)
+	for id,info in pairs(procs) do
+		self.Procs[list][id] = info
+	end
+end
+
+-- Scans for Procs
 function Proculas:scanForProcs()
 	-- Reset tracked Procs
 	self.opt.tracked = {}
@@ -170,6 +178,7 @@ function Proculas:scanForProcs()
 	end
 end
 
+-- Scans an item and checks for procs
 function Proculas:scanItem(slotID)
 	local itemlink = GetInventoryItemLink("player", slotID)
 	if itemlink ~= nil then
@@ -198,6 +207,7 @@ function Proculas:scanItem(slotID)
 	end
 end
 
+-- Adds a proc to the tracked procs
 function Proculas:addProc(procInfo)
 	local proc = {
 		spellID = procInfo.spellID,
