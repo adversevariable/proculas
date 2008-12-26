@@ -47,13 +47,12 @@ L["CONFIG_PROC_STATS"] = "Proc Stats";
 L["CONFIG_PROC_STATS_DESC"] = "Proc Stats options";
 L["FLASH_SCREEN"] = "Flash Screen Border";
 L["FLASH_SCREEN_DESC"] = "Flashes the screens border when you proc.";
-L["ENABLED"] = "Enabled";
-L["DISABLED"] = "Disabled";
 
 -- ProculasLDB
 L["RC2OPENOPTIONS"] = "Hint: Right-click to configure.";
 L["ALTCLICK2RESET"] = "Hint: Alt-Click to reset.";
 L["PROCS"] = "Procs";
 L["PPM"] = "PPM";
+L["COOLDOWN"] = "Cooldown";
 L["MINIMAPBUTTONSETTINGS"] = "Minimap Button Settings";
 L["HIDEMINIMAPBUTTON"] = "Hide Minimap Button";

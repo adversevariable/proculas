@@ -13,7 +13,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 -------------------------------------------------------
 -- Proculas Version
-Proculas.revision = tonumber(("71"):match("%d+"))
+Proculas.revision = tonumber(("@project-revision@"):match("%d+"))
 Proculas.version = GetAddOnMetadata('Proculas', 'Version')
 if(Proculas.revision == nil) then
 	Proculas.version = "SVN"
@@ -97,7 +97,7 @@ function Proculas:OnInitialize()
 	self:Print("v"..VERSION.." running.")
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", defaults)
 	self.opt = self.db.profile
-	self.db.profile.procstats = self.db.profile.procstats
+	self.procstats = self.opt.procstats
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
@@ -222,7 +222,7 @@ function Proculas:postProc(spellID,procName)
 	if (self.opt.Messages.Post) then
 		-- Chat Frame
 		if (self.opt.Messages.PostChatFrame) then
-			self:Print(self.opt.Messages.before..procName..self.opt.Messages.after)
+			self:Print("|cff22ff22"..self.opt.Messages.before..procName..self.opt.Messages.after)
 		end
 		-- Blizzard Combat Text
 		if (self.opt.Messages.PostCT) then
@@ -257,10 +257,9 @@ end
 
 -- Used to build the GameTooltip
 function Proculas:procStatsTooltip()
-	for a,proc in pairs(self.db.profile.procstats) do
+	for a,proc in pairs(self.procstats) do
 		if(proc.name) then
 			GameTooltip:AddLine(proc.name, 0, 1, 0)
-			
 			if proc.count > 0 then
 				GameTooltip:AddDoubleLine(L["PROCS"], proc.count, nil, nil, nil, 1,1,1)
 			else
@@ -278,32 +277,40 @@ function Proculas:procStatsTooltip()
 				GameTooltip:AddDoubleLine(L["PPM"], "N/A", nil, nil, nil, 1,1,1)
 			end
 			
+			if proc.cooldown > 0 then
+				GameTooltip:AddDoubleLine(L["COOLDOWN"], proc.cooldown.."s", nil, nil, nil, 1,1,1)
+			else
+				GameTooltip:AddDoubleLine(L["COOLDOWN"], "N/A", nil, nil, nil, 1,1,1)
+			end
+			
 			GameTooltip:AddLine(" ")
 		end
 	end
 end
 
 -- Does the required things when something procs
-function Proculas:handleProc(procInfo)
-	if not self.db.profile.procstats[procInfo.spellID] then
-		self.db.profile.procstats[procInfo.spellID] = {
-			spellID = procInfo.spellID,
-			name = procInfo.name,
+function Proculas:handleProc(spellID,procName)
+	if not self.procstats[spellID] then
+		self.procstats[spellID] = {
+			spellID = spellID,
+			name = procName,
 			count = 0,
 			totaltime = 0, 
 			cooldown = 0, 
-			laststarted = 0,
+			lastprocced = 0,
 		}
 	end
-	local proc = self.db.profile.procstats[procInfo.spellID]
-	if proc.laststarted > 0 and (proc.cooldown == 0 or (time() - proc.laststarted < proc.cooldown)) then
-		proc.cooldown = time() - proc.laststarted
 	
-		if proc.cooldown < 300 then
-			self:Pour(proc.name.." new cooldown detected: "..proc.cooldown.."s", 1.0, 0.5, 0.5)
+	local proc = self.procstats[spellID]
+	
+	if proc.lastprocced > 0 and (proc.cooldown == 0 or (time() - proc.lastprocced < proc.cooldown)) then
+		proc.cooldown = time() - proc.lastprocced
+		if self.opt.Messages.Post then
+			self:Print("New cooldown found for "..proc.name..": "..proc.cooldown.."s")
 		end
 	end
-	proc.laststarted = time()
+	
+	proc.lastprocced = time()
 	proc.count = proc.count+1
 	self:postProc(proc.spellID,proc.name)
 end
@@ -326,8 +333,7 @@ end
 -- Increments the combatTime variable by 1
 function Proculas:combatTick()
 	combatTime = combatTime+1;
-	for key,proc in pairs(self.db.profile.procstats) do
-		--print(proc.name)
+	for key,proc in pairs(self.procstats) do
 		proc.totaltime = proc.totaltime + 1
 	end
 end
@@ -345,49 +351,43 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	local spellId, spellName, spellSchool = select(9, ...)
 	
 	if(name == self.playerName) then
-	-- Gems
+		-- Gems
 		if(self.Procs.Gems[spellId]) then
 			local procInfo = self.Procs.Gems[spellId]
 			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(procInfo.itemID)
 			local isType = false
-			for _,proctype in ipairs(procInfo.types) do
-				if(type == proctype) then
+			for _,proctype in pairs(procInfo.types) do
+				if(type == proctype and isType == false) then
 					isType = true
-					break;
 				end
 			end
 			if(isType) then
-				if(self.Procs.Gems[spellId].selfOnly and name2 == self.playerName) then
-						--self:postProc(spellId,itemName)
-						self:handleProc(procInfo)
+				if(procInfo.selfOnly) then
+					if(name2 == self.playerName) then
+						self:handleProc(spellId,procInfo.name)
+					end
 				else
-					--self:postProc(spellId,itemName)
-					self:handleProc(procInfo)
+					self:handleProc(spellId,procInfo.name)
 				end
 			end
 		end
 		
-	-- Everything else
-		--for _, procInfo in pairs(self.opt.tracked) do
-		if(self.opt.tracked[spellId]) then
-			procInfo = self.opt.tracked[spellId]
+		-- Everything else
+		for _, procInfo in pairs(self.opt.tracked) do
 			if(procInfo.spellID == spellId) then
 				local isType = false
 				for _,proctype in ipairs(procInfo.types) do
-					if(type == proctype) then
+					if(type == proctype and isType == false) then
 						isType = true
-						break;
 					end
 				end
 				if(isType) then
 					if(procInfo.selfOnly) then
 						if(name2 == self.playerName) then
-							--self:postProc(procInfo.spellID,procInfo.name)
-							self:handleProc(procInfo)
+							self:handleProc(procInfo.spellID,procInfo.name)
 						end
 					else
-						--self:postProc(procInfo.spellID,procInfo.name)
-						self:handleProc(procInfo)
+						self:handleProc(procInfo.spellID,procInfo.name)
 					end
 				end
 			end
@@ -439,7 +439,7 @@ end
 -- Resets the proc stats
 function Proculas:resetProcStats()
 	self.opt.procstats = {}
-	self.db.profile.procstats = {}
+	self.procstats = {}
 end
 
 -------------------------------------------------------
