@@ -85,8 +85,13 @@ Proculas.Procs = {
 }
 -------------------------------------------------------
 -- Just some required things...
+
+-- Things that need to be defined locally
 local combatTime
 local lastCombatTime = 0
+local combatTickTimer
+
+-- OnInitialize
 function Proculas:OnInitialize()
 	self:Print("v"..VERSION.." running.")
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", defaults)
@@ -103,6 +108,7 @@ function Proculas:OnInitialize()
 	combatTime = 0
 end
 
+-- OnEnable
 function Proculas:OnEnable()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -219,18 +225,7 @@ function Proculas:addProc(procInfo)
 	table.insert(self.opt.tracked, proc)
 end
 
-local combatTickTimer
-function Proculas:PLAYER_REGEN_DISABLED()
-	combatTickTimer = self:ScheduleRepeatingTimer("combatTick", 1)
-end
-
-function Proculas:PLAYER_REGEN_ENABLED()
-	self:CancelTimer(combatTickTimer)
-	self:updatePPM()
-	lastCombatTime = combatTime
-	combatTime = 0
-end
-
+-- Updates the Proc Per Minute stats
 function Proculas:updatePPM()
 	for a,b in pairs(self.procstats.lastminute) do
 		local spellID = b[1]
@@ -244,16 +239,77 @@ function Proculas:updatePPM()
 	end
 end
 
+-- Posts procs to the selected frames
+function Proculas:postProc(spellID,procName)
+	spellName = GetSpellInfo(spellID)
+	-- Log Proc
+	self:logProc(procName,spellID);
+	-- Post Proc
+	if (self.opt.Messages.Post) then
+		-- Chat Frame
+		if (self.opt.Messages.PostChatFrame) then
+			self:Print(self.opt.Messages.before..procName..self.opt.Messages.after)
+		end
+		-- Blizzard Combat Text
+		if (self.opt.Messages.PostCT) then
+			self:Pour(self.opt.Messages.before..procName..self.opt.Messages.after, 2, 96, 206, nil, 24, "OUTLINE", self.opt.Messages.StickyCT);
+		end
+		-- Party
+		if (self.opt.Messages.PostParty and GetNumPartyMembers()>0) then
+			SendChatMessage("[Proculas]: "..self.opt.Messages.before..procName..self.opt.Messages.after, "PARTY");
+		end
+		-- Raid Warining
+		if (self.opt.Messages.PostRW and GetNumPartyMembers()>0) then
+			SendChatMessage(self.opt.Messages.before..procName..self.opt.Messages.after, "RAID_WARNING");
+		end
+		-- Guild Chat
+		if (self.opt.Messages.PostGuild) then
+			SendChatMessage("[Proculas]: "..self.opt.Messages.before..procName..self.opt.Messages.after, "GUILD");
+		end
+		-- Raid Chat
+		if (self.opt.Messages.PostRaid) then
+			SendChatMessage("[Proculas]: "..self.opt.Messages.before..procName..self.opt.Messages.after, "RAID");
+		end
+	end
+	-- Play Sound
+	if (self.opt.Sound.Playsound) then
+		PlaySoundFile(LSM:Fetch("sound", self.opt.Sound.SoundFile))
+	end
+	-- Flash Screen
+	if(self.opt.Messages.Flash) then
+		self:Flash()
+	end
+end
+
+-------------------------------------------------------
+-- Event Functions
+
+-- Does the required things for when the player enters combat
+function Proculas:PLAYER_REGEN_DISABLED()
+	combatTickTimer = self:ScheduleRepeatingTimer("combatTick", 1)
+end
+
+-- Does the required things for when the player leaves combat
+function Proculas:PLAYER_REGEN_ENABLED()
+	self:CancelTimer(combatTickTimer)
+	self:updatePPM()
+	lastCombatTime = combatTime
+	combatTime = 0
+end
+
+-- Increments the combatTime variable by 1
 function Proculas:combatTick()
 	combatTime = combatTime+1;
 end
 
+-- Rescans the players gear when they change an item
 function Proculas:UNIT_INVENTORY_CHANGED(event,unit)
 	if unit == "player" then
 		self:scanForProcs()
 	end
 end
 
+-- The Proc scanner, scans the combat log for proc spells
 function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
@@ -303,46 +359,8 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	end
 end
 
-function Proculas:postProc(spellID,procName)
-	spellName = GetSpellInfo(spellID)
-	-- Log Proc
-	self:logProc(procName,spellID);
-	-- Post Proc
-	if (self.opt.Messages.Post) then
-		-- Chat Frame
-		if (self.opt.Messages.PostChatFrame) then
-			self:Print(self.opt.Messages.before..procName..self.opt.Messages.after)
-		end
-		-- Blizzard Combat Text
-		if (self.opt.Messages.PostCT) then
-			self:Pour(self.opt.Messages.before..procName..self.opt.Messages.after, 2, 96, 206, nil, 24, "OUTLINE", self.opt.Messages.StickyCT);
-		end
-		-- Party
-		if (self.opt.Messages.PostParty and GetNumPartyMembers()>0) then
-			SendChatMessage("[Proculas]: "..self.opt.Messages.before..procName..self.opt.Messages.after, "PARTY");
-		end
-		-- Raid Warining
-		if (self.opt.Messages.PostRW and GetNumPartyMembers()>0) then
-			SendChatMessage(self.opt.Messages.before..procName..self.opt.Messages.after, "RAID_WARNING");
-		end
-		-- Guild Chat
-		if (self.opt.Messages.PostGuild) then
-			SendChatMessage("[Proculas]: "..self.opt.Messages.before..procName..self.opt.Messages.after, "GUILD");
-		end
-		-- Raid Chat
-		if (self.opt.Messages.PostRaid) then
-			SendChatMessage("[Proculas]: "..self.opt.Messages.before..procName..self.opt.Messages.after, "RAID");
-		end
-	end
-	-- Play Sound
-	if (self.opt.Sound.Playsound) then
-		PlaySoundFile(LSM:Fetch("sound", self.opt.Sound.SoundFile))
-	end
-	-- Flash Screen
-	if(self.opt.Messages.Flash) then
-		self:Flash()
-	end
-end
+-------------------------------------------------------
+-- Other/Misc Functions
 
 -- Used to Flash the screen
 function Proculas:Flash()
@@ -425,6 +443,7 @@ function Proculas:procStats()
 	end
 end
 
+-- Resets the proc stats
 function Proculas:resetProcStats()
 	self.procstats = {
 		total = {},
@@ -642,10 +661,12 @@ local optionsSlash = {
 }
 Proculas.optionsSlash = optionsSlash
 
+-- Used to get the tracked procs
 function Proculas:getTrackedProcs()
 	return self.opt.tracked
 end
 
+-- Used to get the proc stats
 function Proculas:getProcStats()
 	return self.opt.procstats
 end
