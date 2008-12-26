@@ -13,7 +13,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 -------------------------------------------------------
 -- Proculas Version
-Proculas.revision = tonumber(("@project-revision@"):match("%d+"))
+Proculas.revision = tonumber(("71"):match("%d+"))
 Proculas.version = GetAddOnMetadata('Proculas', 'Version')
 if(Proculas.revision == nil) then
 	Proculas.version = "SVN"
@@ -63,12 +63,7 @@ local defaults = {
 			hide = false,
 			rounding = 10,
 		},
-		procstats = {
-			total = {},
-			session = {},
-			lastminute = {},
-			ppm = {},
-		},
+		procstats = {},
 		tracked = {},
 	},
 }
@@ -93,7 +88,7 @@ Proculas.Procs = {
 -- Just some required things...
 
 -- Things that need to be defined locally
-local combatTime
+local combatTime = 0
 local lastCombatTime = 0
 local combatTickTimer
 
@@ -102,16 +97,12 @@ function Proculas:OnInitialize()
 	self:Print("v"..VERSION.." running.")
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", defaults)
 	self.opt = self.db.profile
-	self.procstats = self.db.profile.procstats
-	self.procstats.session = {}
-	self.procstats.lastminute = {}
+	self.db.profile.procstats = self.db.profile.procstats
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
-	self:ScheduleRepeatingTimer("resetLastMinuteProc", 60)
-	self:SetSinkStorage(self.opt.Messages.SinkOptions)
+
 	self:SetupOptions()
-	combatTime = 0
 end
 
 -- OnEnable
@@ -120,7 +111,6 @@ function Proculas:OnEnable()
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED")
-	changed = true
 	-- Player stuff
 	playerClass0, playerClass1 = UnitClass("player")
 	self.playerClass = playerClass1
@@ -131,11 +121,6 @@ end
 
 -------------------------------------------------------
 -- Timer Functions
-
--- Empties the Procs Last Minute Array.
-function Proculas:resetLastMinuteProc()
-	self.procstats.lastminute = {}
-end
 
 -------------------------------------------------------
 -- Profiles Stuff
@@ -208,7 +193,7 @@ function Proculas:scanItem(slotID)
 				end
 			end
 
-			-- Procs
+			-- Items
 			itemId = tonumber(itemId)
 			if (self.Procs.Items[itemId]) then
 				local procInfo = self.Procs.Items[itemId];
@@ -226,30 +211,13 @@ function Proculas:addProc(procInfo)
 		name = procInfo.name,
 		types = procInfo.types,
 		selfOnly = procInfo.selfOnly,
-		count = 0,
 	}
-	table.insert(self.opt.tracked, proc)
-end
-
--- Updates the Proc Per Minute stats
-function Proculas:updatePPM()
-	for a,b in pairs(self.procstats.lastminute) do
-		local spellID = b[1]
-		if(self.procstats.ppm[spellID]) then
-			if(b[3] > self.procstats.ppm[spellID][3]) then
-				self.procstats.ppm[spellID][3] = self.procstats.lastminute[spellID][3];
-			end
-		else
-			self.procstats.ppm[spellID] = {b[1],b[2],0};
-		end
-	end
+	self.opt.tracked[procInfo.spellID] = proc
 end
 
 -- Posts procs to the selected frames
 function Proculas:postProc(spellID,procName)
 	spellName = GetSpellInfo(spellID)
-	-- Log Proc
-	self:logProc(procName,spellID);
 	-- Post Proc
 	if (self.opt.Messages.Post) then
 		-- Chat Frame
@@ -287,22 +255,59 @@ function Proculas:postProc(spellID,procName)
 	end
 end
 
+-- Used to build the GameTooltip
 function Proculas:procStatsTooltip()
-	for a,proc in pairs(self.procstats.total) do
-		GameTooltip:AddLine(proc[2], 0, 1, 0)
-		if(self.procstats.total[proc[1]]) then
-			GameTooltip:AddDoubleLine(L["PROCS"], self.procstats.total[proc[1]][3], nil, nil, nil, 1,1,1)
-		else
-			GameTooltip:AddDoubleLine(L["PROCS"], 0, nil, nil, nil, 1,1,1)
+	for a,proc in pairs(self.db.profile.procstats) do
+		if(proc.name) then
+			GameTooltip:AddLine(proc.name, 0, 1, 0)
+			
+			if proc.count > 0 then
+				GameTooltip:AddDoubleLine(L["PROCS"], proc.count, nil, nil, nil, 1,1,1)
+			else
+				GameTooltip:AddDoubleLine(L["PROCS"], "N/A", nil, nil, nil, 1,1,1)
+			end
+			
+			local ppm = 0
+			if proc.count > 0 then
+				ppm = proc.count / (proc.totaltime / 60)
+			end
+			
+			if ppm > 0 then
+				GameTooltip:AddDoubleLine(L["PPM"], string.format("%.2f", ppm), nil, nil, nil, 1,1,1)
+			else
+				GameTooltip:AddDoubleLine(L["PPM"], "N/A", nil, nil, nil, 1,1,1)
+			end
+			
+			GameTooltip:AddLine(" ")
 		end
-		if(self.procstats.ppm[proc[1]]) then
-			GameTooltip:AddDoubleLine(L["PPM"], self.procstats.ppm[proc[1]][3], nil, nil, nil, 1,1,1)
-		else
-			GameTooltip:AddDoubleLine(L["PPM"], 0, nil, nil, nil, 1,1,1)
-		end
-		GameTooltip:AddLine(" ")
 	end
 end
+
+-- Does the required things when something procs
+function Proculas:handleProc(procInfo)
+	if not self.db.profile.procstats[procInfo.spellID] then
+		self.db.profile.procstats[procInfo.spellID] = {
+			spellID = procInfo.spellID,
+			name = procInfo.name,
+			count = 0,
+			totaltime = 0, 
+			cooldown = 0, 
+			laststarted = 0,
+		}
+	end
+	local proc = self.db.profile.procstats[procInfo.spellID]
+	if proc.laststarted > 0 and (proc.cooldown == 0 or (time() - proc.laststarted < proc.cooldown)) then
+		proc.cooldown = time() - proc.laststarted
+	
+		if proc.cooldown < 300 then
+			self:Pour(proc.name.." new cooldown detected: "..proc.cooldown.."s", 1.0, 0.5, 0.5)
+		end
+	end
+	proc.laststarted = time()
+	proc.count = proc.count+1
+	self:postProc(proc.spellID,proc.name)
+end
+
 -------------------------------------------------------
 -- Event Functions
 
@@ -314,7 +319,6 @@ end
 -- Does the required things for when the player leaves combat
 function Proculas:PLAYER_REGEN_ENABLED()
 	self:CancelTimer(combatTickTimer)
-	self:updatePPM()
 	lastCombatTime = combatTime
 	combatTime = 0
 end
@@ -322,6 +326,10 @@ end
 -- Increments the combatTime variable by 1
 function Proculas:combatTick()
 	combatTime = combatTime+1;
+	for key,proc in pairs(self.db.profile.procstats) do
+		--print(proc.name)
+		proc.totaltime = proc.totaltime + 1
+	end
 end
 
 -- Rescans the players gear when they change an item
@@ -350,15 +358,19 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 			end
 			if(isType) then
 				if(self.Procs.Gems[spellId].selfOnly and name2 == self.playerName) then
-						self:postProc(spellId,itemName)
+						--self:postProc(spellId,itemName)
+						self:handleProc(procInfo)
 				else
-					self:postProc(spellId,itemName)
+					--self:postProc(spellId,itemName)
+					self:handleProc(procInfo)
 				end
 			end
 		end
 		
 	-- Everything else
-		for _, procInfo in pairs(self.opt.tracked) do
+		--for _, procInfo in pairs(self.opt.tracked) do
+		if(self.opt.tracked[spellId]) then
+			procInfo = self.opt.tracked[spellId]
 			if(procInfo.spellID == spellId) then
 				local isType = false
 				for _,proctype in ipairs(procInfo.types) do
@@ -370,10 +382,12 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 				if(isType) then
 					if(procInfo.selfOnly) then
 						if(name2 == self.playerName) then
-							self:postProc(procInfo.spellID,procInfo.name)
+							--self:postProc(procInfo.spellID,procInfo.name)
+							self:handleProc(procInfo)
 						end
 					else
-						self:postProc(procInfo.spellID,procInfo.name)
+						--self:postProc(procInfo.spellID,procInfo.name)
+						self:handleProc(procInfo)
 					end
 				end
 			end
@@ -422,63 +436,10 @@ function Proculas:Flash()
 	self.FlashFrame:Show()
 end
 
--- Used to Log the Proc for stats tracking
-function Proculas:logProc(procName,spellID)
-	-- Total
-	if(self.procstats.total[spellID]) then
-		self.procstats.total[spellID][3] = self.procstats.total[spellID][3]+1;
-	else
-		self.procstats.total[spellID] = {spellID,procName,1};
-	end
-	-- Session
-	if(self.procstats.session[spellID]) then
-		self.procstats.session[spellID][3] = self.procstats.session[spellID][3]+1;
-	else
-		self.procstats.session[spellID] = {spellID,procName,1};
-	end
-	-- Last Minute
-	if(self.procstats.lastminute[spellID]) then
-		self.procstats.lastminute[spellID][3] = self.procstats.lastminute[spellID][3]+1;
-	else
-		self.procstats.lastminute[spellID] = {spellID,procName,1};
-	end
-	-- PPM
-	self:updatePPM();
-end
-
--- Used to print the Proc stats
-function Proculas:procStats()
-	self:Print("-------------------------------");
-	self:Print("Proc Stats: Total Procs");
-	for _,v in pairs(self.procstats.total) do
-		self:Print(v[2]..": "..v[3].." times");
-	end
-	self:Print("-------------------------------");
-	self:Print("Proc Stats: Procs This Session");
-	for _,v in pairs(self.procstats.session) do
-		self:Print(v[2]..": "..v[3].." times");
-	end
-	self:Print("-------------------------------");
-	self:Print("Proc Stats: Procs Per Minute");
-	for _,v in pairs(self.procstats.ppm) do
-		self:Print(v[2]..": "..v[3].." ppm");
-	end
-end
-
 -- Resets the proc stats
 function Proculas:resetProcStats()
-	self.opt.procstats = {
-		total = {},
-		session = {},
-		lastminute = {},
-		ppm = {},
-	}
-	self.procstats = {
-		total = {},
-		session = {},
-		lastminute = {},
-		ppm = {},
-	}
+	self.opt.procstats = {}
+	self.db.profile.procstats = {}
 end
 
 -------------------------------------------------------
@@ -692,15 +653,6 @@ local optionsSlash = {
 			end,
 			guiHidden = true,
 		},
-		stats = {
-			type = "execute",
-			name = L["STATS_CMD"],
-			desc = L["STATS_CMD_DESC"],
-			func = function()
-				Proculas:procStats()
-			end,
-			guiHidden = true,
-		},
 	},
 }
 Proculas.optionsSlash = optionsSlash
@@ -708,11 +660,6 @@ Proculas.optionsSlash = optionsSlash
 -- Used to get the tracked procs
 function Proculas:getTrackedProcs()
 	return self.opt.tracked
-end
-
--- Used to get the proc stats
-function Proculas:getProcStats()
-	return self.opt.procstats
 end
 
 function Proculas:SetupOptions()

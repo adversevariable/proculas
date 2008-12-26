@@ -43,6 +43,9 @@ function dataobj:OnEnter()
     GameTooltip:SetOwner(self, "ANCHOR_NONE")
 	GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
     GameTooltip:ClearLines()
+	
+	GameTooltip:AddLine("Proculas")
+	GameTooltip:AddLine(" ")
 
 	Proculas:procStatsTooltip()
 	
