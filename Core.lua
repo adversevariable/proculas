@@ -57,6 +57,12 @@ local defaults = {
 			Playsound = true,
 			SoundFile = "Explosion",
 		},
+		minimapButton = {
+			minimapPos = 200,
+			radius = 80,
+			hide = false,
+			rounding = 10,
+		},
 		procstats = {
 			total = {},
 			session = {},
@@ -559,11 +565,27 @@ local options = {
 					type = "toggle",
 				},
 				Flash = {
-				order = 14,
+					order = 14,
 					name = L["FLASH_SCREEN"],
 					desc = L["FLASH_SCREEN_DESC"],
 					type = "toggle",
-				}
+				},
+				minimapButtonDesc = {
+					order = 15,
+					type = "description",
+					name = L["MINIMAPBUTTONSETTINGS"],
+				},
+				minimapButtonHide = {
+					order = 16,
+					name = L["HIDEMINIMAPBUTTON"],
+					desc = L["HIDEMINIMAPBUTTON"],
+					type = "toggle",
+					get = function(info) return Proculas.opt.minimapButton.hide end,
+					set = function(info, value)
+						Proculas:GetModule("ProculasLDB"):ToggleMMButton(value)
+						Proculas.opt.minimapButton.hide = value
+					end,
+				},
 			},
 		}, -- General
 		ProcStats = {

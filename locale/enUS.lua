@@ -53,3 +53,5 @@ L["RC2OPENOPTIONS"] = "Hint: Right-click to configure.";
 L["ALTCLICK2RESET"] = "Hint: Alt-Click to reset.";
 L["PROCS"] = "Procs";
 L["PPM"] = "PPM";
+L["MINIMAPBUTTONSETTINGS"] = "Minimap Button Settings";
+L["HIDEMINIMAPBUTTON"] = "Hide Minimap Button";

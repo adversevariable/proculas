@@ -16,13 +16,26 @@ local dataobj = ldb:NewDataObject("Proculas", {
 		icon = "Interface\\Icons\\Spell_Holy_Aspiration",
 		text = "Proculas"
 		})
-Proculas.ldbobj = dataobj		
+
+function ProculasLDB:OnInitialize()
+	self.opt = Proculas.opt
+	self.icon = LibStub("LibDBIcon-1.0")
+	self.icon:Register("Proculas", dataobj, self.opt.minimapButton)
+end
 
 function ProculasLDB:UpdateText(enabled)
 	if enabled then
 		dataobj.text = "Enabled"
 	else
 		dataobj.text = "Disabled"
+	end
+end
+
+function ProculasLDB:ToggleMMButton(value)
+	if value then
+		self.icon:Hide("Proculas")
+	else
+		self.icon:Show("Proculas")
 	end
 end
 
