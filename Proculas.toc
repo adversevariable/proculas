@@ -13,3 +13,5 @@ embeds.xml
 locale\enUS.lua
 
 Core.lua
+
+modules\proculasldb.lua

@@ -13,4 +13,5 @@
   <Include file="Libs\LibSink-2.0\lib.xml"/>
   <Include file="Libs\AceTimer-3.0\AceTimer-3.0.xml"/>
   <Include file="Libs\AceLocale-3.0\AceLocale-3.0.xml"/>
+  <Script file="Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua"/>
 </Ui>

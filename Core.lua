@@ -1,8 +1,8 @@
 --
---	Proculas
---	Tells you when things like Mongoose, Clearcasting, etc proc.
---	Created by Clorell/Keruni of Argent Dawn [US]
---	$Id$
+-- Proculas
+-- Tells you when things like Mongoose, Clearcasting, etc proc.
+-- Created by Clorell/Keruni of Argent Dawn [US]
+-- $Id$
 --
 
 -------------------------------------------------------
@@ -281,6 +281,22 @@ function Proculas:postProc(spellID,procName)
 	end
 end
 
+function Proculas:procStatsTooltip()
+	for a,proc in pairs(self.procstats.total) do
+		GameTooltip:AddLine(proc[2], 0, 1, 0)
+		if(self.procstats.total[proc[1]]) then
+			GameTooltip:AddDoubleLine(L["PROCS"], self.procstats.total[proc[1]][3], nil, nil, nil, 1,1,1)
+		else
+			GameTooltip:AddDoubleLine(L["PROCS"], 0, nil, nil, nil, 1,1,1)
+		end
+		if(self.procstats.ppm[proc[1]]) then
+			GameTooltip:AddDoubleLine(L["PPM"], self.procstats.ppm[proc[1]][3], nil, nil, nil, 1,1,1)
+		else
+			GameTooltip:AddDoubleLine(L["PPM"], 0, nil, nil, nil, 1,1,1)
+		end
+		GameTooltip:AddLine(" ")
+	end
+end
 -------------------------------------------------------
 -- Event Functions
 
@@ -445,6 +461,12 @@ end
 
 -- Resets the proc stats
 function Proculas:resetProcStats()
+	self.opt.procstats = {
+		total = {},
+		session = {},
+		lastminute = {},
+		ppm = {},
+	}
 	self.procstats = {
 		total = {},
 		session = {},
