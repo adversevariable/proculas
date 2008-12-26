@@ -15,9 +15,6 @@ local LSM = LibStub("LibSharedMedia-3.0")
 -- Proculas Version
 Proculas.revision = tonumber(("@project-revision@"):match("%d+"))
 Proculas.version = GetAddOnMetadata('Proculas', 'Version')
---[[if(Proculas.revision == nil) then
-	Proculas.version = string.gsub(Proculas.version, "@".."project--revision@", "dev")
-end]]--
 if(Proculas.revision == nil) then
 	Proculas.version = "SVN"
 end
@@ -91,6 +88,8 @@ function Proculas:addProcList(list,procs)
 end
 -------------------------------------------------------
 -- Just some required things...
+local combatTime
+local lastCombatTime = 0
 function Proculas:OnInitialize()
 	self:Print("v"..VERSION.." running.")
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", defaults)
@@ -104,8 +103,7 @@ function Proculas:OnInitialize()
 	self:ScheduleRepeatingTimer("resetLastMinuteProc", 60)
 	self:SetSinkStorage(self.opt.Messages.SinkOptions)
 	self:SetupOptions()
-	self.combatTime = 0
-	self.lastCombatTime = 0
+	combatTime = 0
 end
 
 function Proculas:OnEnable()
@@ -180,16 +178,6 @@ function Proculas:scanItem(slotID)
 			local _, itemId, enchantId, jewelId1, jewelId2, jewelId3, jewelId4, suffixId, uniqueId, fromLvl = strsplit(":", itemstring)
 			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(itemlink)
 		
-			-- Gems
-			--print("Gems for "..itemName..": "..jewelId1.."-"..jewelId2.."-"..jewelId3.."-"..jewelId4)
-			--[[
-			Finding the GemID is fraking hard, I've decided to try another way.
-			self:checkGemID(jewelId1)
-			self:checkGemID(jewelId2)
-			self:checkGemID(jewelId3)
-			self:checkGemID(jewelId4)
-			]]--
-			
 			-- Enchants
 			if tonumber(enchantId) ~= 0 then
 				local enchID = tonumber(enchantId)
@@ -210,18 +198,6 @@ function Proculas:scanItem(slotID)
 	end
 end
 
-function Proculas:checkGemID(ID)
-	if tonumber(ID) ~= 0 then
-			local gemID = tonumber(ID)
-			if(self.Procs.Gems[gemID]) then
-				local procInfo = self.Procs.Gems[gemID]
-				procInfo.name = GetItemInfo(procInfo.itemID)
-				self:addProc(procInfo)
-				--print("Gem Found: "..procInfo.name)
-			end
-		end
-end
-
 function Proculas:addProc(procInfo)
 	local proc = {
 		spellID = procInfo.spellID,
@@ -233,6 +209,7 @@ function Proculas:addProc(procInfo)
 	table.insert(self.opt.tracked, proc)
 end
 
+local combatTickTimer
 function Proculas:PLAYER_REGEN_DISABLED()
 	combatTickTimer = self:ScheduleRepeatingTimer("combatTick", 1)
 end
@@ -240,8 +217,8 @@ end
 function Proculas:PLAYER_REGEN_ENABLED()
 	self:CancelTimer(combatTickTimer)
 	self:updatePPM()
-	self.lastCombatTime = self.combatTime
-	self.combatTime = 0
+	lastCombatTime = combatTime
+	combatTime = 0
 end
 
 function Proculas:updatePPM()
@@ -258,7 +235,7 @@ function Proculas:updatePPM()
 end
 
 function Proculas:combatTick()
-	self.combatTime = self.combatTime+1;
+	combatTime = combatTime+1;
 end
 
 function Proculas:UNIT_INVENTORY_CHANGED(event,unit)
@@ -270,8 +247,9 @@ end
 function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
-	-- Gems
+	
 	if(name == self.playerName) then
+	-- Gems
 		if(self.Procs.Gems[spellId]) then
 			local procInfo = self.Procs.Gems[spellId]
 			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(procInfo.itemID)
@@ -290,10 +268,8 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 				end
 			end
 		end
-	end
-	
+		
 	-- Everything else
-	if(name == self.playerName) then
 		for _, procInfo in pairs(self.opt.tracked) do
 			if(procInfo.spellID == spellId) then
 				local isType = false
@@ -325,12 +301,10 @@ function Proculas:postProc(spellID,procName)
 	if (self.opt.Messages.Post) then
 		-- Chat Frame
 		if (self.opt.Messages.PostChatFrame) then
-			--self:Print(procName.." Procced! (\124cff71d5ff\124Hspell:"..spellId.."\124h["..spellName.."]\124h\124r)")
 			self:Print(self.opt.Messages.before..procName..self.opt.Messages.after)
 		end
 		-- Blizzard Combat Text
 		if (self.opt.Messages.PostCT) then
-			--CombatText_AddMessage(procName.." procced", "", 2, 96, 206, "crit", false);
 			self:Pour(self.opt.Messages.before..procName..self.opt.Messages.after, 2, 96, 206, nil, 24, "OUTLINE", self.opt.Messages.StickyCT);
 		end
 		-- Party
@@ -539,7 +513,6 @@ local options = {
 					desc = L["FLASH_SCREEN_DESC"],
 					type = "toggle",
 				}
-				--Output = Proculas:GetSinkAce3OptionsDataTable(),
 			},
 		}, -- General
 		ProcStats = {
@@ -621,9 +594,6 @@ local options = {
 	},
 }
 Proculas.options = options
---options.args.General.args.Output.order = 10
---options.args.General.args.Output.inline = true
-
 
 -- Option table for the slash command only
 local optionsSlash = {
@@ -662,7 +632,7 @@ local optionsSlash = {
 }
 Proculas.optionsSlash = optionsSlash
 
-function Proculas:trackedProcs()
+function Proculas:getTrackedProcs()
 	return self.opt.tracked
 end
 
