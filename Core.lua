@@ -236,7 +236,7 @@ function Proculas:postProc(spellID,procName)
 	if (self.opt.Messages.Post) then
 		-- Chat Frame
 		if (self.opt.Messages.PostChatFrame) then
-			self:Print("|cff22ff22"..self.opt.Messages.before..procName..self.opt.Messages.after)
+			self:Print(self.opt.Messages.before..procName..self.opt.Messages.after)
 		end
 		-- Blizzard Combat Text
 		if (self.opt.Messages.PostCT) then
@@ -328,7 +328,7 @@ function Proculas:handleProc(spellID,procName)
 	-- Check Cooldown
 	if proc.lastprocced > 0 and (proc.cooldown == 0 or (time() - proc.lastprocced < proc.cooldown)) then
 		proc.cooldown = time() - proc.lastprocced
-		if self.opt.Messages.Post and proc.cooldown < 300 then
+		if self.opt.Messages.Post and proc.cooldown < 300 and proc.cooldown > 4 then
 			self:Print("New cooldown found for "..proc.name..": "..proc.cooldown.."s")
 		end
 	end
@@ -366,6 +366,8 @@ function Proculas:CreateCDFrame()
 	
 	if(self.opt.Cooldowns.show) then
 		self.procCooldowns:Show()
+	else
+		self.procCooldowns:Hide()
 	end
 	
 	self.procCooldowns:ShowAnchor()
@@ -420,7 +422,7 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		procInfo.icon = itemTexture
 		if(checktype(procInfo.types,type)) then
 			if(name == self.playerName) then
-				if(procInfo.selfOnly and name == self.playerName) then
+				if(procInfo.selfOnly and name == self.playerName and name2 == self.playerName) then
 					self:handleProc(spellId,procInfo.name)
 				elseif procInfo.selfOnly == 0 then
 					self:handleProc(spellId,procInfo.name)
@@ -436,7 +438,7 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		local procInfo = self.opt.tracked[spellId]
 		if(checktype(procInfo.types,type)) then
 			if(name == self.playerName) then
-				if(procInfo.selfOnly and name == self.playerName) then
+				if(procInfo.selfOnly and name2 == self.playerName) then
 					self:handleProc(spellId,procInfo.name)
 				elseif procInfo.selfOnly == 0 then
 					self:handleProc(spellId,procInfo.name)
