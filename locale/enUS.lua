@@ -46,7 +46,9 @@ L["RESET_PROC_STATS_DESC"] = "Resets all the stats saved for procs.";
 L["CONFIG_PROC_STATS"] = "Proc Stats";
 L["CONFIG_PROC_STATS_DESC"] = "Proc Stats options";
 L["FLASH_SCREEN"] = "Flash Screen Border";
-L["FLASH_SCREEN_DESC"] = "Flashes the screens border when you proc.";
+L["FLASH_SCREEN_DESC"] = "Flashes the screens border when things proc.";
+L["SHAKE_SCREEN"] = "Shake Screen";
+L["SHAKE_SCREEN_DESC"] = "Shakes the screen when things proc.";
 L["COOLDOWNSETTINGS"] = "Cooldown Settings";
 L["SHOWCOOLDOWNS"] = "Show Cooldowns";
 

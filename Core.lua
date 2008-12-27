@@ -7,10 +7,10 @@
 
 -------------------------------------------------------
 -- Proculas
-Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "LibSink-2.0", "LibBars-1.0")
+Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "LibSink-2.0", "LibBars-1.0", "LibEffects-1.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("Proculas", false)
 local LSM = LibStub("LibSharedMedia-3.0")
-local bars = {}
+
 -------------------------------------------------------
 -- Proculas Version
 Proculas.revision = tonumber(("@project-revision@"):match("%d+"))
@@ -54,6 +54,7 @@ local defaults = {
 		},
 		Effects = {
 			Flash = false,
+			Shake = false,
 		},
 		Cooldowns = {
 			show = true,
@@ -266,6 +267,10 @@ function Proculas:postProc(spellID,procName)
 	if(self.opt.Effects.Flash) then
 		self:Flash()
 	end
+	-- Shake Screen
+	if(self.opt.Effects.Shake) then
+		self:Shake()
+	end
 end
 
 -- Used to build the GameTooltip
@@ -304,6 +309,7 @@ end
 
 -- Does the required things when something procs
 function Proculas:handleProc(spellID,procName)
+	-- Check if the procstats record exists or not
 	if not self.procstats[spellID] then
 		self.procstats[spellID] = {
 			spellID = spellID,
@@ -316,6 +322,7 @@ function Proculas:handleProc(spellID,procName)
 		}
 	end
 	
+	-- Get the proc info
 	local proc = self.procstats[spellID]
 	
 	-- Check Cooldown
@@ -335,23 +342,14 @@ function Proculas:handleProc(spellID,procName)
 		bar:SetTimer(proc.cooldown, proc.cooldown)
 	end
 	
+	-- set the lastprocced time and increment the proc count
 	proc.lastprocced = time()
 	proc.count = proc.count+1
+	
+	-- Calls the postProc function, duh?
 	self:postProc(proc.spellID,proc.name)
 end
-function Proculas:testbars(name)
-	local proc = {}
-	proc.cooldown = 10
-	proc.name = name
--- Reset cooldown bar
-	if proc.cooldown > 0 then
-		local bar = self.procCooldowns:GetBar(proc.name)
-		if not bar then
-			bar = self.procCooldowns:NewTimerBar(proc.name, proc.name, proc.cooldown, proc.cooldown)
-		end
-		bar:SetTimer(proc.cooldown, proc.cooldown)
-	end
-end
+
 -------------------------------------------------------
 -- Proc CD Frame
 
@@ -452,7 +450,7 @@ end
 -------------------------------------------------------
 -- Other/Misc Functions
 
--- Used to Flash the screen
+--[[ Used to Flash the screen - Deprecated due to LibEffects-1.0 intergration providing this function
 function Proculas:Flash()
 	if not self.FlashFrame then
 		local flasher = CreateFrame("Frame", "ProculasFlashFrame")
@@ -488,7 +486,7 @@ function Proculas:Flash()
 		self.FlashFrame = flasher
 	end
 	self.FlashFrame:Show()
-end
+end]]
 
 -- Resets the proc stats
 function Proculas:resetProcStats()
@@ -583,6 +581,16 @@ local options = {
 					order = 14,
 					name = L["FLASH_SCREEN"],
 					desc = L["FLASH_SCREEN_DESC"],
+					type = "toggle",
+					get = function(info) return Proculas.opt.Effects[ info[#info] ] end,
+					set = function(info, value)
+						Proculas.opt.Effects[ info[#info] ] = value
+					end,
+				},
+				Shake = {
+					order = 14,
+					name = L["SHAKE_SCREEN"],
+					desc = L["SHAKE_SCREEN_DESC"],
 					type = "toggle",
 					get = function(info) return Proculas.opt.Effects[ info[#info] ] end,
 					set = function(info, value)
