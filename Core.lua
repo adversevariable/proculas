@@ -7,10 +7,10 @@
 
 -------------------------------------------------------
 -- Proculas
-Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "LibSink-2.0")
+Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "LibSink-2.0", "LibBars-1.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("Proculas", false)
 local LSM = LibStub("LibSharedMedia-3.0")
-
+local bars = {}
 -------------------------------------------------------
 -- Proculas Version
 Proculas.revision = tonumber(("@project-revision@"):match("%d+"))
@@ -51,7 +51,12 @@ local defaults = {
 			SinkOptions = {},
 			before = "",
 			after = " procced!",
-			Flash = true,
+		},
+		Effects = {
+			Flash = false,
+		},
+		Cooldowns = {
+			show = true,
 		},
 		Sound = {
 			Playsound = true,
@@ -102,6 +107,8 @@ function Proculas:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
 
+	self:CreateCDFrame()
+	
 	self:SetupOptions()
 end
 
@@ -169,6 +176,8 @@ function Proculas:scanForProcs()
 		if(index == self.playerClass) then
 			for spellID,procInfo in pairs(procs) do
 				procInfo.spellID = spellID
+				local name, rank, icon, cost, isFunnel, powerType, castTime, minRange, maxRange = GetSpellInfo(spellID)
+				procInfo.icon = icon
 				self:addProc(procInfo)
 			end
 		end
@@ -189,6 +198,8 @@ function Proculas:scanItem(slotID)
 				local enchID = tonumber(enchantId)
 				if(self.Procs.Enchants[enchID]) then
 					local procInfo = self.Procs.Enchants[enchID]
+					local name, rank, icon, cost, isFunnel, powerType, castTime, minRange, maxRange = GetSpellInfo(procInfo.spellID)
+					procInfo.icon = icon
 					self:addProc(procInfo)
 				end
 			end
@@ -198,6 +209,7 @@ function Proculas:scanItem(slotID)
 			if (self.Procs.Items[itemId]) then
 				local procInfo = self.Procs.Items[itemId];
 				procInfo.name = itemName
+				procInfo.icon = itemTexture
 				self:addProc(procInfo)
 			end
 		end
@@ -211,6 +223,7 @@ function Proculas:addProc(procInfo)
 		name = procInfo.name,
 		types = procInfo.types,
 		selfOnly = procInfo.selfOnly,
+		icon = procInfo.icon,
 	}
 	self.opt.tracked[procInfo.spellID] = proc
 end
@@ -250,7 +263,7 @@ function Proculas:postProc(spellID,procName)
 		PlaySoundFile(LSM:Fetch("sound", self.opt.Sound.SoundFile))
 	end
 	-- Flash Screen
-	if(self.opt.Messages.Flash) then
+	if(self.opt.Effects.Flash) then
 		self:Flash()
 	end
 end
@@ -260,6 +273,7 @@ function Proculas:procStatsTooltip()
 	for a,proc in pairs(self.procstats) do
 		if(proc.name) then
 			GameTooltip:AddLine(proc.name, 0, 1, 0)
+			GameTooltip:AddTexture(proc.icon)
 			if proc.count > 0 then
 				GameTooltip:AddDoubleLine(L["PROCS"], proc.count, nil, nil, nil, 1,1,1)
 			else
@@ -298,21 +312,65 @@ function Proculas:handleProc(spellID,procName)
 			totaltime = 0, 
 			cooldown = 0, 
 			lastprocced = 0,
+			icon = self.opt.tracked[spellID].icon,
 		}
 	end
 	
 	local proc = self.procstats[spellID]
 	
+	-- Check Cooldown
 	if proc.lastprocced > 0 and (proc.cooldown == 0 or (time() - proc.lastprocced < proc.cooldown)) then
 		proc.cooldown = time() - proc.lastprocced
-		if self.opt.Messages.Post then
+		if self.opt.Messages.Post and proc.cooldown < 300 then
 			self:Print("New cooldown found for "..proc.name..": "..proc.cooldown.."s")
 		end
+	end
+
+	-- Reset cooldown bar
+	if proc.cooldown > 0 then
+		local bar = self.procCooldowns:GetBar(proc.name)
+		if not bar then
+			bar = self.procCooldowns:NewTimerBar(proc.name, proc.name, proc.cooldown, proc.cooldown, proc.icon)
+		end
+		bar:SetTimer(proc.cooldown, proc.cooldown)
 	end
 	
 	proc.lastprocced = time()
 	proc.count = proc.count+1
 	self:postProc(proc.spellID,proc.name)
+end
+function Proculas:testbars(name)
+	local proc = {}
+	proc.cooldown = 10
+	proc.name = name
+-- Reset cooldown bar
+	if proc.cooldown > 0 then
+		local bar = self.procCooldowns:GetBar(proc.name)
+		if not bar then
+			bar = self.procCooldowns:NewTimerBar(proc.name, proc.name, proc.cooldown, proc.cooldown)
+		end
+		bar:SetTimer(proc.cooldown, proc.cooldown)
+	end
+end
+-------------------------------------------------------
+-- Proc CD Frame
+
+function Proculas:CreateCDFrame()
+	self.procCooldowns = self:NewBarGroup("Proc Cooldowns", nil, 150, 18, "ProculasProcCD")
+	self.procCooldowns:SetTexture(LSM:Fetch('statusbar', "Blizzard"))
+	self.procCooldowns:SetColorAt(1.00, 1.0, 0.2, 0.2, 0.8)
+	self.procCooldowns:SetColorAt(0.25, 0.30, 0.8, 0.1, 0.8)
+	self.procCooldowns:SetUserPlaced(true)
+		
+	local bar = self.procCooldowns:NewTimerBar("Test Bar", "Test Bar", 10, 10)
+	bar:SetHeight(18)
+	bar:SetTimer(0, 0)
+	
+	if(self.opt.Cooldowns.show) then
+		self.procCooldowns:Show()
+	end
+	
+	self.procCooldowns:ShowAnchor()
 end
 
 -------------------------------------------------------
@@ -344,57 +402,53 @@ function Proculas:UNIT_INVENTORY_CHANGED(event,unit)
 		self:scanForProcs()
 	end
 end
-
+local function checktype(types,type)
+	for _,thisType in pairs(types) do
+		if(thisType == type) then
+			return true
+		end
+	end
+	return false
+end
 -- The Proc scanner, scans the combat log for proc spells
 function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
-	
-	if(name == self.playerName) then
-		-- Gems
-		if(self.Procs.Gems[spellId]) then
-			local procInfo = self.Procs.Gems[spellId]
-			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(procInfo.itemID)
-			local isType = false
-			for _,proctype in pairs(procInfo.types) do
-				if(type == proctype and isType == false) then
-					isType = true
-				end
-			end
-			if(isType) then
-				if(procInfo.selfOnly) then
-					if(name2 == self.playerName) then
-						self:handleProc(spellId,procInfo.name)
-					end
-				else
+
+	-- Gems else
+	if(self.Procs.Gems[spellId]) then
+		local procInfo = self.Procs.Gems[spellId]
+		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(procInfo.itemID)
+		procInfo.icon = itemTexture
+		if(checktype(procInfo.types,type)) then
+			if(name == self.playerName) then
+				if(procInfo.selfOnly and name == self.playerName) then
+					self:handleProc(spellId,procInfo.name)
+				elseif procInfo.selfOnly == 0 then
 					self:handleProc(spellId,procInfo.name)
 				end
+			elseif(name == nil and name2 == self.playerName) then
+				self:handleProc(spellId,procInfo.name)
 			end
 		end
-		
-		-- Everything else
-		for _, procInfo in pairs(self.opt.tracked) do
-			if(procInfo.spellID == spellId) then
-				local isType = false
-				for _,proctype in ipairs(procInfo.types) do
-					if(type == proctype and isType == false) then
-						isType = true
-					end
+	end
+	
+	-- Everything else
+	if(self.opt.tracked[spellId]) then
+		local procInfo = self.opt.tracked[spellId]
+		if(checktype(procInfo.types,type)) then
+			if(name == self.playerName) then
+				if(procInfo.selfOnly and name == self.playerName) then
+					self:handleProc(spellId,procInfo.name)
+				elseif procInfo.selfOnly == 0 then
+					self:handleProc(spellId,procInfo.name)
 				end
-				if(isType) then
-					if(procInfo.selfOnly) then
-						if(name2 == self.playerName) then
-							self:handleProc(procInfo.spellID,procInfo.name)
-						end
-					else
-						self:handleProc(procInfo.spellID,procInfo.name)
-					end
-				end
+			elseif(name == nil and name2 == self.playerName) then
+				self:handleProc(spellId,procInfo.name)
 			end
 		end
 	end
 end
-
 -------------------------------------------------------
 -- Other/Misc Functions
 
@@ -530,6 +584,10 @@ local options = {
 					name = L["FLASH_SCREEN"],
 					desc = L["FLASH_SCREEN_DESC"],
 					type = "toggle",
+					get = function(info) return Proculas.opt.Effects[ info[#info] ] end,
+					set = function(info, value)
+						Proculas.opt.Effects[ info[#info] ] = value
+					end,
 				},
 				minimapButtonDesc = {
 					order = 15,
@@ -545,6 +603,22 @@ local options = {
 					set = function(info, value)
 						Proculas:GetModule("ProculasLDB"):ToggleMMButton(value)
 						Proculas.opt.minimapButton.hide = value
+					end,
+				},
+				procCooldownsDesc = {
+					order = 17,
+					type = "description",
+					name = L["COOLDOWNSETTINGS"],
+				},
+				procCooldownsShow = {
+					order = 18,
+					name = L["SHOWCOOLDOWNS"],
+					desc = L["SHOWCOOLDOWNS"],
+					type = "toggle",
+					get = function(info) return Proculas.opt.Cooldowns.show end,
+					set = function(info, value)
+						if value then Proculas.procCooldowns:Show() else Proculas.procCooldowns:Hide() end
+						Proculas.opt.Cooldowns.show = value
 					end,
 				},
 			},
