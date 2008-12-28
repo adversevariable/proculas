@@ -253,7 +253,11 @@ function Proculas:postProc(spellID,procName)
 		if (self.opt.PostChatFrame) then
 			self:Print(self.opt.Messages.before..procName..self.opt.Messages.after)
 		end
-		self:Pour(self.opt.Messages.before..procName..self.opt.Messages.after);
+		local pourBefore = ""
+		if(self.opt.SinkOptions.sink20OutputSink == "Channel") then
+			pourBefore = "[Proculas]: "
+		end
+		self:Pour(pourBefore..self.opt.Messages.before..procName..self.opt.Messages.after);
 	end
 	-- Play Sound
 	if (self.opt.Sound.Playsound) then
