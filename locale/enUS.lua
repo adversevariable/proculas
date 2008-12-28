@@ -8,9 +8,9 @@ local L = LibStub("AceLocale-3.0"):NewLocale("Proculas", "enUS", true)
 
 L["GENERAL_SETTINGS"] = "General Settings";
 L["ENABLE_POSTING"] = "Enable posting procs?";
-L["POST_PROCS"] = "Post Procs";
-L["POST_PROCS_DESC"] = "Check to enable posting procs.";
-L["WHERE_TO_POST"] = "Where should Proculas post procs?";
+L["POST_PROCS"] = "Post Proc Messages";
+L["POST_PROCS_DESC"] = "Check to enable posting proc messages.";
+L["WHERE_TO_POST"] = "Where should Proculas post proc messages?";
 L["CHAT_FRAME"] = "Chat Frame";
 L["CHAT_FRAME_DESC"] = "Post procs to the chat frame?";
 L["PARTY_CHAT"] = "Party Chat";
@@ -51,6 +51,10 @@ L["SHAKE_SCREEN"] = "Shake Screen";
 L["SHAKE_SCREEN_DESC"] = "Shakes the screen when things proc.";
 L["COOLDOWNSETTINGS"] = "Cooldown Settings";
 L["SHOWCOOLDOWNS"] = "Show Cooldowns";
+L["CONFIG_OUTPUT"] = "Output Settings";
+L["CONFIG_MESSAGES"] = "Messages";
+L["CONFIG_MESSAGES_DESC"] = "Proc Messages.";
+L["SCREEN_EFFECTS"] = "Screen Effects"
 
 -- ProculasLDB
 L["RC2OPENOPTIONS"] = "Hint: Right-click to configure.";

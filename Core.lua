@@ -39,16 +39,9 @@ LSM:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.wav]])
 -- Default options
 local defaults = {
 	profile = {
+		postprocs = true,
+		PostChatFrame = true,
 		Messages = {
-			Post = true,
-			PostChatFrame = true,
-			PostCT = true,
-			PostParty = false,
-			PostRW = false,
-			PostGuild = false,
-			PostRaid = false,
-			StickyCT = true,
-			SinkOptions = {},
 			before = "",
 			after = " procced!",
 		},
@@ -58,6 +51,9 @@ local defaults = {
 		},
 		Cooldowns = {
 			show = true,
+		},
+		SinkOptions = {
+			sink20OutputSink = "Default",
 		},
 		Sound = {
 			Playsound = true,
@@ -112,6 +108,7 @@ function Proculas:OnInitialize()
 	
 	self:CreateCDFrame()
 	
+	self:SetSinkStorage(self.opt.SinkOptions)
 	self:SetupOptions()
 end
 
@@ -251,31 +248,12 @@ end
 function Proculas:postProc(spellID,procName)
 	spellName = GetSpellInfo(spellID)
 	-- Post Proc
-	if (self.opt.Messages.Post) then
+	if (self.opt.postprocs) then
 		-- Chat Frame
-		if (self.opt.Messages.PostChatFrame) then
+		if (self.opt.PostChatFrame) then
 			self:Print(self.opt.Messages.before..procName..self.opt.Messages.after)
 		end
-		-- Blizzard Combat Text
-		if (self.opt.Messages.PostCT) then
-			self:Pour(self.opt.Messages.before..procName..self.opt.Messages.after, 2, 96, 206, nil, 24, "OUTLINE", self.opt.Messages.StickyCT);
-		end
-		-- Party
-		if (self.opt.Messages.PostParty and GetNumPartyMembers()>0) then
-			SendChatMessage("[Proculas]: "..self.opt.Messages.before..procName..self.opt.Messages.after, "PARTY");
-		end
-		-- Raid Warining
-		if (self.opt.Messages.PostRW and GetNumPartyMembers()>0) then
-			SendChatMessage(self.opt.Messages.before..procName..self.opt.Messages.after, "RAID_WARNING");
-		end
-		-- Guild Chat
-		if (self.opt.Messages.PostGuild) then
-			SendChatMessage("[Proculas]: "..self.opt.Messages.before..procName..self.opt.Messages.after, "GUILD");
-		end
-		-- Raid Chat
-		if (self.opt.Messages.PostRaid) then
-			SendChatMessage("[Proculas]: "..self.opt.Messages.before..procName..self.opt.Messages.after, "RAID");
-		end
+		self:Pour(self.opt.Messages.before..procName..self.opt.Messages.after);
 	end
 	-- Play Sound
 	if (self.opt.Sound.Playsound) then
@@ -351,7 +329,7 @@ function Proculas:handleProc(spellID,procName)
 	-- Check Cooldown
 	if proc.lastprocced > 0 and (proc.cooldown == 0 or (time() - proc.lastprocced < proc.cooldown)) then
 		proc.cooldown = time() - proc.lastprocced
-		if self.opt.Messages.Post and proc.cooldown < 300 and proc.cooldown > 4 then
+		if self.opt.postprocs and proc.cooldown < 300 and proc.cooldown > 4 then
 			self:Print("New cooldown found for "..proc.name..": "..proc.cooldown.."s")
 		end
 	end
@@ -539,71 +517,42 @@ local options = {
 			type = "group",
 			name = L["GENERAL_SETTINGS"],
 			desc = L["GENERAL_SETTINGS"],
-			get = function(info) return Proculas.opt.Messages[ info[#info] ] end,
+			get = function(info) return Proculas.opt[ info[#info] ] end,
 			set = function(info, value)
-				Proculas.opt.Messages[ info[#info] ] = value
+				Proculas.opt[ info[#info] ] = value
 			end,
 			args = {
 				enablepost = {
-					order = 4,
+					order = 1,
 					type = "description",
 					name = L["ENABLE_POSTING"],
 				},
-				Post = {
-					order = 5,
+				postprocs = {
+					order = 2,
 					name = L["POST_PROCS"],
 					desc = L["POST_PROCS_DESC"],
 					type = "toggle",
 				},
 				postwhere = {
-					order = 6,
+					order = 3,
 					type = "description",
 					name = L["WHERE_TO_POST"],
 				},
 				PostChatFrame = {
-					order = 7,
+					order = 4,
 					name = L["CHAT_FRAME"],
 					desc = L["CHAT_FRAME_DESC"],
 					type = "toggle",
+					disabled = function() return not Proculas.opt.postprocs end
 				},
-				PostParty = {
-					order = 8,
-					name = L["PARTY_CHAT"],
-					desc = L["PARTY_CHAT_DESC"],
-					type = "toggle",
-				},
-				PostCT = {
-					order = 9,
-					name = L["COMBAT_TEXT"],
-					desc = L["COMBAT_TEXT_DESC"],
-					type = "toggle",
-				},
-				StickyCT = {
-					order = 10,
-					name = L["STICKY_COMBAT_TEXT"],
-					desc = L["STICKY_COMBAT_TEXT_DESC"],
-					type = "toggle",
-				},
-				PostRW = {
-					order = 11,
-					name = L["RAID_WARNING"],
-					desc = L["RAID_WARNING_DESC"],
-					type = "toggle",
-				},
-				PostGuild = {
-					order = 12,
-					name = L["GUILD_CHAT"],
-					desc = L["GUILD_CHAT_DESC"],
-					type = "toggle",
-				},
-				PostRaid = {
-					order = 13,
-					name = L["RAID_CHAT"],
-					desc = L["RAID_CHAT_DESC"],
-					type = "toggle",
+				Sink = Proculas:GetSinkAce3OptionsDataTable(),
+				screenEffectsDesc = {
+					order = 6,
+					type = "description",
+					name = L["SCREEN_EFFECTS"],
 				},
 				Flash = {
-					order = 14,
+					order = 7,
 					name = L["FLASH_SCREEN"],
 					desc = L["FLASH_SCREEN_DESC"],
 					type = "toggle",
@@ -613,7 +562,7 @@ local options = {
 					end,
 				},
 				Shake = {
-					order = 14,
+					order = 8,
 					name = L["SHAKE_SCREEN"],
 					desc = L["SHAKE_SCREEN_DESC"],
 					type = "toggle",
@@ -623,12 +572,12 @@ local options = {
 					end,
 				},
 				minimapButtonDesc = {
-					order = 15,
+					order = 9,
 					type = "description",
 					name = L["MINIMAPBUTTONSETTINGS"],
 				},
 				minimapButtonHide = {
-					order = 16,
+					order = 10,
 					name = L["HIDEMINIMAPBUTTON"],
 					desc = L["HIDEMINIMAPBUTTON"],
 					type = "toggle",
@@ -639,12 +588,12 @@ local options = {
 					end,
 				},
 				procCooldownsDesc = {
-					order = 17,
+					order = 11,
 					type = "description",
 					name = L["COOLDOWNSETTINGS"],
 				},
 				procCooldownsShow = {
-					order = 18,
+					order = 12,
 					name = L["SHOWCOOLDOWNS"],
 					desc = L["SHOWCOOLDOWNS"],
 					type = "toggle",
@@ -675,8 +624,8 @@ local options = {
 		Messages = {
 			order = 2,
 			type = "group",
-			name = "Messages",
-			desc = "Proc Messages",
+			name = L["CONFIG_MESSAGES"],
+			desc = L["CONFIG_MESSAGES_DESC"],
 			get = function(info) return Proculas.opt.Messages[ info[#info] ] end,
 			set = function(info, value)
 				Proculas.opt.Messages[ info[#info] ] = value
@@ -735,6 +684,9 @@ local options = {
 	},
 }
 Proculas.options = options
+options.args.General.args.Sink.order = 5
+options.args.General.args.Sink.inline = true
+options.args.General.args.Sink.disabled = function() return not Proculas.opt.postprocs end
 
 -- Option table for the slash command only
 local optionsSlash = {
