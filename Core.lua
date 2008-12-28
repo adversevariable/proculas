@@ -107,10 +107,25 @@ function Proculas:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
-
+	
+	GameTooltip:HookScript("OnTooltipSetItem", function(tooltip, item) Proculas:OnTooltipSetItem(tooltip,item) end)
+	
 	self:CreateCDFrame()
 	
 	self:SetupOptions()
+end
+
+function Proculas:OnTooltipSetItem(tooltip, ...)
+	local itemName, itemLink = tooltip:GetItem()
+	local found, _, itemString = string.find(itemLink, "^|c%x+|H(.+)|h%[.*%]")
+	local itemId = select(2, strsplit(":", itemString))
+	
+	-- Tracked items
+	for index,proc in pairs(self.opt.tracked) do
+		if proc.itemID ~= nil and tostring(proc.itemID) == itemId then
+			self:addProcInfoToTooltip(self.procstats[proc.spellID])
+		end
+	end
 end
 
 -- OnEnable
@@ -211,6 +226,7 @@ function Proculas:scanItem(slotID)
 				local procInfo = self.Procs.Items[itemId];
 				procInfo.name = itemName
 				procInfo.icon = itemTexture
+				procInfo.itemID = itemId
 				self:addProc(procInfo)
 			end
 		end
@@ -219,12 +235,14 @@ end
 
 -- Adds a proc to the tracked procs
 function Proculas:addProc(procInfo)
+	if not procInfo.itemID then procInfo.itemID = 0 end
 	local proc = {
 		spellID = procInfo.spellID,
 		name = procInfo.name,
 		types = procInfo.types,
 		selfOnly = procInfo.selfOnly,
 		icon = procInfo.icon,
+		itemID = procInfo.itemID,
 	}
 	self.opt.tracked[procInfo.spellID] = proc
 end
@@ -279,31 +297,36 @@ function Proculas:procStatsTooltip()
 		if(proc.name) then
 			GameTooltip:AddLine(proc.name, 0, 1, 0)
 			GameTooltip:AddTexture(proc.icon)
-			if proc.count > 0 then
-				GameTooltip:AddDoubleLine(L["PROCS"], proc.count, nil, nil, nil, 1,1,1)
-			else
-				GameTooltip:AddDoubleLine(L["PROCS"], "N/A", nil, nil, nil, 1,1,1)
-			end
 			
-			local ppm = 0
-			if proc.count > 0 then
-				ppm = proc.count / (proc.totaltime / 60)
-			end
-			
-			if ppm > 0 then
-				GameTooltip:AddDoubleLine(L["PPM"], string.format("%.2f", ppm), nil, nil, nil, 1,1,1)
-			else
-				GameTooltip:AddDoubleLine(L["PPM"], "N/A", nil, nil, nil, 1,1,1)
-			end
-			
-			if proc.cooldown > 0 then
-				GameTooltip:AddDoubleLine(L["COOLDOWN"], proc.cooldown.."s", nil, nil, nil, 1,1,1)
-			else
-				GameTooltip:AddDoubleLine(L["COOLDOWN"], "N/A", nil, nil, nil, 1,1,1)
-			end
+			self:addProcInfoToTooltip(proc)
 			
 			GameTooltip:AddLine(" ")
 		end
+	end
+end
+
+function Proculas:addProcInfoToTooltip(procInfo)
+	if procInfo.count > 0 then
+		GameTooltip:AddDoubleLine(L["PROCS"], procInfo.count, nil, nil, nil, 1,1,1)
+	else
+		GameTooltip:AddDoubleLine(L["PROCS"], "N/A", nil, nil, nil, 1,1,1)
+	end
+	
+	local ppm = 0
+	if procInfo.count > 0 then
+		ppm = procInfo.count / (procInfo.totaltime / 60)
+	end
+	
+	if ppm > 0 then
+		GameTooltip:AddDoubleLine(L["PPM"], string.format("%.2f", ppm), nil, nil, nil, 1,1,1)
+	else
+		GameTooltip:AddDoubleLine(L["PPM"], "N/A", nil, nil, nil, 1,1,1)
+	end
+	
+	if procInfo.cooldown > 0 then
+		GameTooltip:AddDoubleLine(L["COOLDOWN"], procInfo.cooldown.."s", nil, nil, nil, 1,1,1)
+	else
+		GameTooltip:AddDoubleLine(L["COOLDOWN"], "N/A", nil, nil, nil, 1,1,1)
 	end
 end
 
