@@ -64,8 +64,9 @@ local combatTickTimer
 function Proculas:OnInitialize()
 	self:Print("v"..VERSION.." running.")
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", self.defaults)
+	self.dbpc = LibStub("AceDB-3.0"):New("ProculasDBPC", self.defaultsPC)
 	self.opt = self.db.profile
-	self.procstats = self.opt.procstats
+	self.procstats = self.dbpc.profile.procstats or {}
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
@@ -111,8 +112,9 @@ end
 -------------------------------------------------------
 -- Profiles Stuff
 function Proculas:OnProfileChanged(event, database, newProfileKey)
-	self.db = db
-	self.opt = db.profile
+	self.db = database
+	self.opt = database.profile
+	self:updateCooldownsFrame()
 	self:Print("Profile changed.")
 end
 
@@ -448,7 +450,7 @@ end
 
 -- Resets the proc stats
 function Proculas:resetProcStats()
-	self.opt.procstats = {}
+	self.dbpc.profile.procstats = {}
 	self.procstats = {}
 end
 

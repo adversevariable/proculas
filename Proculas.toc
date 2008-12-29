@@ -4,6 +4,7 @@
 ## Author: Clorell [US Argent Dawn]
 ## Version: @project-version@
 ## SavedVariables: ProculasDB
+## SavedVariablesPerCharacter: ProculasDBPC
 ## Created by Clorell/Keruni of Argent Dawn [US]
 
 #@no-lib-strip@

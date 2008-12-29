@@ -1,14 +1,22 @@
+--
+-- Proculas
+-- Created by Clorell/Keruni of Argent Dawn [US]
+-- $Id$
+--
+
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasOptions = Proculas:NewModule("ProculasOptions")
 local L = LibStub("AceLocale-3.0"):GetLocale("Proculas", false)
 local LSM = LibStub("LibSharedMedia-3.0")
 
 -------------------------------------------------------
+-- Proculas Options Stuff
+
 -- Default options
 local defaults = {
 	profile = {
 		postprocs = true,
-		PostChatFrame = true,
+		PostChatFrame = false,
 		Messages = {
 			before = "",
 			after = " procced!",
@@ -21,8 +29,8 @@ local defaults = {
 			show = true,
 			movableFrame = true,
 			reverseGrowth = false,
-			barFont = nil,
-			barFontSize = 11,
+			barFont = "Arial Narrow",
+			barFontSize = 12,
 			barHeight = 20,
 			barWidth = 150,
 			barTexture = "Blizzard",
@@ -45,8 +53,15 @@ local defaults = {
 	},
 }
 Proculas.defaults = defaults
--------------------------------------------------------
--- Proculas Options Stuff
+
+local defaultsPC = {
+	profile = {
+		procstats = {}
+	}
+}
+Proculas.defaultsPC = defaultsPC
+
+-- Options array from config window
 local options = {
 	type = "group",
 	name = "Proculas",
@@ -190,66 +205,73 @@ local options = {
 					type = "description",
 					name = L["COOLDOWN_SETTINGS"],
 				},
-				show = {
-					order =2,
-					name = L["SHOWCOOLDOWNS"],
-					desc = L["SHOWCOOLDOWNS"],
-					type = "toggle",
+				barOptions = {
+					type = "group",
+					guiInline = true,
+					name = L["BAR_OPTIONS"],
+					args = {
+						show = {
+							order =2,
+							name = L["SHOWCOOLDOWNS"],
+							desc = L["SHOWCOOLDOWNS"],
+							type = "toggle",
 
-				},
-				movableFrame = {
-					type = "toggle",
-					name = L["MOVABLEFRAME"],
-					desc = L["MOVABLEFRAME"],
-					order = 3,
+						},
+						movableFrame = {
+							type = "toggle",
+							name = L["MOVABLEFRAME"],
+							desc = L["MOVABLEFRAME"],
+							order = 3,
 
-				},
-				barTexture = {
-					type = "select", dialogControl = 'LSM30_Background',
-					name = L["BAR_TEXTURE"],
-					desc = L["BAR_TEXTURE"],
-					order = 4,
-					values = AceGUIWidgetLSMlists.statusbar,
-				}, 
-				barFont = {
-					type = "select", dialogControl = 'LSM30_Font',
-					name = L["BAR_FONT"],
-					desc = L["BAR_FONT"],
-					order = 5,
-					values = AceGUIWidgetLSMlists.font,
-				},                        		
-				barFontSize = {
-					type = "range",
-					name = L["BAR_FONT_SIZE"],
-					desc = L["BAR_FONT_SIZE"],
-					min = 4, max = 30, step = 1,
-				},
-				barWidth = {
-					type = "range",
-					name = L["BAR_WIDTH"],
-					desc = L["BAR_WIDTH"],
-					min = 40,
-					max = 300,
-					step = 1,
-					order = 7,
-				},
-				barHeight = {
-					type = "range",
-					name = L["BAR_HEIGHT"],
-					desc = L["BAR_HEIGHT"],
-					min = 8,
-					max = 60,
-					step = 1,
-					order = 8,
-				},
-				reverseGrowth = {
-					type = "toggle",
-					name = L["REVERSE_GROWTH"],
-					desc = L["REVERSE_GROWTH"],
-					order = 9,
-				},
+						},
+						barTexture = {
+							type = "select", dialogControl = 'LSM30_Background',
+							name = L["BAR_TEXTURE"],
+							desc = L["BAR_TEXTURE"],
+							order = 4,
+							values = AceGUIWidgetLSMlists.statusbar,
+						}, 
+						barFont = {
+							type = "select", dialogControl = 'LSM30_Font',
+							name = L["BAR_FONT"],
+							desc = L["BAR_FONT"],
+							order = 5,
+							values = AceGUIWidgetLSMlists.font,
+						},                        		
+						barFontSize = {
+							type = "range",
+							name = L["BAR_FONT_SIZE"],
+							desc = L["BAR_FONT_SIZE"],
+							min = 4, max = 30, step = 1,
+						},
+						barWidth = {
+							type = "range",
+							name = L["BAR_WIDTH"],
+							desc = L["BAR_WIDTH"],
+							min = 40,
+							max = 300,
+							step = 1,
+							order = 7,
+						},
+						barHeight = {
+							type = "range",
+							name = L["BAR_HEIGHT"],
+							desc = L["BAR_HEIGHT"],
+							min = 8,
+							max = 60,
+							step = 1,
+							order = 8,
+						},
+						reverseGrowth = {
+							type = "toggle",
+							name = L["GROW_UPWARDS"],
+							desc = L["GROW_UPWARDS"],
+							order = 9,
+						},
+					}
+				}
 			}
-		},
+		}, -- Cooldown Frame/Bars options
 		Sound = {
 			order = 3,
 			type = "group",

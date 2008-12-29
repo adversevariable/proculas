@@ -58,7 +58,8 @@ L["BAR_FONT"] = "Bar Font";
 L["BAR_FONT_SIZE"] = "Bar Font Size";
 L["BAR_WIDTH"] = "Bar Width";
 L["BAR_HEIGHT"] = "Bar Height";
-L["REVERSE_GROWTH"] = "Reverse Growth";
+L["GROW_UPWARDS"] = "Grow Upwards";
+L["BAR_OPTIONS"] = "Bar Options";
 
 -- ProculasLDB
 L["RC2OPENOPTIONS"] = "Hint: Right-click to configure.";
