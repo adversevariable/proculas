@@ -1,3 +1,4 @@
+
 ## Interface: 30000
 ## Title: Proculas
 ## Notes: Tells you when things proc and logs proc stats.
@@ -15,4 +16,4 @@ locale\enUS.lua
 
 Core.lua
 Options.lua
-proculasldb.lua
+ProculasLDB.lua
