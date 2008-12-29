@@ -36,40 +36,6 @@ LSM:Register("sound", "Fel Portal", [[Sound\Spells\Sunwell_Fel_PortalStand.wav]]
 LSM:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.wav]])
 
 -------------------------------------------------------
--- Default options
-local defaults = {
-	profile = {
-		postprocs = true,
-		PostChatFrame = true,
-		Messages = {
-			before = "",
-			after = " procced!",
-		},
-		Effects = {
-			Flash = false,
-			Shake = false,
-		},
-		Cooldowns = {
-			show = true,
-		},
-		SinkOptions = {
-			sink20OutputSink = "Default",
-		},
-		Sound = {
-			Playsound = true,
-			SoundFile = "Explosion",
-		},
-		minimapButton = {
-			minimapPos = 200,
-			radius = 80,
-			hide = false,
-			rounding = 10,
-		},
-		procstats = {},
-		tracked = {},
-	},
-}
--------------------------------------------------------
 -- Procs
 Proculas.Procs = {
 	Items = {},
@@ -97,7 +63,7 @@ local combatTickTimer
 -- OnInitialize
 function Proculas:OnInitialize()
 	self:Print("v"..VERSION.." running.")
-	self.db = LibStub("AceDB-3.0"):New("ProculasDB", defaults)
+	self.db = LibStub("AceDB-3.0"):New("ProculasDB", self.defaults)
 	self.opt = self.db.profile
 	self.procstats = self.opt.procstats
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
@@ -109,7 +75,7 @@ function Proculas:OnInitialize()
 	self:CreateCDFrame()
 	
 	self:SetSinkStorage(self.opt.SinkOptions)
-	self:SetupOptions()
+	--self:SetupOptions()
 end
 
 function Proculas:OnTooltipSetItem(tooltip, ...)
@@ -359,11 +325,14 @@ end
 -- Proc CD Frame
 
 function Proculas:CreateCDFrame()
-	self.procCooldowns = self:NewBarGroup("Proc Cooldowns", nil, 150, 18, "ProculasProcCD")
-	self.procCooldowns:SetTexture(LSM:Fetch('statusbar', "Blizzard"))
+	self.procCooldowns = self:NewBarGroup("Proc Cooldowns", nil, self.opt.Cooldowns.barWidth, self.opt.Cooldowns.barHeight, "ProculasProcCD")
+	self.procCooldowns:SetFont(LSM:Fetch('font', self.opt.Cooldowns.barFont), self.opt.Cooldowns.barFontSize)
+	self.procCooldowns:SetTexture(LSM:Fetch('statusbar', self.opt.Cooldowns.barTexture))
 	self.procCooldowns:SetColorAt(1.00, 1.0, 0.2, 0.2, 0.8)
 	self.procCooldowns:SetColorAt(0.25, 0.30, 0.8, 0.1, 0.8)
+	self.procCooldowns.RegisterCallback(self, "AnchorClicked")
 	self.procCooldowns:SetUserPlaced(true)
+	self.procCooldowns:ReverseGrowth(self.opt.Cooldowns.reverseGrowth or false)
 		
 	local bar = self.procCooldowns:NewTimerBar("Test Bar", "Test Bar", 10, 10)
 	bar:SetHeight(18)
@@ -375,9 +344,29 @@ function Proculas:CreateCDFrame()
 		self.procCooldowns:Hide()
 	end
 	
-	self.procCooldowns:ShowAnchor()
+	self:setMovableCooldownsFrame(self.opt.Cooldowns.movableFrame)
 end
-
+function Proculas:AnchorClicked(cbk, group, button)
+	if button == "RightButton" then
+		self:setMovableCooldownsFrame(false)
+	end
+end
+function Proculas:setMovableCooldownsFrame(movable)
+	self.opt.Cooldowns.movableFrame = movable
+	if movable then
+		self.procCooldowns:ShowAnchor()
+	else
+		self.procCooldowns:HideAnchor()
+	end
+end
+function Proculas:updateCooldownsFrame()
+	self.procCooldowns:SetFont(LSM:Fetch('font', self.opt.Cooldowns.barFont), self.opt.Cooldowns.barFontSize)
+	self.procCooldowns:SetWidth(self.opt.Cooldowns.barWidth)
+	self.procCooldowns:SetHeight(self.opt.Cooldowns.barHeight)
+	self.procCooldowns:SetTexture(LSM:Fetch('statusbar', self.opt.Cooldowns.barTexture))
+	self.procCooldowns:ReverseGrowth(self.opt.Cooldowns.reverseGrowth)
+	self:setMovableCooldownsFrame(self.opt.Cooldowns.movableFrame)
+end
 -------------------------------------------------------
 -- Event Functions
 
@@ -463,253 +452,21 @@ function Proculas:resetProcStats()
 	self.procstats = {}
 end
 
--------------------------------------------------------
+-- Used to get the tracked procs
+function Proculas:getTrackedProcs()
+	return self.opt.tracked
+end
+
 -- About Proculas
 function Proculas:AboutProculas()
 	self:Print("Version "..VERSION)
 	self:Print("Created by Clorell/Keruni of Argent Dawn [US]")
 end
 
--------------------------------------------------------
--- Proculas Options Stuff
-local options = {
-	type = "group",
-	name = "Proculas",
-	get = function(info) return Proculas.opt[ info[#info] ] end,
-	set = function(info, value) Proculas.opt[ info[#info] ] = value end,
-	args = {
-		General = {
-			order = 1,
-			type = "group",
-			name = L["GENERAL_SETTINGS"],
-			desc = L["GENERAL_SETTINGS"],
-			get = function(info) return Proculas.opt[ info[#info] ] end,
-			set = function(info, value)
-				Proculas.opt[ info[#info] ] = value
-			end,
-			args = {
-				enablepost = {
-					order = 1,
-					type = "description",
-					name = L["ENABLE_POSTING"],
-				},
-				postprocs = {
-					order = 2,
-					name = L["POST_PROCS"],
-					desc = L["POST_PROCS_DESC"],
-					type = "toggle",
-				},
-				postwhere = {
-					order = 3,
-					type = "description",
-					name = L["WHERE_TO_POST"],
-				},
-				PostChatFrame = {
-					order = 4,
-					name = L["CHAT_FRAME"],
-					desc = L["CHAT_FRAME_DESC"],
-					type = "toggle",
-					disabled = function() return not Proculas.opt.postprocs end
-				},
-				Sink = Proculas:GetSinkAce3OptionsDataTable(),
-				screenEffectsDesc = {
-					order = 6,
-					type = "description",
-					name = L["SCREEN_EFFECTS"],
-				},
-				Flash = {
-					order = 7,
-					name = L["FLASH_SCREEN"],
-					desc = L["FLASH_SCREEN_DESC"],
-					type = "toggle",
-					get = function(info) return Proculas.opt.Effects[ info[#info] ] end,
-					set = function(info, value)
-						Proculas.opt.Effects[ info[#info] ] = value
-					end,
-				},
-				Shake = {
-					order = 8,
-					name = L["SHAKE_SCREEN"],
-					desc = L["SHAKE_SCREEN_DESC"],
-					type = "toggle",
-					get = function(info) return Proculas.opt.Effects[ info[#info] ] end,
-					set = function(info, value)
-						Proculas.opt.Effects[ info[#info] ] = value
-					end,
-				},
-				minimapButtonDesc = {
-					order = 9,
-					type = "description",
-					name = L["MINIMAPBUTTONSETTINGS"],
-				},
-				minimapButtonHide = {
-					order = 10,
-					name = L["HIDEMINIMAPBUTTON"],
-					desc = L["HIDEMINIMAPBUTTON"],
-					type = "toggle",
-					get = function(info) return Proculas.opt.minimapButton.hide end,
-					set = function(info, value)
-						Proculas:GetModule("ProculasLDB"):ToggleMMButton(value)
-						Proculas.opt.minimapButton.hide = value
-					end,
-				},
-				procCooldownsDesc = {
-					order = 11,
-					type = "description",
-					name = L["COOLDOWNSETTINGS"],
-				},
-				procCooldownsShow = {
-					order = 12,
-					name = L["SHOWCOOLDOWNS"],
-					desc = L["SHOWCOOLDOWNS"],
-					type = "toggle",
-					get = function(info) return Proculas.opt.Cooldowns.show end,
-					set = function(info, value)
-						if value then Proculas.procCooldowns:Show() else Proculas.procCooldowns:Hide() end
-						Proculas.opt.Cooldowns.show = value
-					end,
-				},
-			},
-		}, -- General
-		ProcStats = {
-			order = 1,
-			type = "group",
-			name = L["CONFIG_PROC_STATS"],
-			desc = L["CONFIG_PROC_STATS_DESC"],
-			args = {
-				resetstats = {
-					type = "execute",
-					name = L["RESET_PROC_STATS"],
-					desc = L["RESET_PROC_STATS_DESC"],
-					func = function()
-						Proculas:resetProcStats()
-					end,
-				},
-			},
-		}, -- ProcStats
-		Messages = {
-			order = 2,
-			type = "group",
-			name = L["CONFIG_MESSAGES"],
-			desc = L["CONFIG_MESSAGES_DESC"],
-			get = function(info) return Proculas.opt.Messages[ info[#info] ] end,
-			set = function(info, value)
-				Proculas.opt.Messages[ info[#info] ] = value
-			end,
-			args = {
-				intro = {
-					order = 1,
-					type = "description",
-					name = L["CONFIG_PROC_MESSAGE"],
-				},
-				before = {
-					type = "input",
-					order = 2,
-					name = L["BEFORE"],
-					desc = L["BEFORE_DESC"],
-				},
-				after = {
-					type = "input",
-					order = 3,
-					name = L["AFTER"],
-					desc = L["AFTER_DESC"],
-				},
-			},
-		}, -- Messages
-		Sound = {
-			order = 3,
-			type = "group",
-			name = "Sound Settings",
-			desc = "Sound Settings",
-			get = function(info) return Proculas.opt.Sound[ info[#info] ] end,
-			set = function(info, value)
-				Proculas.opt.Sound[ info[#info] ] = value
-			end,
-			args = {
-				intro = {
-					order = 1,
-					type = "description",
-					name = L["CONFIG_PROC_SOUND"],
-				},
-				Playsound = {
-					type = "toggle",
-					order = 2,
-					name = L["ENABLE_SOUND"],
-					desc = L["ENABLE_SOUND_DESC"],
-				},
-				SoundFile = {
-					type = "select", dialogControl = 'LSM30_Sound',
-					order = 4,
-					name = L["SOUND_TO_PLAY"],
-					desc = L["SOUND_TO_PLAY"],
-					values = AceGUIWidgetLSMlists.sound,
-					disabled = function() return not Proculas.opt.Sound.Playsound end,
-				},
-			},
-		}, -- Sound
-	},
-}
-Proculas.options = options
-options.args.General.args.Sink.order = 5
-options.args.General.args.Sink.inline = true
-options.args.General.args.Sink.disabled = function() return not Proculas.opt.postprocs end
-
--- Option table for the slash command only
-local optionsSlash = {
-	type = "group",
-	name = "Slash Command",
-	order = -3,
-	args = {
-		about = {
-			type = "execute",
-			name = L["ABOUT_CMD"],
-			desc = L["ABOUT_CMD_DESC"],
-			func = function()
-				Proculas:AboutProculas()
-			end,
-			guiHidden = true,
-		},
-		config = {
-			type = "execute",
-			name = L["CONFIGURE_CMD"],
-			desc = L["CONFIGURE_CMD_DESC"],
-			func = function()
-				Proculas:ShowConfig()
-			end,
-			guiHidden = true,
-		},
-	},
-}
-Proculas.optionsSlash = optionsSlash
-
--- Used to get the tracked procs
-function Proculas:getTrackedProcs()
-	return self.opt.tracked
-end
-
-function Proculas:SetupOptions()
-	self.optionsFrames = {}
-
-	-- setup options table
-	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("Proculas", options)
-	LibStub("AceConfig-3.0"):RegisterOptionsTable("Proculas Commands", optionsSlash, "proculas")
-	local ACD3 = LibStub("AceConfigDialog-3.0")
-
-	-- The ordering here matters, it determines the order in the Blizzard Interface Options
-	self.optionsFrames.Proculas = ACD3:AddToBlizOptions("Proculas", nil, nil, "General")
-	self.optionsFrames.Messages = ACD3:AddToBlizOptions("Proculas", "Messages", "Proculas", "Messages")
-	self.optionsFrames.Sound = ACD3:AddToBlizOptions("Proculas", "Sound Settings", "Proculas", "Sound")
-	self.optionsFrames.ProcStats = ACD3:AddToBlizOptions("Proculas", L["CONFIG_PROC_STATS"], "Proculas", "ProcStats")
-	self:RegisterModuleOptions("Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db), "Profiles")
-end
-
-function Proculas:RegisterModuleOptions(name, optionTbl, displayName)
-	options.args[name] = (type(optionTbl) == "function") and optionTbl() or optionTbl
-	self.optionsFrames[name] = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Proculas", displayName, "Proculas", name)
-end
-
+-- Used to bring up the Config/Options window
 function Proculas:ShowConfig()
 	-- Open the profiles tab before, so the menu expands
-	InterfaceOptionsFrame_OpenToCategory(self.optionsFrames.Profiles)
-	InterfaceOptionsFrame_OpenToCategory(self.optionsFrames.Proculas)
+	local Options = self:GetModule("ProculasOptions")
+	InterfaceOptionsFrame_OpenToCategory(Options.optionsFrames.Profiles)
+	InterfaceOptionsFrame_OpenToCategory(Options.optionsFrames.Proculas)
 end

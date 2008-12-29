@@ -45,12 +45,20 @@ L["FLASH_SCREEN"] = "Flash Screen Border";
 L["FLASH_SCREEN_DESC"] = "Flashes the screens border when things proc.";
 L["SHAKE_SCREEN"] = "Shake Screen";
 L["SHAKE_SCREEN_DESC"] = "Shakes the screen when things proc.";
-L["COOLDOWNSETTINGS"] = "Cooldown Settings";
+L["COOLDOWN_SETTINGS"] = "Cooldown Settings";
 L["SHOWCOOLDOWNS"] = "Show Cooldowns";
 L["CONFIG_OUTPUT"] = "Output Settings";
 L["CONFIG_MESSAGES"] = "Messages";
 L["CONFIG_MESSAGES_DESC"] = "Proc Messages.";
-L["SCREEN_EFFECTS"] = "Screen Effects"
+L["SCREEN_EFFECTS"] = "Screen Effects";
+L["CONFIG_COOLDOWNS"] = "Cooldowns";
+L["MOVABLEFRAME"] = "Movable Frame";
+L["BAR_TEXTURE"] = "Bar Texture";
+L["BAR_FONT"] = "Bar Font";
+L["BAR_FONT_SIZE"] = "Bar Font Size";
+L["BAR_WIDTH"] = "Bar Width";
+L["BAR_HEIGHT"] = "Bar Height";
+L["REVERSE_GROWTH"] = "Reverse Growth";
 
 -- ProculasLDB
 L["RC2OPENOPTIONS"] = "Hint: Right-click to configure.";
