@@ -14,7 +14,8 @@ local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local dataobj = ldb:NewDataObject("Proculas", {
 		type = "data source",
 		icon = "Interface\\Icons\\Spell_Holy_Aspiration",
-		text = "Proculas"
+		text = "Proculas",
+		OnTooltipShow = function() ProculasLDB:doTooltip() end,
 		})
 
 function ProculasLDB:OnInitialize()
@@ -40,7 +41,7 @@ function ProculasLDB:ToggleMMButton(value)
 end
 
 function dataobj:OnEnter()
-    GameTooltip:SetOwner(self, "ANCHOR_NONE")
+    --[[GameTooltip:SetOwner(self, "ANCHOR_NONE")
 	GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
     GameTooltip:ClearLines()
 	
@@ -52,7 +53,17 @@ function dataobj:OnEnter()
 	GameTooltip:AddLine(L["RC2OPENOPTIONS"], 0, 1, 0)
     GameTooltip:AddLine(L["ALTCLICK2RESET"], 0, 1, 0)
     
-    GameTooltip:Show()
+    GameTooltip:Show()]]
+end
+
+function ProculasLDB:doTooltip()
+	GameTooltip:AddLine("Proculas")
+	GameTooltip:AddLine(" ")
+
+	Proculas:procStatsTooltip()
+	
+	GameTooltip:AddLine(L["RC2OPENOPTIONS"], 0, 1, 0)
+    GameTooltip:AddLine(L["ALTCLICK2RESET"], 0, 1, 0)
 end
 
 function dataobj:OnLeave()
