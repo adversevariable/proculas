@@ -76,7 +76,11 @@ function Proculas:OnInitialize()
 	self:CreateCDFrame()
 	
 	self:SetSinkStorage(self.opt.SinkOptions)
-	--self:SetupOptions()
+	
+	-- Player stuff
+	playerClass0, playerClass1 = UnitClass("player")
+	self.playerClass = playerClass1
+	self.playerName = UnitName("player")
 end
 
 function Proculas:OnTooltipSetItem(tooltip, ...)
@@ -90,6 +94,9 @@ function Proculas:OnTooltipSetItem(tooltip, ...)
 			self:addProcInfoToTooltip(self.procstats[proc.spellID])
 		end
 	end
+	
+	-- Check for procs
+	self:scanForProcs()
 end
 
 -- OnEnable
@@ -98,12 +105,6 @@ function Proculas:OnEnable()
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED")
-	-- Player stuff
-	playerClass0, playerClass1 = UnitClass("player")
-	self.playerClass = playerClass1
-	self.playerName = UnitName("player")
-	-- Check for procs
-	self:scanForProcs()
 end
 
 -------------------------------------------------------
