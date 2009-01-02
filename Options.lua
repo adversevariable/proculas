@@ -179,18 +179,6 @@ local options = {
 					type = "description",
 					name = L["CONFIG_PROC_MESSAGE"],
 				},
-				--[[before = {
-					type = "input",
-					order = 2,
-					name = L["BEFORE"],
-					desc = L["BEFORE_DESC"],
-				},
-				after = {
-					type = "input",
-					order = 3,
-					name = L["AFTER"],
-					desc = L["AFTER_DESC"],
-				},]]
 				message = {
 					type = "input",
 					order = 2,
@@ -301,12 +289,6 @@ local options = {
 					type = "description",
 					name = L["CONFIG_PROC_SOUND"],
 				},
-				--[[Playsound = {
-					type = "toggle",
-					order = 2,
-					name = L["ENABLE_SOUND"],
-					desc = L["ENABLE_SOUND_DESC"],
-				},]]
 				SoundFile = {
 					type = "select", dialogControl = 'LSM30_Sound',
 					order = 4,
@@ -392,7 +374,6 @@ local options = {
 					hasAlpha = true,
 					get = function(info)
 						if not Proculas.editingproc then return nil end
-						--local t = Proculas.editingproc.color
 						local t
 						if not Proculas.editingproc.color then t = Proculas.opt.Messages.color else t = Proculas.editingproc.color end
 						return t.r, t.g, t.b
@@ -430,6 +411,15 @@ local options = {
 					tristate = true,
 					disabled = function() return Proculas.editingproc == nil end,
 				},
+				headerSound = {order=11, type="header", name="Sound Settings"},
+				soundfile = {
+					type = "select", dialogControl = 'LSM30_Sound',
+					order = 12,
+					name = L["SOUND_TO_PLAY"],
+					desc = L["SOUND_TO_PLAY"],
+					values = AceGUIWidgetLSMlists.sound,
+					disabled = function() return Proculas.editingproc == nil end,
+				}, 
 			},
 		},
 	},
