@@ -19,6 +19,7 @@ local defaults = {
 		PostChatFrame = false,
 		Messages = {
 			message = "%s procced",
+			color = {r = 1, g = 1, b = 1},
 		},
 		Effects = {
 			Flash = false,
@@ -381,6 +382,27 @@ local options = {
 					name = L["MESSAGE"],
 					desc = L["MESSAGE_DESC"],
 					order = 6,
+					disabled = function() return Proculas.editingproc == nil end,
+				},
+				color = {
+					type = "color",
+					order = 7,
+					name = L["COLOR"],
+					desc = L["COLOR_DESC"],
+					hasAlpha = true,
+					get = function(info)
+						if not Proculas.editingproc then return nil end
+						--local t = Proculas.editingproc.color
+						local t
+						if not Proculas.editingproc.color then t = Proculas.opt.Messages.color else t = Proculas.editingproc.color end
+						return t.r, t.g, t.b
+					end,
+					set = function(info, r, g, b, a)
+						if not Proculas.editingproc then return nil end
+						if not Proculas.editingproc.color then Proculas.editingproc.color = {r = 1,g = 1,b = 1} end
+						local t = Proculas.editingproc.color
+						t.r, t.g, t.b = r, g, b
+					end,
 					disabled = function() return Proculas.editingproc == nil end,
 				},
 			},

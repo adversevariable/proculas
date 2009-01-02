@@ -77,6 +77,8 @@ L["ENABLE_COOLDOWN_DESC"] = "Check this to show this proc in the cooldown list."
 L["ENABLE_COOLDOWNS"] = "Enable Cooldowns";
 L["ENABLE_COOLDOWNS_DESC"] = "Enable/Disable showing proc cooldowns in the cooldowns frame.";
 L["PROC_MESSAGE"] = "Proc Message";
+L["COLOR"] = "Color";
+L["COLOR_DESC"] = "Select the color of the message";
 
 -- ProculasLDB
 L["RC2OPENOPTIONS"] = "Hint: Right-click to configure.";
