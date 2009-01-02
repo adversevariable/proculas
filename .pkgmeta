@@ -23,6 +23,7 @@ move-folders:
     Proculas/pullouts/Proculas_AmuletProcs: Proculas_AmuletProcs
     Proculas/pullouts/Proculas_DeathKnightProcs: Proculas_DeathKnightProcs
     Proculas/pullouts/Proculas_DruidProcs: Proculas_DruidProcs
+    Proculas/pullouts/Proculas_EmbroideryProcs: Proculas_EmbroideryProcs
     Proculas/pullouts/Proculas_EnchantProcs: Proculas_EnchantProcs
     Proculas/pullouts/Proculas_GemProcs: Proculas_GemProcs
     Proculas/pullouts/Proculas_HunterProcs: Proculas_HunterProcs

@@ -40,6 +40,7 @@ LSM:Register("sound", "Fel Nova", [[Sound\Spells\SeepingGaseous_Fel_Nova.wav]])
 Proculas.Procs = {
 	Items = {},
 	Enchants = {},
+	Embroideries = {},
 	Gems = {},
 	PALADIN = {},
 	DEATHKNIGHT = {},
@@ -175,7 +176,7 @@ function Proculas:scanItem(slotID)
 			local _, itemId, enchantId, jewelId1, jewelId2, jewelId3, jewelId4, suffixId, uniqueId, fromLvl = strsplit(":", itemstring)
 			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(itemlink)
 		
-			-- Enchants
+			-- Enchants and Embroideries
 			if tonumber(enchantId) ~= 0 then
 				local enchID = tonumber(enchantId)
 				if(self.Procs.Enchants[enchID]) then
@@ -185,7 +186,7 @@ function Proculas:scanItem(slotID)
 					self:addProc(procInfo)
 				end
 			end
-
+			
 			-- Items
 			itemId = tonumber(itemId)
 			if (self.Procs.Items[itemId]) then
