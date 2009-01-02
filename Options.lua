@@ -18,14 +18,14 @@ local defaults = {
 		postprocs = true,
 		PostChatFrame = false,
 		Messages = {
-			before = "",
-			after = " procced!",
+			message = "%s procced",
 		},
 		Effects = {
 			Flash = false,
 			Shake = false,
 		},
 		Cooldowns = {
+			cooldowns = true,
 			show = true,
 			movableFrame = true,
 			reverseGrowth = false,
@@ -56,7 +56,9 @@ Proculas.defaults = defaults
 
 local defaultsPC = {
 	profile = {
-		procstats = {}
+		procstats = {},
+		procoptions = {},
+		tracked = {}
 	}
 }
 Proculas.defaultsPC = defaultsPC
@@ -94,13 +96,13 @@ local options = {
 					type = "description",
 					name = L["WHERE_TO_POST"],
 				},
-				PostChatFrame = {
+				--[[PostChatFrame = {
 					order = 4,
 					name = L["CHAT_FRAME"],
 					desc = L["CHAT_FRAME_DESC"],
 					type = "toggle",
 					disabled = function() return not Proculas.opt.postprocs end
-				},
+				},]]
 				Sink = Proculas:GetSinkAce3OptionsDataTable(),
 				screenEffectsDesc = {
 					order = 6,
@@ -176,7 +178,7 @@ local options = {
 					type = "description",
 					name = L["CONFIG_PROC_MESSAGE"],
 				},
-				before = {
+				--[[before = {
 					type = "input",
 					order = 2,
 					name = L["BEFORE"],
@@ -187,6 +189,12 @@ local options = {
 					order = 3,
 					name = L["AFTER"],
 					desc = L["AFTER_DESC"],
+				},]]
+				message = {
+					type = "input",
+					order = 2,
+					name = L["MESSAGE"],
+					desc = L["MESSAGE_DESC"],
 				},
 			},
 		}, -- Messages
@@ -210,12 +218,17 @@ local options = {
 					guiInline = true,
 					name = L["BAR_OPTIONS"],
 					args = {
+						cooldowns = {
+							order =2,
+							name = L["ENABLE_COOLDOWNS"],
+							desc = L["ENABLE_COOLDOWNS_DESC"],
+							type = "toggle",
+						},
 						show = {
 							order =2,
 							name = L["SHOWCOOLDOWNS"],
 							desc = L["SHOWCOOLDOWNS"],
 							type = "toggle",
-
 						},
 						movableFrame = {
 							type = "toggle",
@@ -287,12 +300,12 @@ local options = {
 					type = "description",
 					name = L["CONFIG_PROC_SOUND"],
 				},
-				Playsound = {
+				--[[Playsound = {
 					type = "toggle",
 					order = 2,
 					name = L["ENABLE_SOUND"],
 					desc = L["ENABLE_SOUND_DESC"],
-				},
+				},]]
 				SoundFile = {
 					type = "select", dialogControl = 'LSM30_Sound',
 					order = 4,
@@ -303,6 +316,60 @@ local options = {
 				},
 			},
 		}, -- Sound
+		Procs = {
+			type="group",
+			name = L["PROC_SETTINGS"],
+			order = 1,
+			get = function(info) return Proculas.editingproc ~= nil and Proculas.editingproc[ info[#info] ] end,
+			set = function(info, value)
+				if not Proculas.editingproc then return nil end
+				Proculas.editingproc[ info[#info] ] = value
+			end,
+			args = {
+				intro = {
+					type = "description",
+					name = L["PROC_SETTINGS_DESC"],
+					order = 0,
+				},
+				proc = {
+					type = "select",
+					width = "full",
+					order = 1,
+					name = L["SELECT_PROC"],
+					desc = L["SELECT_PROC_DESC"],
+					values = function()
+						local procs = {}
+						for index, proc in pairs(Proculas.procstats) do
+							procs[proc.spellID] = proc.name
+						end
+						return procs
+					end,
+					get = function() 
+						if Proculas.editingproc ~= nil then
+							 return Proculas.editingproc.spellID
+						end
+					end,
+					set = function(info,value) 
+						Proculas.editingproc = Proculas:GetProcOptions(value) 
+					end
+				},
+				enabled = {
+					type = "toggle",
+					name = L["ENABLE"],
+					desc = L["ENABLE_DESC"],
+					order = 2,
+					disabled = function() return Proculas.editingproc == nil end,
+				},
+				cooldown = {
+					type = "toggle",
+					name = L["ENABLE_COOLDOWN"],
+					desc = L["ENABLE_COOLDOWN_DESC"],
+					order = 3,
+					tristate = true,
+					disabled = function() return Proculas.editingproc == nil end,
+				},               									
+			},
+		},
 	},
 }
 options.args.General.args.Sink.order = 5
@@ -352,6 +419,7 @@ function ProculasOptions:SetupOptions()
 
 	-- The ordering here matters, it determines the order in the Blizzard Interface Options
 	self.optionsFrames.Proculas = ACD3:AddToBlizOptions("Proculas", nil, nil, "General")
+	self.optionsFrames.Messages = ACD3:AddToBlizOptions("Proculas", L["PROC_SETTINGS"], "Proculas", "Procs")
 	self.optionsFrames.Messages = ACD3:AddToBlizOptions("Proculas", "Messages", "Proculas", "Messages")
 	self.optionsFrames.Cooldowns = ACD3:AddToBlizOptions("Proculas", "Cooldowns", "Proculas", "Cooldowns")
 	self.optionsFrames.Sound = ACD3:AddToBlizOptions("Proculas", "Sound Settings", "Proculas", "Sound")
