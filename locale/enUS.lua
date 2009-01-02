@@ -60,6 +60,22 @@ L["BAR_WIDTH"] = "Bar Width";
 L["BAR_HEIGHT"] = "Bar Height";
 L["GROW_UPWARDS"] = "Grow Upwards";
 L["BAR_OPTIONS"] = "Bar Options";
+L["MESSAGE"] = "Message";
+L["MESSAGE_DESC"] = "Message to display, use %s as the proc name.";
+L["ANNOUNCE_PROC"] = "Announce Proc";
+L["ANNOUNCE_PROC_DESC"] = "Display a message for this proc.";
+L["CUSTOM_MESSAGE"] = "Custom Message";
+L["CUSTOM_MESSAGE_DESC"] = "Check this to enable use of a custom message.";
+L["ENABLE"] = "Enable";
+L["ENABLE_DESC"] = "Uncheck this to disable this proc, it will not be tracked or show up in statistics.";
+L["SELECT_PROC"] = "Select Proc";
+L["SELECT_PROC_DESC"] = "Choose a proc tp configure.";
+L["PROC_SETTINGS"] = "Proc Settings";
+L["PROC_SETTINGS_DESC"] = "Configure individual options for procs.";
+L["ENABLE_COOLDOWN"] = "Enable Cooldown";
+L["ENABLE_COOLDOWN_DESC"] = "Check this to show this proc in the cooldown list.";
+L["ENABLE_COOLDOWNS"] = "Enable Cooldowns";
+L["ENABLE_COOLDOWNS_DESC"] = "Enable/Disable showing proc cooldowns in the cooldowns frame.";
 
 -- ProculasLDB
 L["RC2OPENOPTIONS"] = "Hint: Right-click to configure.";
