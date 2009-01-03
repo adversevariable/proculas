@@ -185,6 +185,21 @@ local options = {
 					name = L["MESSAGE"],
 					desc = L["MESSAGE_DESC"],
 				},
+				color = {
+					type = "color",
+					order = 3,
+					name = L["COLOR"],
+					desc = L["COLOR_DESC"],
+					hasAlpha = true,
+					get = function(info)
+						local t = Proculas.opt.Messages.color
+						return t.r, t.g, t.b
+					end,
+					set = function(info, r, g, b, a)
+						local t = Proculas.opt.Messages.color
+						t.r, t.g, t.b = r, g, b
+					end,
+				},
 			},
 		}, -- Messages
 		Cooldowns = {

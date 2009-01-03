@@ -67,7 +67,10 @@ function Proculas:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", self.defaults)
 	self.dbpc = LibStub("AceDB-3.0"):New("ProculasDBPC", self.defaultsPC)
 	self.opt = self.db.profile
+	self.optpc = self.dbpc.profile
 	self.procstats = self.dbpc.profile.procstats or {}
+	self.tracked = self.opt.tracked
+	self.procopts = self.optpc.procoptions
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
@@ -82,6 +85,8 @@ function Proculas:OnInitialize()
 	playerClass0, playerClass1 = UnitClass("player")
 	self.playerClass = playerClass1
 	self.playerName = UnitName("player")
+	
+
 end
 
 function Proculas:OnTooltipSetItem(tooltip, ...)
@@ -95,9 +100,6 @@ function Proculas:OnTooltipSetItem(tooltip, ...)
 			self:addProcInfoToTooltip(self.procstats[proc.spellID])
 		end
 	end
-	
-	-- Check for procs
-	self:scanForProcs()
 end
 
 -- OnEnable
@@ -106,6 +108,8 @@ function Proculas:OnEnable()
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED")
+	-- Check for procs
+	self:scanForProcs()
 end
 
 -------------------------------------------------------
@@ -215,30 +219,50 @@ function Proculas:addProc(procInfo)
 end
 
 -- Posts procs to the selected frames
-function Proculas:postProc(spellID,procName)
-	spellName = GetSpellInfo(spellID)
-	-- Post Proc
-	if (self.opt.postprocs) then
-		-- Chat Frame
-		if (self.opt.PostChatFrame) then
-			self:Print(self.opt.Messages.before..procName..self.opt.Messages.after)
-		end
-		local pourBefore = ""
-		if(self.opt.SinkOptions.sink20OutputSink == "Channel") then
-			pourBefore = "[Proculas]: "
-		end
-		self:Pour(pourBefore..self.opt.Messages.before..procName..self.opt.Messages.after);
+function Proculas:postProc(proc)
+	local procOpt = self.procopts[proc.spellID]
+	spellName = GetSpellInfo(proc.spellID)
+	
+	-- Chat Frame
+	--[[if (self.opt.PostChatFrame and self.procopts[proc.spellID].postproc) then
+		self:Print(self.opt.Messages.before..proc.name..self.opt.Messages.after)
+	end]]
+	
+	-- Sink
+	local pourBefore = ""
+	if(self.opt.SinkOptions.sink20OutputSink == "Channel") then
+		pourBefore = "[Proculas]: "
 	end
-	-- Play Sound
-	if (self.opt.Sound.Playsound) then
+	if procOpt.postproc or (self.opt.postprocs and (procOpt.postproc ~= false or procOpt.postproc == nil)) then
+		local procMessage
+		if procOpt.custommessage then
+			procMessage = procOpt.message
+		else
+			procMessage = self.opt.Messages.message
+		end
+		local color = nil
+		if not procOpt.color then
+			color = self.opt.Messages.color
+		else
+			color = procOpt.color
+		end
+		self:Pour(pourBefore..procMessage:format(proc.name),color.r,color.g,color.b);
+	end
+	
+	-- Sound
+	if procOpt.soundfile ~= nil then
+		PlaySoundFile(LSM:Fetch("sound", procOpt.soundfile)) 
+	elseif self.opt.Sound.SoundFile then
 		PlaySoundFile(LSM:Fetch("sound", self.opt.Sound.SoundFile))
 	end
+
 	-- Flash Screen
-	if(self.opt.Effects.Flash) then
+	if procOpt.flash or (self.opt.Effects.Flash and (procOpt.flash ~= false or procOpt.flash == nil)) then
 		self:Flash()
 	end
+
 	-- Shake Screen
-	if(self.opt.Effects.Shake) then
+	if procOpt.shake or (self.opt.Effects.Shake and (procOpt.shake ~= false or procOpt.shake == nil)) then
 		self:Shake()
 	end
 end
@@ -246,6 +270,12 @@ end
 -- Used to build the GameTooltip
 function Proculas:procStatsTooltip()
 	for a,proc in pairs(self.procstats) do
+		if self.procopts[proc.spellID] then
+			local procOpt = self.procopts[proc.spellID]
+			if not procOpt.enabled then
+				break
+			end
+		end
 		if(proc.name) then
 			GameTooltip:AddLine(proc.name, 0, 1, 0)
 			GameTooltip:AddTexture(proc.icon)
@@ -282,6 +312,23 @@ function Proculas:addProcInfoToTooltip(procInfo)
 	end
 end
 
+function Proculas:insertProcOpts(id)
+	self.optpc.procoptions[id] = {
+		name = self.opt.tracked[id].name,
+		spellID = self.opt.tracked[id].spellID,
+		enabled = true,
+		custommessage = false,
+		message = self.opt.Messages.message,
+	}
+end
+function Proculas:GetProcOptions(id)
+	if not self.optpc.procoptions[id] then
+		self:insertProcOpts(id)
+	end
+	local procInfo = self.optpc.procoptions[id]
+	return procInfo;
+end
+
 -- Does the required things when something procs
 function Proculas:handleProc(spellID,procName)
 	-- Check if the procstats record exists or not
@@ -296,9 +343,18 @@ function Proculas:handleProc(spellID,procName)
 			icon = self.opt.tracked[spellID].icon,
 		}
 	end
+	if not self.procopts[spellID] then
+		self:insertProcOpts(spellID)
+	end
 	
 	-- Get the proc info
 	local proc = self.procstats[spellID]
+	local procOpt = self.procopts[spellID]
+	
+	-- Check if its enabled or not.
+	if not procOpt.enabled then
+		return nil
+	end
 	
 	-- Check Cooldown
 	if proc.lastprocced > 0 and (proc.cooldown == 0 or (time() - proc.lastprocced < proc.cooldown)) then
@@ -309,7 +365,7 @@ function Proculas:handleProc(spellID,procName)
 	end
 
 	-- Reset cooldown bar
-	if proc.cooldown > 0 then
+	if procOpt.cooldown or (self.opt.Cooldowns.cooldowns and (procOpt.cooldown ~= false or procOpt.cooldown == nil)) then
 		local bar = self.procCooldowns:GetBar(proc.name)
 		if not bar then
 			bar = self.procCooldowns:NewTimerBar(proc.name, proc.name, proc.cooldown, proc.cooldown, proc.icon)
@@ -317,17 +373,16 @@ function Proculas:handleProc(spellID,procName)
 		bar:SetTimer(proc.cooldown, proc.cooldown)
 	end
 	
-	-- set the lastprocced time and increment the proc count
+	-- Set the lastprocced time and increment the proc count
 	proc.lastprocced = time()
 	proc.count = proc.count+1
 	
 	-- Calls the postProc function, duh?
-	self:postProc(proc.spellID,proc.name)
+	self:postProc(proc)
 end
 
 -------------------------------------------------------
 -- Proc CD Frame
-
 function Proculas:CreateCDFrame()
 	self.procCooldowns = self:NewBarGroup("Proc Cooldowns", nil, self.opt.Cooldowns.barWidth, self.opt.Cooldowns.barHeight, "ProculasProcCD")
 	self.procCooldowns:SetFont(LSM:Fetch('font', self.opt.Cooldowns.barFont), self.opt.Cooldowns.barFontSize)
@@ -370,6 +425,11 @@ function Proculas:updateCooldownsFrame()
 	self.procCooldowns:SetTexture(LSM:Fetch('statusbar', self.opt.Cooldowns.barTexture))
 	self.procCooldowns:ReverseGrowth(self.opt.Cooldowns.reverseGrowth)
 	self:setMovableCooldownsFrame(self.opt.Cooldowns.movableFrame)
+	if(self.opt.Cooldowns.show) then
+		self.procCooldowns:Show()
+	else
+		self.procCooldowns:Hide()
+	end
 end
 -------------------------------------------------------
 -- Event Functions
