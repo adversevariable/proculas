@@ -60,6 +60,8 @@ function dataobj:OnEnter()
 			end
 			if proc.cooldown > 0 then
 				procCooldown = proc.cooldown
+			elseif proc.cooldown == 0 and proc.count > 1 then
+				procCooldown = 0
 			else
 				procCooldown = "N/A"
 			end

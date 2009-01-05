@@ -242,7 +242,7 @@ local options = {
 
 						},
 						barTexture = {
-							type = "select", dialogControl = 'LSM30_Background',
+							type = "select", dialogControl = 'LSM30_Statusbar',
 							name = L["BAR_TEXTURE"],
 							desc = L["BAR_TEXTURE"],
 							order = 4,

@@ -205,7 +205,7 @@ function Proculas:scanItem(slotID)
 			
 			-- Items
 			itemId = tonumber(itemId)
-			if (self.Procs.Items[itemId]) then
+			if self.Procs.Items[itemId] then
 				local procInfo = self.Procs.Items[itemId];
 				procInfo.name = itemName
 				procInfo.icon = itemTexture
@@ -245,7 +245,7 @@ function Proculas:postProc(proc)
 	if(self.opt.SinkOptions.sink20OutputSink == "Channel") then
 		pourBefore = "[Proculas]: "
 	end
-	if procOpt.postproc or (self.opt.postprocs and (procOpt.postproc ~= false or procOpt.postproc == nil)) then
+	if procOpt.postproc or (self.opt.postprocs and (procOpt.postproc ~= nil or procOpt.postproc == false)) then
 		local procMessage
 		if procOpt.custommessage then
 			procMessage = procOpt.message
@@ -269,12 +269,12 @@ function Proculas:postProc(proc)
 	end
 
 	-- Flash Screen
-	if procOpt.flash or (self.opt.Effects.Flash and (procOpt.flash ~= false or procOpt.flash == nil)) then
+	if procOpt.flash or (self.opt.Effects.Flash and (procOpt.flash ~= nil or procOpt.flash == false)) then
 		self:Flash()
 	end
 
 	-- Shake Screen
-	if procOpt.shake or (self.opt.Effects.Shake and (procOpt.shake ~= false or procOpt.shake == nil)) then
+	if procOpt.shake or (self.opt.Effects.Shake and (procOpt.shake ~= nil or procOpt.shake == false)) then
 		self:Shake()
 	end
 end
@@ -409,7 +409,7 @@ function Proculas:CreateCDFrame()
 	self.procCooldowns:SetColorAt(0.25, 0.30, 0.8, 0.1, 0.8)
 	self.procCooldowns.RegisterCallback(self, "AnchorClicked")
 	self.procCooldowns:SetUserPlaced(true)
-	self.procCooldowns:ReverseGrowth(self.opt.Cooldowns.reverseGrowth or false)
+	self.procCooldowns:ReverseGrowth(self.opt.Cooldowns.reverseGrowth)
 		
 	local bar = self.procCooldowns:NewTimerBar("Test Bar", "Test Bar", 10, 10)
 	bar:SetHeight(18)
@@ -487,8 +487,8 @@ end
 function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
-
-	-- Gems else
+	
+	-- Gems
 	if(self.Procs.Gems[spellId]) then
 		local procInfo = self.Procs.Gems[spellId]
 		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(procInfo.itemID)
