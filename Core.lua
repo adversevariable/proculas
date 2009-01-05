@@ -115,6 +115,14 @@ end
 -------------------------------------------------------
 -- Timer Functions
 
+-- Increments the combatTime variable by 1
+function Proculas:combatTick()
+	combatTime = combatTime+1;
+	for key,proc in pairs(self.procstats) do
+		proc.totaltime = proc.totaltime + 1
+	end
+end
+
 -------------------------------------------------------
 -- Profiles Stuff
 function Proculas:OnProfileChanged(event, database, newProfileKey)
@@ -446,13 +454,6 @@ function Proculas:PLAYER_REGEN_ENABLED()
 	combatTime = 0
 end
 
--- Increments the combatTime variable by 1
-function Proculas:combatTick()
-	combatTime = combatTime+1;
-	for key,proc in pairs(self.procstats) do
-		proc.totaltime = proc.totaltime + 1
-	end
-end
 
 -- Rescans the players gear when they change an item
 function Proculas:UNIT_INVENTORY_CHANGED(event,unit)
@@ -468,6 +469,7 @@ local function checktype(types,type)
 	end
 	return false
 end
+
 -- The Proc scanner, scans the combat log for proc spells
 function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)

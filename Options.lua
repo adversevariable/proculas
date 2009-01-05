@@ -197,7 +197,7 @@ local options = {
 					end,
 					set = function(info, r, g, b, a)
 						local c = Proculas.opt.Messages.color
-						C.r, c.g, c.b = r, g, b
+						c.r, c.g, c.b = r, g, b
 					end,
 				},
 			},
