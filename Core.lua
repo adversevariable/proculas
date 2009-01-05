@@ -14,7 +14,7 @@ local LSM = LibStub("LibSharedMedia-3.0")
 -------------------------------------------------------
 -- Proculas Version
 Proculas.revision = tonumber(("@project-revision@"):match("%d+"))
-Proculas.version = GetAddOnMetadata('Proculas', 'Version')
+Proculas.version = GetAddOnMetadata('Proculas', 'Version').." r@project-revision@"
 if(Proculas.revision == nil) then
 	Proculas.version = "SVN"
 end
@@ -525,6 +525,14 @@ end
 
 -------------------------------------------------------
 -- Other/Misc Functions
+
+-- Prints a detailed version string
+function Proculas:debugVersion()
+	print("---------------------------------------------")
+	print("Please submit the following line with bug reports:")
+	print("Proculas "..self.version.." / Core.lua $Rev$")
+	print("---------------------------------------------")
+end
 
 -- Resets the proc stats
 function Proculas:resetProcStats()

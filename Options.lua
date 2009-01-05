@@ -467,6 +467,15 @@ local optionsSlash = {
 			end,
 			guiHidden = true,
 		},
+		debugver = {
+			type = "execute",
+			name = L["DEBUGVER_CMD"],
+			desc = L["DEBUGVER_CMD"],
+			func = function()
+				Proculas:debugVersion()
+			end,
+			guiHidden = true,
+		},
 	},
 }
 --Proculas.optionsSlash = optionsSlash
