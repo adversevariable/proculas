@@ -63,7 +63,7 @@ local combatTickTimer
 
 -- OnInitialize
 function Proculas:OnInitialize()
-	self:Print("v"..VERSION.." running.")
+	self:Print(VERSION.." running.")
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", self.defaults)
 	self.dbpc = LibStub("AceDB-3.0"):New("ProculasDBPC", self.defaultsPC)
 	self.opt = self.db.profile
@@ -75,10 +75,13 @@ function Proculas:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
 	
+	-- Setup the hook for item tooltips. Soon this will be done for spells too.
 	GameTooltip:HookScript("OnTooltipSetItem", function(tooltip, item) Proculas:OnTooltipSetItem(tooltip,item) end)
 	
+	-- Create the Cooldown bars frame.
 	self:CreateCDFrame()
 	
+	-- Set the Sink options.
 	self:SetSinkStorage(self.opt.SinkOptions)
 	
 	-- Player stuff
@@ -89,6 +92,7 @@ function Proculas:OnInitialize()
 
 end
 
+-- Used to put item proc stats into the items tooltip.
 function Proculas:OnTooltipSetItem(tooltip, ...)
 	local itemName, itemLink = tooltip:GetItem()
 	local found, _, itemString = string.find(itemLink, "^|c%x+|H(.+)|h%[.*%]")
@@ -295,6 +299,7 @@ function Proculas:procStatsTooltip()
 	end
 end
 
+-- Used to add the proc info to a tooltip.
 function Proculas:addProcInfoToTooltip(procInfo)
 	if procInfo.count > 0 then
 		GameTooltip:AddDoubleLine(L["PROCS"], procInfo.count, nil, nil, nil, 1,1,1)
@@ -320,6 +325,7 @@ function Proculas:addProcInfoToTooltip(procInfo)
 	end
 end
 
+-- Used to setup the default proc options.
 function Proculas:insertProcOpts(id)
 	self.optpc.procoptions[id] = {
 		name = self.opt.tracked[id].name,
@@ -329,6 +335,8 @@ function Proculas:insertProcOpts(id)
 		message = self.opt.Messages.message,
 	}
 end
+
+-- Used to get the proc options.
 function Proculas:GetProcOptions(id)
 	if not self.optpc.procoptions[id] then
 		self:insertProcOpts(id)
@@ -439,6 +447,7 @@ function Proculas:updateCooldownsFrame()
 		self.procCooldowns:Hide()
 	end
 end
+
 -------------------------------------------------------
 -- Event Functions
 
@@ -461,6 +470,8 @@ function Proculas:UNIT_INVENTORY_CHANGED(event,unit)
 		self:scanForProcs()
 	end
 end
+
+-- Used to check if the Combat Log Event Type (type) is in the types array.
 local function checktype(types,type)
 	for _,thisType in pairs(types) do
 		if(thisType == type) then
@@ -509,6 +520,7 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		end
 	end
 end
+
 -------------------------------------------------------
 -- Other/Misc Functions
 
