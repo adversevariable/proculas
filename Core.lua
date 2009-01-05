@@ -382,11 +382,13 @@ function Proculas:handleProc(spellID,procName)
 
 	-- Reset cooldown bar
 	if procOpt.cooldown or (self.opt.Cooldowns.cooldowns and (procOpt.cooldown ~= false or procOpt.cooldown == nil)) then
+		if proc.cooldown > 0 then
 		local bar = self.procCooldowns:GetBar(proc.name)
 		if not bar then
 			bar = self.procCooldowns:NewTimerBar(proc.name, proc.name, proc.cooldown, proc.cooldown, proc.icon)
 		end
 		bar:SetTimer(proc.cooldown, proc.cooldown)
+		end
 	end
 	
 	-- Set the lastprocced time and increment the proc count
