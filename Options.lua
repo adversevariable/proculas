@@ -192,12 +192,12 @@ local options = {
 					desc = L["COLOR_DESC"],
 					hasAlpha = true,
 					get = function(info)
-						local t = Proculas.opt.Messages.color
-						return t.r, t.g, t.b
+						local c = Proculas.opt.Messages.color
+						return c.r, c.g, c.b
 					end,
 					set = function(info, r, g, b, a)
-						local t = Proculas.opt.Messages.color
-						t.r, t.g, t.b = r, g, b
+						local c = Proculas.opt.Messages.color
+						C.r, c.g, c.b = r, g, b
 					end,
 				},
 			},
@@ -292,8 +292,8 @@ local options = {
 		Sound = {
 			order = 3,
 			type = "group",
-			name = "Sound Settings",
-			desc = "Sound Settings",
+			name = L["CONFIG_SOUND"],
+			desc = L["CONFIG_SOUND"],
 			get = function(info) return Proculas.opt.Sound[ info[#info] ] end,
 			set = function(info, value)
 				Proculas.opt.Sound[ info[#info] ] = value
@@ -389,15 +389,15 @@ local options = {
 					hasAlpha = true,
 					get = function(info)
 						if not Proculas.editingproc then return nil end
-						local t
-						if not Proculas.editingproc.color then t = Proculas.opt.Messages.color else t = Proculas.editingproc.color end
-						return t.r, t.g, t.b
+						local c
+						if not Proculas.editingproc.color then c = Proculas.opt.Messages.color else c = Proculas.editingproc.color end
+						return c.r, c.g, c.b
 					end,
 					set = function(info, r, g, b, a)
 						if not Proculas.editingproc then return nil end
 						if not Proculas.editingproc.color then Proculas.editingproc.color = {r = 1,g = 1,b = 1} end
-						local t = Proculas.editingproc.color
-						t.r, t.g, t.b = r, g, b
+						local c = Proculas.editingproc.color
+						c.r, c.g, c.b = r, g, b
 					end,
 					disabled = function() return Proculas.editingproc == nil end,
 				},
@@ -487,11 +487,11 @@ function ProculasOptions:SetupOptions()
 	-- The ordering here matters, it determines the order in the Blizzard Interface Options
 	self.optionsFrames.Proculas = ACD3:AddToBlizOptions("Proculas", nil, nil, "General")
 	self.optionsFrames.Messages = ACD3:AddToBlizOptions("Proculas", L["PROC_SETTINGS"], "Proculas", "Procs")
-	self.optionsFrames.Messages = ACD3:AddToBlizOptions("Proculas", "Messages", "Proculas", "Messages")
-	self.optionsFrames.Cooldowns = ACD3:AddToBlizOptions("Proculas", "Cooldowns", "Proculas", "Cooldowns")
-	self.optionsFrames.Sound = ACD3:AddToBlizOptions("Proculas", "Sound Settings", "Proculas", "Sound")
+	self.optionsFrames.Messages = ACD3:AddToBlizOptions("Proculas", L["CONFIG_MESSAGES"], "Proculas", "Messages")
+	self.optionsFrames.Cooldowns = ACD3:AddToBlizOptions("Proculas", L["CONFIG_COOLDOWNS"], "Proculas", "Cooldowns")
+	self.optionsFrames.Sound = ACD3:AddToBlizOptions("Proculas", L["CONFIG_SOUND"], "Proculas", "Sound")
 	self.optionsFrames.ProcStats = ACD3:AddToBlizOptions("Proculas", L["CONFIG_PROC_STATS"], "Proculas", "ProcStats")
-	self:RegisterModuleOptions("Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(Proculas.db), "Profiles")
+	self:RegisterModuleOptions("Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(Proculas.db), L["PROFILES"])
 end
 
 function ProculasOptions:RegisterModuleOptions(name, optionTbl, displayName)
