@@ -310,7 +310,6 @@ local options = {
 					name = L["SOUND_TO_PLAY"],
 					desc = L["SOUND_TO_PLAY"],
 					values = AceGUIWidgetLSMlists.sound,
-					disabled = function() return not Proculas.opt.Sound.Playsound end,
 				},
 			},
 		}, -- Sound
