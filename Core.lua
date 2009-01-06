@@ -480,6 +480,7 @@ end
 -- Used to put item proc stats into the items tooltip.
 function Proculas:OnTooltipSetItem(tooltip, ...)
 	local itemName, itemLink = tooltip:GetItem()
+	if not itemLink then return nil end -- possibly fixes "bad argument #1 to find: string expected got nil"
 	local found, _, itemString = string.find(itemLink, "^|c%x+|H(.+)|h%[.*%]")
 	local itemId = select(2, strsplit(":", itemString))
 	
