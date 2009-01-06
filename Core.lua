@@ -78,32 +78,12 @@ function Proculas:OnInitialize()
 	-- Setup the hook for item tooltips. Soon this will be done for spells too.
 	GameTooltip:HookScript("OnTooltipSetItem", function(tooltip, item) Proculas:OnTooltipSetItem(tooltip,item) end)
 	
-	-- Create the Cooldown bars frame.
-	self:CreateCDFrame()
-	
 	-- Set the Sink options.
 	self:SetSinkStorage(self.opt.SinkOptions)
 	
 	-- Player stuff
-	playerClass0, playerClass1 = UnitClass("player")
-	self.playerClass = playerClass1
+	self.playerClass = select(2,UnitClass("player"))
 	self.playerName = UnitName("player")
-	
-
-end
-
--- Used to put item proc stats into the items tooltip.
-function Proculas:OnTooltipSetItem(tooltip, ...)
-	local itemName, itemLink = tooltip:GetItem()
-	local found, _, itemString = string.find(itemLink, "^|c%x+|H(.+)|h%[.*%]")
-	local itemId = select(2, strsplit(":", itemString))
-	
-	-- Tracked items
-	for index,proc in pairs(self.opt.tracked) do
-		if proc.itemID ~= nil and tostring(proc.itemID) == itemId then
-			self:addProcInfoToTooltip(self.procstats[proc.spellID])
-		end
-	end
 end
 
 -- OnEnable
@@ -114,6 +94,8 @@ function Proculas:OnEnable()
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	-- Check for procs
 	self:scanForProcs()
+	-- Create the Cooldown bars frame.
+	self:CreateCDFrame()
 end
 
 -------------------------------------------------------
@@ -235,17 +217,12 @@ function Proculas:postProc(proc)
 	local procOpt = self.procopts[proc.spellID]
 	spellName = GetSpellInfo(proc.spellID)
 	
-	-- Chat Frame
-	--[[if (self.opt.PostChatFrame and self.procopts[proc.spellID].postproc) then
-		self:Print(self.opt.Messages.before..proc.name..self.opt.Messages.after)
-	end]]
-	
 	-- Sink
 	local pourBefore = ""
 	if(self.opt.SinkOptions.sink20OutputSink == "Channel") then
 		pourBefore = "[Proculas]: "
 	end
-	if procOpt.postproc or (self.opt.postprocs and (procOpt.postproc ~= nil or procOpt.postproc == false)) then
+	if procOpt.postproc or (self.opt.postprocs and (procOpt.postproc ~= false or procOpt.postproc == nil)) then
 		local procMessage
 		if procOpt.custommessage then
 			procMessage = procOpt.message
@@ -269,33 +246,13 @@ function Proculas:postProc(proc)
 	end
 
 	-- Flash Screen
-	if procOpt.flash or (self.opt.Effects.Flash and (procOpt.flash ~= nil or procOpt.flash == false)) then
+	if procOpt.flash or (self.opt.Effects.Flash and (procOpt.flash ~= false or procOpt.flash == nil)) then
 		self:Flash()
 	end
 
 	-- Shake Screen
-	if procOpt.shake or (self.opt.Effects.Shake and (procOpt.shake ~= nil or procOpt.shake == false)) then
+	if procOpt.shake or (self.opt.Effects.Shake and (procOpt.shake ~= false or procOpt.shake == nil)) then
 		self:Shake()
-	end
-end
-
--- Used to build the GameTooltip
-function Proculas:procStatsTooltip()
-	for a,proc in pairs(self.procstats) do
-		if self.procopts[proc.spellID] then
-			local procOpt = self.procopts[proc.spellID]
-			if not procOpt.enabled then
-				break
-			end
-		end
-		if(proc.name) then
-			GameTooltip:AddLine(proc.name, 0, 1, 0)
-			GameTooltip:AddTexture(proc.icon)
-			
-			self:addProcInfoToTooltip(proc)
-			
-			GameTooltip:AddLine(" ")
-		end
 	end
 end
 
@@ -519,6 +476,20 @@ end
 
 -------------------------------------------------------
 -- Other/Misc Functions
+
+-- Used to put item proc stats into the items tooltip.
+function Proculas:OnTooltipSetItem(tooltip, ...)
+	local itemName, itemLink = tooltip:GetItem()
+	local found, _, itemString = string.find(itemLink, "^|c%x+|H(.+)|h%[.*%]")
+	local itemId = select(2, strsplit(":", itemString))
+	
+	-- Tracked items
+	for index,proc in pairs(self.opt.tracked) do
+		if proc.itemID ~= nil and tostring(proc.itemID) == itemId then
+			self:addProcInfoToTooltip(self.procstats[proc.spellID])
+		end
+	end
+end
 
 -- Prints a detailed version string
 function Proculas:debugVersion()

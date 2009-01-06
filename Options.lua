@@ -97,13 +97,6 @@ local options = {
 					type = "header",
 					name = L["WHERE_TO_POST"],
 				},
-				--[[PostChatFrame = {
-					order = 4,
-					name = L["CHAT_FRAME"],
-					desc = L["CHAT_FRAME_DESC"],
-					type = "toggle",
-					disabled = function() return not Proculas.opt.postprocs end
-				},]]
 				Sink = Proculas:GetSinkAce3OptionsDataTable(),
 				screenEffectsDesc = {
 					order = 6,
