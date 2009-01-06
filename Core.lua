@@ -346,7 +346,7 @@ function Proculas:GetProcOptions(id)
 end
 
 -- Does the required things when something procs
-function Proculas:handleProc(spellID,procName)
+function Proculas:processProc(spellID,procName)
 	-- Check if the procstats record exists or not
 	if not self.procstats[spellID] then
 		self.procstats[spellID] = {
@@ -381,14 +381,12 @@ function Proculas:handleProc(spellID,procName)
 	end
 
 	-- Reset cooldown bar
-	if procOpt.cooldown or (self.opt.Cooldowns.cooldowns and (procOpt.cooldown ~= false or procOpt.cooldown == nil)) then
-		if proc.cooldown > 0 then
+	if (procOpt.cooldown or (self.opt.Cooldowns.cooldowns and (procOpt.cooldown ~= false or procOpt.cooldown == nil))) and proc.cooldown > 0 then
 		local bar = self.procCooldowns:GetBar(proc.name)
 		if not bar then
 			bar = self.procCooldowns:NewTimerBar(proc.name, proc.name, proc.cooldown, proc.cooldown, proc.icon)
 		end
 		bar:SetTimer(proc.cooldown, proc.cooldown)
-		end
 	end
 	
 	-- Set the lastprocced time and increment the proc count
@@ -407,12 +405,11 @@ function Proculas:CreateCDFrame()
 	self.procCooldowns:SetTexture(LSM:Fetch('statusbar', self.opt.Cooldowns.barTexture))
 	self.procCooldowns:SetColorAt(1.00, 1.0, 0.2, 0.2, 0.8)
 	self.procCooldowns:SetColorAt(0.25, 0.30, 0.8, 0.1, 0.8)
-	self.procCooldowns.RegisterCallback(self, "AnchorClicked")
 	self.procCooldowns:SetUserPlaced(true)
 	self.procCooldowns:ReverseGrowth(self.opt.Cooldowns.reverseGrowth)
 		
-	local bar = self.procCooldowns:NewTimerBar("Test Bar", "Test Bar", 10, 10)
-	bar:SetHeight(18)
+	local bar = self.procCooldowns:NewTimerBar("Test Cooldown", "Test Cooldown", 10, 10)
+	bar:SetHeight(20)
 	bar:SetTimer(0, 0)
 	
 	if(self.opt.Cooldowns.show) then
@@ -422,11 +419,6 @@ function Proculas:CreateCDFrame()
 	end
 	
 	self:setMovableCooldownsFrame(self.opt.Cooldowns.movableFrame)
-end
-function Proculas:AnchorClicked(cbk, group, button)
-	if button == "RightButton" then
-		self:setMovableCooldownsFrame(false)
-	end
 end
 function Proculas:setMovableCooldownsFrame(movable)
 	self.opt.Cooldowns.movableFrame = movable
@@ -484,11 +476,13 @@ local function checktype(types,type)
 end
 
 -- The Proc scanner, scans the combat log for proc spells
+-- This sweet little Proc Tracker here is Copyright (c) Clorell
 function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
 	
 	-- Gems
+	-- Done like this because finding the GemID isn't easy.
 	if(self.Procs.Gems[spellId]) then
 		local procInfo = self.Procs.Gems[spellId]
 		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(procInfo.itemID)
@@ -496,12 +490,12 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		if(checktype(procInfo.types,type)) then
 			if(name == self.playerName) then
 				if(procInfo.selfOnly and name == self.playerName and name2 == self.playerName) then
-					self:handleProc(spellId,procInfo.name)
+					self:processProc(spellId,procInfo.name)
 				elseif procInfo.selfOnly == 0 then
-					self:handleProc(spellId,procInfo.name)
+					self:processProc(spellId,procInfo.name)
 				end
 			elseif(name == nil and name2 == self.playerName) then
-				self:handleProc(spellId,procInfo.name)
+				self:processProc(spellId,procInfo.name)
 			end
 		end
 	end
@@ -512,12 +506,12 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		if(checktype(procInfo.types,type)) then
 			if(name == self.playerName) then
 				if(procInfo.selfOnly and name2 == self.playerName) then
-					self:handleProc(spellId,procInfo.name)
+					self:processProc(spellId,procInfo.name)
 				elseif procInfo.selfOnly == 0 then
-					self:handleProc(spellId,procInfo.name)
+					self:processProc(spellId,procInfo.name)
 				end
 			elseif(name == nil and name2 == self.playerName) then
-				self:handleProc(spellId,procInfo.name)
+				self:processProc(spellId,procInfo.name)
 			end
 		end
 	end
