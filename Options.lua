@@ -67,7 +67,7 @@ Proculas.defaultsPC = defaultsPC
 -- Options array from config window
 local options = {
 	type = "group",
-	name = "Proculas",
+	name = L["Proculas"],
 	get = function(info) return Proculas.opt[ info[#info] ] end,
 	set = function(info, value) Proculas.opt[ info[#info] ] = value end,
 	args = {
@@ -83,7 +83,7 @@ local options = {
 			args = {
 				enablepost = {
 					order = 1,
-					type = "description",
+					type = "header",
 					name = L["ENABLE_POSTING"],
 				},
 				postprocs = {
@@ -94,7 +94,7 @@ local options = {
 				},
 				postwhere = {
 					order = 3,
-					type = "description",
+					type = "header",
 					name = L["WHERE_TO_POST"],
 				},
 				--[[PostChatFrame = {
@@ -107,7 +107,7 @@ local options = {
 				Sink = Proculas:GetSinkAce3OptionsDataTable(),
 				screenEffectsDesc = {
 					order = 6,
-					type = "description",
+					type = "header",
 					name = L["SCREEN_EFFECTS"],
 				},
 				Flash = {
@@ -132,7 +132,7 @@ local options = {
 				},
 				minimapButtonDesc = {
 					order = 9,
-					type = "description",
+					type = "header",
 					name = L["MINIMAPBUTTONSETTINGS"],
 				},
 				minimapButtonHide = {
@@ -488,21 +488,21 @@ function ProculasOptions:SetupOptions()
 	self.optionsFrames = {}
 
 	-- setup options table
-	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("Proculas", options)
+	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable(L["Proculas"], options)
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("Proculas Commands", optionsSlash, "proculas")
 	local ACD3 = LibStub("AceConfigDialog-3.0")
 
 	-- The ordering here matters, it determines the order in the Blizzard Interface Options
-	self.optionsFrames.Proculas = ACD3:AddToBlizOptions("Proculas", nil, nil, "General")
-	self.optionsFrames.Messages = ACD3:AddToBlizOptions("Proculas", L["PROC_SETTINGS"], "Proculas", "Procs")
-	self.optionsFrames.Messages = ACD3:AddToBlizOptions("Proculas", L["CONFIG_MESSAGES"], "Proculas", "Messages")
-	self.optionsFrames.Cooldowns = ACD3:AddToBlizOptions("Proculas", L["CONFIG_COOLDOWNS"], "Proculas", "Cooldowns")
-	self.optionsFrames.Sound = ACD3:AddToBlizOptions("Proculas", L["CONFIG_SOUND"], "Proculas", "Sound")
-	self.optionsFrames.ProcStats = ACD3:AddToBlizOptions("Proculas", L["CONFIG_PROC_STATS"], "Proculas", "ProcStats")
+	self.optionsFrames.Proculas = ACD3:AddToBlizOptions(L["Proculas"], nil, nil, "General")
+	self.optionsFrames.Messages = ACD3:AddToBlizOptions(L["Proculas"], L["PROC_SETTINGS"], L["Proculas"], "Procs")
+	self.optionsFrames.Messages = ACD3:AddToBlizOptions(L["Proculas"], L["CONFIG_MESSAGES"], L["Proculas"], "Messages")
+	self.optionsFrames.Cooldowns = ACD3:AddToBlizOptions(L["Proculas"], L["CONFIG_COOLDOWNS"], L["Proculas"], "Cooldowns")
+	self.optionsFrames.Sound = ACD3:AddToBlizOptions(L["Proculas"], L["CONFIG_SOUND"], L["Proculas"], "Sound")
+	self.optionsFrames.ProcStats = ACD3:AddToBlizOptions(L["Proculas"], L["CONFIG_PROC_STATS"], L["Proculas"], "ProcStats")
 	self:RegisterModuleOptions("Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(Proculas.db), L["PROFILES"])
 end
 
 function ProculasOptions:RegisterModuleOptions(name, optionTbl, displayName)
 	options.args[name] = (type(optionTbl) == "function") and optionTbl() or optionTbl
-	self.optionsFrames[name] = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Proculas", displayName, "Proculas", name)
+	self.optionsFrames[name] = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["Proculas"], displayName, L["Proculas"], name)
 end
