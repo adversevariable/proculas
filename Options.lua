@@ -35,6 +35,8 @@ local defaults = {
 			barHeight = 20,
 			barWidth = 150,
 			barTexture = "Blizzard",
+			colorStart = {r=1.0, g=0.2, b=0.2, a=0.8},
+			colorEnd = {r=0.30, g=0.8, b=0.1, a=0.8},
 		},
 		SinkOptions = {
 			sink20OutputSink = "Default",
@@ -277,6 +279,36 @@ local options = {
 							name = L["GROW_UPWARDS"],
 							desc = L["GROW_UPWARDS"],
 							order = 9,
+						},
+						colorStart = {
+							type = "color",
+							order = 10,
+							name = "Color Start",
+							desc = "Color Start",
+							hasAlpha = true,
+							get = function(info)
+								local c = Proculas.opt.Cooldowns.colorStart
+								return c.r, c.g, c.b
+							end,
+							set = function(info, r, g, b, a)
+								local c = Proculas.opt.Cooldowns.colorStart
+								c.r, c.g, c.b = r, g, b
+							end,
+						},
+						colorEnd = {
+							type = "color",
+							order = 11,
+							name = "Color End",
+							desc = "Color End",
+							hasAlpha = true,
+							get = function(info)
+								local c = Proculas.opt.Cooldowns.colorEnd
+								return c.r, c.g, c.b
+							end,
+							set = function(info, r, g, b, a)
+								local c = Proculas.opt.Cooldowns.colorEnd
+								c.r, c.g, c.b = r, g, b
+							end,
 						},
 					}
 				}
