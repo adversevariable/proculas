@@ -5,6 +5,7 @@
 --
 
 local L = LibStub("AceLocale-3.0"):NewLocale("Proculas", "enUS", true)
+if not L then return end
 
 L["ABOUT_CMD"] = "About"
 L["ABOUT_CMD_DESC"] = "About Proculas (/proculas about)"

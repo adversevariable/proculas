@@ -362,6 +362,7 @@ function Proculas:CreateCDFrame()
 	self.procCooldowns:SetTexture(LSM:Fetch('statusbar', self.opt.Cooldowns.barTexture))
 	self.procCooldowns:SetColorAt(1.00, self.opt.Cooldowns.colorStart.r, self.opt.Cooldowns.colorStart.g, self.opt.Cooldowns.colorStart.b, self.opt.Cooldowns.colorStart.a) --1.0, 0.2, 0.2, 0.8)
 	self.procCooldowns:SetColorAt(0.25, self.opt.Cooldowns.colorEnd.r, self.opt.Cooldowns.colorEnd.g, self.opt.Cooldowns.colorEnd.b, self.opt.Cooldowns.colorEnd.a) --0.30, 0.8, 0.1, 0.8)
+	self.procCooldowns.RegisterCallback(self, "AnchorClicked")
 	self.procCooldowns:SetUserPlaced(true)
 	self.procCooldowns:ReverseGrowth(self.opt.Cooldowns.reverseGrowth)
 		
@@ -376,6 +377,12 @@ function Proculas:CreateCDFrame()
 	end
 	
 	self:setMovableCooldownsFrame(self.opt.Cooldowns.movableFrame)
+end
+function Proculas:AnchorClicked(...)
+	local button = select(3,...)
+	if button == "RightButton" then
+		self:setMovableCooldownsFrame(false)
+	end
 end
 function Proculas:setMovableCooldownsFrame(movable)
 	self.opt.Cooldowns.movableFrame = movable
