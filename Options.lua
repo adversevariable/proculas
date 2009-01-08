@@ -218,15 +218,15 @@ local options = {
 					name = L["BAR_OPTIONS"],
 					args = {
 						cooldowns = {
-							order =2,
-							name = L["ENABLE_COOLDOWNS"],
-							desc = L["ENABLE_COOLDOWNS_DESC"],
+							order = 2,
+							name = L["SHOWCOOLDOWNS"],
+							desc = L["SHOWCOOLDOWNS"],
 							type = "toggle",
 						},
 						show = {
-							order =2,
-							name = L["SHOWCOOLDOWNS"],
-							desc = L["SHOWCOOLDOWNS"],
+							order = 2,
+							name = L["ENABLE_COOLDOWNS"],
+							desc = L["ENABLE_COOLDOWNS_DESC"],
 							type = "toggle",
 						},
 						movableFrame = {
@@ -234,7 +234,6 @@ local options = {
 							name = L["MOVABLEFRAME"],
 							desc = L["MOVABLEFRAME"],
 							order = 3,
-
 						},
 						barTexture = {
 							type = "select", dialogControl = 'LSM30_Statusbar',
@@ -255,6 +254,7 @@ local options = {
 							name = L["BAR_FONT_SIZE"],
 							desc = L["BAR_FONT_SIZE"],
 							min = 4, max = 30, step = 1,
+							order = 7,
 						},
 						barWidth = {
 							type = "range",
@@ -274,17 +274,12 @@ local options = {
 							step = 1,
 							order = 8,
 						},
-						reverseGrowth = {
-							type = "toggle",
-							name = L["GROW_UPWARDS"],
-							desc = L["GROW_UPWARDS"],
-							order = 9,
-						},
+						--divider = {order = 10, type = "header", name = ""},
 						colorStart = {
 							type = "color",
-							order = 10,
-							name = "Color Start",
-							desc = "Color Start",
+							order = 9,
+							name = L["START_COLOR"],
+							desc = L["START_COLOR_DESC"],
 							hasAlpha = true,
 							get = function(info)
 								local c = Proculas.opt.Cooldowns.colorStart
@@ -297,9 +292,9 @@ local options = {
 						},
 						colorEnd = {
 							type = "color",
-							order = 11,
-							name = "Color End",
-							desc = "Color End",
+							order = 10,
+							name = L["END_COLOR"],
+							desc = L["END_COLOR_DESC"],
 							hasAlpha = true,
 							get = function(info)
 								local c = Proculas.opt.Cooldowns.colorEnd
@@ -309,6 +304,12 @@ local options = {
 								local c = Proculas.opt.Cooldowns.colorEnd
 								c.r, c.g, c.b, c.a = r, g, b, a
 							end,
+						},
+						reverseGrowth = {
+							type = "toggle",
+							name = L["GROW_UPWARDS"],
+							desc = L["GROW_UPWARDS"],
+							order = 11,
 						},
 					}
 				}
