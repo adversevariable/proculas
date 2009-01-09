@@ -341,7 +341,7 @@ function Proculas:processProc(spellID,procName)
 	if (procOpt.cooldown or (self.opt.Cooldowns.cooldowns and (procOpt.cooldown ~= false or procOpt.cooldown == nil))) and proc.cooldown > 0 then
 		local bar = self.procCooldowns:GetBar(proc.name)
 		if not bar then
-			bar = self.procCooldowns:NewTimerBar(proc.name, proc.name, proc.cooldown, proc.cooldown, proc.icon)
+			bar = self.procCooldowns:NewTimerBar(proc.name, proc.name, proc.cooldown, proc.cooldown, proc.icon, self.opt.Cooldowns.flashTimer)
 		end
 		bar:SetTimer(proc.cooldown, proc.cooldown)
 	end
@@ -353,7 +353,9 @@ function Proculas:processProc(spellID,procName)
 	-- Calls the postProc function, duh?
 	self:postProc(proc)
 end
-
+function Proculas:testBars()
+	self.procCooldowns:NewTimerBar("Test", "test", 10, 10, "Interface\\Icons\\Spell_Holy_WordFortitude", self.opt.Cooldowns.flashTimer)
+end
 -------------------------------------------------------
 -- Proc CD Frame
 function Proculas:CreateCDFrame()

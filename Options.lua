@@ -37,6 +37,7 @@ local defaults = {
 			barTexture = "Blizzard",
 			colorStart = {r = 1.0, g = 0.2, b = 0.2, a = 0.8},
 			colorEnd = {r = 0.30, g = 0.8, b = 0.1, a = 0.8},
+			flashTimer = 4,
 		},
 		SinkOptions = {
 			sink20OutputSink = "Default",
@@ -310,6 +311,26 @@ local options = {
 							name = L["GROW_UPWARDS"],
 							desc = L["GROW_UPWARDS"],
 							order = 11,
+						},
+						flashTimer = {
+							type = "toggle",
+							name = L["FLASH_BAR"],
+							desc = L["FLASH_BAR_DESC"],
+							order = 12,
+							get = function(info)
+								if Proculas.opt.Cooldowns.flashTimer == 4 then 
+									return true
+								else
+									return false
+								end
+							end,
+							set = function(info,value)
+								if value then 
+									Proculas.opt.Cooldowns.flashTimer = 4
+								else
+									Proculas.opt.Cooldowns.flashTimer = 0
+								end
+							end,
 						},
 					}
 				}
