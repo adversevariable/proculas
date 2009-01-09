@@ -188,11 +188,22 @@ function Proculas:scanItem(slotID)
 			-- Items
 			itemId = tonumber(itemId)
 			if self.Procs.Items[itemId] then
-				local procInfo = self.Procs.Items[itemId];
-				procInfo.name = itemName
-				procInfo.icon = itemTexture
-				procInfo.itemID = itemId
-				self:addProc(procInfo)
+				if type(self.Procs.Items[itemId].spellID) == "table" then
+					for _,spell in pairs(self.Procs.Items[itemId].spellID) do
+						local procInfo = self.Procs.Items[itemId];
+						procInfo.name = itemName
+						procInfo.icon = itemTexture
+						procInfo.itemID = itemId
+						procInfo.spellID = spell
+						self:addProc(procInfo)
+					end
+				else
+					local procInfo = self.Procs.Items[itemId];
+					procInfo.name = itemName
+					procInfo.icon = itemTexture
+					procInfo.itemID = itemId
+					self:addProc(procInfo)
+				end
 			end
 		end
 	end
