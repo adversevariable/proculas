@@ -77,6 +77,9 @@ function Proculas:OnInitialize()
 	
 	-- Setup the hook for item tooltips. Soon this will be done for spells too.
 	GameTooltip:HookScript("OnTooltipSetItem", function(tooltip, item) Proculas:OnTooltipSetItem(tooltip,item) end)
+
+	-- Create the Cooldown bars frame.
+	self:CreateCDFrame()
 	
 	-- Set the Sink options.
 	self:SetSinkStorage(self.opt.SinkOptions)
@@ -94,8 +97,6 @@ function Proculas:OnEnable()
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	-- Check for procs
 	self:scanForProcs()
-	-- Create the Cooldown bars frame.
-	self:CreateCDFrame()
 end
 
 -------------------------------------------------------
