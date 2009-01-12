@@ -79,7 +79,7 @@ local PROCS = {
 		-- name: Black Magic 
 		-- type: enchant 
 	},
-	[3790] = {
+	[3789] = {
 		spellID = 59620,
 		name = "Berserking",
 		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
