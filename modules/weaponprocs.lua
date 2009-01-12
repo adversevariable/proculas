@@ -837,6 +837,186 @@ local PROCS = {
 		-- name: Ravager 
 		-- type: 2haxe 
 	},
+	[30316] = {
+		spellID = 36479,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 234 
+		-- name: Devastation 
+		-- type: 2haxe 
+	},
+	[31318] = {
+		spellID = 38282,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 235 
+		-- name: Singing Crystal Axe 
+		-- type: 2haxe 
+	},
+	[21134] = {
+		spellID = 26108,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 236 
+		-- name: Dark Edge of Insanity 
+		-- type: 2haxe 
+	},
+	[19353] = {
+		spellID = 21140,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 237 
+		-- name: Drake Talon Cleaver 
+		-- type: 2haxe 
+	},
+	[21856] = {
+		spellID = 26693,
+		types = {"SPELL_LEECH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 238 
+		-- name: Neretzek, The Blood Drinker 
+		-- type: 2haxe 
+	},
+	[13983] = {
+		spellID = 18289,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 239 
+		-- name: Gravestone War Axe 
+		-- type: 2haxe 
+	},
+	[1263] = {
+		spellID = 17148,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 240 
+		-- name: Brain Hacker 
+		-- type: 2haxe 
+	},
+	[13285] = {
+		spellID = 17407,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 241 
+		-- name: The Blackrock Slicer 
+		-- type: 2haxe 
+	},
+	[11607] = {
+		spellID = 15280,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 242 
+		-- name: Dark Iron Sunderer 
+		-- type: 2haxe 
+	},
+	[12769] = {
+		spellID = 16871,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 243 
+		-- name: Bleakwood Hew 
+		-- type: 2haxe 
+	},
+	[17730] = {
+		spellID = 21949,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 244 
+		-- name: Gatorbite Axe 
+		-- type: 2haxe 
+	},
+	[2291] = {
+		spellID = 17153,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 245 
+		-- name: Kang the Decapitator 
+		-- type: 2haxe 
+	},
+	[9425] = {
+		spellID = 10373,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 246 
+		-- name: Pendulum of Doom 
+		-- type: 2haxe 
+	},
+	[870] = {
+		spellID = 18796,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 247 
+		-- name: Fiery War Axe 
+		-- type: 2haxe 
+	},
+	[12250] = {
+		spellID = 13440,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 248 
+		-- name: Midnight Axe 
+		-- type: 2haxe 
+	},
+	[2299] = {
+		spellID = 18199,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 249 
+		-- name: Burning War Axe 
+		-- type: 2haxe 
+	},
+	[7753] = {
+		spellID = 18200,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 250 
+		-- name: Bloodspiller 
+		-- type: 2haxe 
+	},
+	[9486] = {
+		spellID = 13527,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 251 
+		-- name: Supercharger Battle Axe 
+		-- type: 2haxe 
+	},
+	[13016] = {
+		spellID = 13318,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 252 
+		-- name: Killmaim 
+		-- type: 2haxe 
+	},
+	[1318] = {
+		spellID = 13480,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 253 
+		-- name: Night Reaver 
+		-- type: 2haxe 
+	},
 }
 
 function ProculasWeapon:OnInitialize()
