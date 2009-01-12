@@ -208,7 +208,7 @@ local PROCS = {
 		-- type: trinket 
 	},
 	[39229] = {
-		spellID = 60494,
+		spellID = 60492,
 		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
 		selfOnly = 0,
 		-- Proc Info
