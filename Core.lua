@@ -76,7 +76,7 @@ function Proculas:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
 	
 	-- Setup the hook for item tooltips. Soon this will be done for spells too.
-	GameTooltip:HookScript("OnTooltipSetItem", function(tooltip, item) Proculas:OnTooltipSetItem(tooltip,item) end)
+	--GameTooltip:HookScript("OnTooltipSetItem", function(tooltip, item) Proculas:OnTooltipSetItem(tooltip,item) end)
 
 	-- Create the Cooldown bars frame.
 	self:CreateCDFrame()
