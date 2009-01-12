@@ -43,5 +43,4 @@ local PROCS = {
 
 function ProculasEmbroidery:OnInitialize()
 	Proculas:addProcList('Enchants',PROCS)
-	Proculas:Print("Embroidery Procs Loaded")
 end

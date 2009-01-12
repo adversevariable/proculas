@@ -112,5 +112,4 @@ local PROCS = {
 
 function ProculasPaladin:OnInitialize()
 	Proculas:addProcList('PALADIN',PROCS)
-	Proculas:Print("Paladin Procs Loaded")
 end

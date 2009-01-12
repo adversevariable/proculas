@@ -49,5 +49,4 @@ local PROCS = {
 
 function ProculasWarlock:OnInitialize()
 	Proculas:addProcList('WARLOCK',PROCS)
-	Proculas:Print("Warlock Procs Loaded")
 end

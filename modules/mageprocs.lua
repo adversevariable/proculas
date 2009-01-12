@@ -67,5 +67,4 @@ local PROCS = {
 
 function ProculasMage:OnInitialize()
 	Proculas:addProcList('MAGE',PROCS)
-	Proculas:Print("Mage Procs Loaded")
 end

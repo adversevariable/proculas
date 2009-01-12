@@ -22,5 +22,4 @@ local PROCS = {
 
 function ProculasRing:OnInitialize()
 	Proculas:addProcList('',PROCS)
-	Proculas:Print("Ring Procs Loaded")
 end

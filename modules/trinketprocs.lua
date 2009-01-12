@@ -418,5 +418,4 @@ local PROCS = {
 
 function ProculasTrinket:OnInitialize()
 	Proculas:addProcList('Items',PROCS)
-	Proculas:Print("Trinket Procs Loaded")
 end

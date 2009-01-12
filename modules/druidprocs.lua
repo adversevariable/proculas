@@ -40,5 +40,4 @@ local PROCS = {
 
 function ProculasDruid:OnInitialize()
 	Proculas:addProcList('DRUID',PROCS)
-	Proculas:Print("Druid Procs Loaded")
 end

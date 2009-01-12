@@ -130,5 +130,4 @@ local PROCS = {
 
 function ProculasWarrior:OnInitialize()
 	Proculas:addProcList('WARRIOR',PROCS)
-	Proculas:Print("Warrior Procs Loaded")
 end

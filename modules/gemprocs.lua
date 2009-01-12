@@ -22,5 +22,4 @@ local PROCS = {
 
 function ProculasGem:OnInitialize()
 	Proculas:addProcList('Gems',PROCS)
-	Proculas:Print("Gem Procs Loaded")
 end

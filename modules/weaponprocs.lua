@@ -841,5 +841,4 @@ local PROCS = {
 
 function ProculasWeapon:OnInitialize()
 	Proculas:addProcList('Items',PROCS)
-	Proculas:Print("Weapon Procs Loaded")
 end

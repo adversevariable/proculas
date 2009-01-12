@@ -76,5 +76,4 @@ local PROCS = {
 
 function ProculasShaman:OnInitialize()
 	Proculas:addProcList('SHAMAN',PROCS)
-	Proculas:Print("Shaman Procs Loaded")
 end

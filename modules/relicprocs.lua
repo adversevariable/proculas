@@ -94,5 +94,4 @@ local PROCS = {
 
 function ProculasRelic:OnInitialize()
 	Proculas:addProcList('Items',PROCS)
-	Proculas:Print("Relic Procs Loaded")
 end

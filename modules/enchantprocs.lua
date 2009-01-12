@@ -93,5 +93,4 @@ local PROCS = {
 
 function ProculasEnchant:OnInitialize()
 	Proculas:addProcList('Enchants',PROCS)
-	Proculas:Print("Enchant Procs Loaded")
 end

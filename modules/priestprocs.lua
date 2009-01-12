@@ -58,5 +58,4 @@ local PROCS = {
 
 function ProculasPriest:OnInitialize()
 	Proculas:addProcList('PRIEST',PROCS)
-	Proculas:Print("Priest Procs Loaded")
 end

@@ -49,5 +49,4 @@ local PROCS = {
 
 function ProculasHunter:OnInitialize()
 	Proculas:addProcList('HUNTER',PROCS)
-	Proculas:Print("Hunter Procs Loaded")
 end

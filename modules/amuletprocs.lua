@@ -85,5 +85,4 @@ local PROCS = {
 
 function ProculasAmulet:OnInitialize()
 	Proculas:addProcList('Items',PROCS)
-	Proculas:Print("Amulet Procs Loaded")
 end

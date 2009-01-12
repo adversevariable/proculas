@@ -130,5 +130,4 @@ local PROCS = {
 
 function ProculasDeathKnight:OnInitialize()
 	Proculas:addProcList('DEATHKNIGHT',PROCS)
-	Proculas:Print("Death Knight Procs Loaded")
 end
