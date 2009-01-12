@@ -21,5 +21,5 @@ local PROCS = {
 }
 
 function ProculasRing:OnInitialize()
-	Proculas:addProcList('',PROCS)
+	Proculas:addProcList('Items',PROCS)
 end
