@@ -414,6 +414,15 @@ local PROCS = {
 		-- name: Darkmoon Card: Blue Dragon 
 		-- type: trinket 
 	},
+	[37264] = {
+		spellID = 60483,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 254 
+		-- name: Pendulum of Telluric Currents 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()
