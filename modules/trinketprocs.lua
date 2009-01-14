@@ -423,6 +423,15 @@ local PROCS = {
 		-- name: Pendulum of Telluric Currents 
 		-- type: trinket 
 	},
+	[38212] = {
+		spellID = {54696,54697},
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 255 
+		-- name: Death Knight's Anguish 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()
