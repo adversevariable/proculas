@@ -17,3 +17,5 @@ locale\deDE.lua
 Core.lua
 Options.lua
 ProculasLDB.lua
+
+modules.xml

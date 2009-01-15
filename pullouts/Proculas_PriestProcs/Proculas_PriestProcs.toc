@@ -1,9 +1,0 @@
-## Interface: 30000
-## Title: Proculas: Priest Procs
-## Notes: Contains all the Priest Procs.
-## Author: Clorell [US Argent Dawn]
-## Version: @project-version@
-## RequiredDeps: Proculas
-## Created by Clorell/Keruni of Argent Dawn [US]
-
-includes.xml
