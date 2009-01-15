@@ -128,6 +128,15 @@ local PROCS = {
 		-- name: Freezing Fog 
 		-- type: DEATHKNIGHT 
 	},
+	[53365] = {
+		name = "Rune of the Fallen Crusader",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 256 
+		-- name: Rune of the Fallen Crusader 
+		-- type: DEATHKNIGHT 
+	},
 }
 
 function ProculasDeathKnight:OnInitialize()
