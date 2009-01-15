@@ -13,6 +13,8 @@ embeds.xml
 
 locale\enUS.lua
 locale\deDE.lua
+locale\zhCN.lua
+locale\zhTW.lua
 
 Core.lua
 Options.lua
