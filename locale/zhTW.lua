@@ -4,7 +4,7 @@
 --	$Id$
 --
 
-local L = LibStub("AceLocale-3.0"):NewLocale("Proculas", "zhTW", true)
+local L = LibStub("AceLocale-3.0"):NewLocale("Proculas", "zhTW")
 if not L then return end
 
 L["ABOUT_CMD"] = "關於"

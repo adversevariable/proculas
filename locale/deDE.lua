@@ -4,7 +4,7 @@
 --	$Id$
 --
 
-local L = LibStub("AceLocale-3.0"):NewLocale("Proculas", "deDE", true)
+local L = LibStub("AceLocale-3.0"):NewLocale("Proculas", "deDE")
 if not L then return end
 
 L["ABOUT_CMD"] = "\195\156ber"
