@@ -110,6 +110,24 @@ local PROCS = {
 		-- name: Infusion of Light 
 		-- type: PALADIN 
 	},
+	[67] = {
+		name = "Vindication",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 258 
+		-- name: Vindication 
+		-- type: PALADIN 
+	},
+	[26017] = {
+		name = "Vindication",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 259 
+		-- name: Vindication 
+		-- type: PALADIN 
+	},
 }
 
 function ProculasPaladin:OnInitialize()

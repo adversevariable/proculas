@@ -432,6 +432,15 @@ local PROCS = {
 		-- name: Death Knight's Anguish 
 		-- type: trinket 
 	},
+	[37111] = {
+		spellID = 60510,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 257 
+		-- name: Soul Preserver 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()
