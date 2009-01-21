@@ -65,6 +65,24 @@ local PROCS = {
 		-- name: Firestarter 
 		-- type: MAGE 
 	},
+	[12355] = {
+		name = "Impact",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 260 
+		-- name: Impact 
+		-- type: MAGE 
+	},
+	[12497] = {
+		name = "Frostbite",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 261 
+		-- name: Frostbite 
+		-- type: MAGE 
+	},
 }
 
 function ProculasMage:OnInitialize()

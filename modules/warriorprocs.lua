@@ -122,7 +122,7 @@ local PROCS = {
 	[30029] = {
 		name = "Rampage",
 		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
-		selfOnly = 0,
+		selfOnly = 1,
 		-- Proc Info
 		-- ID: 191 
 		-- name: Rampage 
