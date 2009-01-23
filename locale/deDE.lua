@@ -81,4 +81,6 @@ L["SOUND_TO_PLAY"] = "Sound, der abgespielt wird"
 L["START_COLOR"] = "Start-Farbe"
 L["START_COLOR_DESC"] = "Start-Farbe der Abklingzeit-Balken auswählen"
 L["TOTAL_PROCS"] = "Procs insgesamt"
+L["UPDATE_COOLDOWN"] = "Update Cooldown" -- Requires localization
+L["UPDATE_COOLDOWN_DESC"] = "Uncheck this to stop Proculas from changing the cooldown time." -- Requires localization
 L["WHERE_TO_POST"] = "Wo soll Proculas die Proc-Nachrichten ausgeben?"

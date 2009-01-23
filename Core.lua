@@ -71,12 +71,20 @@ function Proculas:OnInitialize()
 	self.procstats = self.dbpc.profile.procstats or {}
 	self.tracked = self.opt.tracked
 	self.procopts = self.optpc.procoptions
+	
+	-- DB Updater
+	if not self.opt.lastver then
+		for a,b in pairs(self.procopts) do
+			if not b.updatecd then
+				b.updatecd = true
+			end
+		end
+		self.opt.lastver = 1
+	end
+	
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
-	
-	-- Setup the hook for item tooltips. Soon this will be done for spells too.
-	--GameTooltip:HookScript("OnTooltipSetItem", function(tooltip, item) Proculas:OnTooltipSetItem(tooltip,item) end)
 
 	-- Create the Cooldown bars frame.
 	self:CreateCDFrame()
@@ -268,32 +276,6 @@ function Proculas:postProc(proc)
 	end
 end
 
--- Used to add the proc info to a tooltip.
-function Proculas:addProcInfoToTooltip(procInfo)
-	if procInfo.count > 0 then
-		GameTooltip:AddDoubleLine(L["PROCS"], procInfo.count, nil, nil, nil, 1,1,1)
-	else
-		GameTooltip:AddDoubleLine(L["PROCS"], "N/A", nil, nil, nil, 1,1,1)
-	end
-	
-	local ppm = 0
-	if procInfo.count > 0 then
-		ppm = procInfo.count / (procInfo.totaltime / 60)
-	end
-	
-	if ppm > 0 then
-		GameTooltip:AddDoubleLine(L["PPM"], string.format("%.2f", ppm), nil, nil, nil, 1,1,1)
-	else
-		GameTooltip:AddDoubleLine(L["PPM"], "N/A", nil, nil, nil, 1,1,1)
-	end
-	
-	if procInfo.cooldown > 0 then
-		GameTooltip:AddDoubleLine(L["COOLDOWN"], procInfo.cooldown.."s", nil, nil, nil, 1,1,1)
-	else
-		GameTooltip:AddDoubleLine(L["COOLDOWN"], "N/A", nil, nil, nil, 1,1,1)
-	end
-end
-
 -- Used to setup the default proc options.
 function Proculas:insertProcOpts(id)
 	self.optpc.procoptions[id] = {
@@ -302,6 +284,7 @@ function Proculas:insertProcOpts(id)
 		enabled = true,
 		custommessage = false,
 		message = self.opt.Messages.message,
+		updatecd = true,
 	}
 end
 
@@ -346,7 +329,7 @@ function Proculas:processProc(spellID,procName)
 	end
 	
 	-- Check Cooldown
-	if proc.lastprocced > 0 and (proc.count > 0 or (time() - proc.lastprocced < proc.cooldown)) then
+	if procOpt.updatecd and (proc.lastprocced > 0 and (proc.count > 0 or (time() - proc.lastprocced < proc.cooldown))) then
 		proc.cooldown = time() - proc.lastprocced
 		if self.opt.postprocs and proc.cooldown < 300 and proc.cooldown > 4 then
 			self:Print("New cooldown found for "..proc.name..": "..proc.cooldown.."s")
