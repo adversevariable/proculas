@@ -404,12 +404,29 @@ local options = {
 					order = 2,
 					disabled = function() return Proculas.editingproc == nil end,
 				},
+				headerCooldown = {order = 3, type = "header", name = L["COOLDOWN_OPTIONS"]},
 				cooldown = {
 					type = "toggle",
 					name = L["ENABLE_COOLDOWN"],
 					desc = L["ENABLE_COOLDOWN_DESC"],
 					order = 3,
 					tristate = true,
+					disabled = function() return Proculas.editingproc == nil end,
+				},
+				cooldowntime = {
+					type = "range",
+					name = L["COOLDOWN_TIME"],
+					desc = L["COOLDOWN_TIME_DESC"],
+					order = 3,
+					min = 0,
+					max = 600,
+					step = 1,
+					get = function() 
+						if Proculas.editingproc ~= nil then
+							return Proculas.procstats[Proculas.editingproc.spellID].cooldown 
+						end
+					end,
+					set = function(info,value) Proculas.procstats[Proculas.editingproc.spellID].cooldown = value end,
 					disabled = function() return Proculas.editingproc == nil end,
 				},
 				headerMessage = {order = 4, type = "header", name = L["PROC_MESSAGE"]},
