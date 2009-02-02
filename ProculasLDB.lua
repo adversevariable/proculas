@@ -40,11 +40,11 @@ function dataobj:OnEnter()
 	tooltip:Hide()
 	tooltip:Clear()
 
-	tooltip:AddHeader(Yellow(L["Proculas"]))
+	tooltip:AddHeader(L["Proculas"])
 	tooltip:AddLine(" ")
 	
 	--Proculas:procStatsTooltip(tooltip)
-	tooltip:AddLine(Yellow(L["PROC"].." "),Yellow(" "..L["TOTAL_PROCS"].." "),Yellow(" "..L["PPM"].." "),Yellow(" "..L["COOLDOWN"].." "))
+	tooltip:AddLine(Yellow(L["PROC"].." "),Yellow(" "..L["TOTAL_PROCS"].." "),Yellow(" "..L["PPM"].." "),Yellow(" "..L["COOLDOWN"]))
 	for a,proc in pairs(Proculas.procstats) do
 		if Proculas.procopts[proc.spellID] then
 			local procOpt = Proculas.procopts[proc.spellID]

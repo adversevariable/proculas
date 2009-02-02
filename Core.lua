@@ -319,19 +319,15 @@ function Proculas:processProc(spellID,procName)
 	local proc = self.procstats[spellID]
 	local procOpt = self.procopts[spellID]
 
-	-- Set the lastprocced time and increment the proc count
-	proc.lastprocced = time()
-	proc.count = proc.count+1
-	
 	-- Check if its enabled or not.
 	if not procOpt.enabled then
 		return nil
 	end
 	
 	-- Check Cooldown
-	if procOpt.updatecd and (proc.lastprocced > 0 and (proc.count > 0 or (time() - proc.lastprocced < proc.cooldown))) then
+	if procOpt.updatecd and proc.lastprocced > 0 and (proc.count == 0 or (time() - proc.lastprocced < proc.cooldown)) then
 		proc.cooldown = time() - proc.lastprocced
-		if self.opt.postprocs and proc.cooldown < 300 and proc.cooldown > 4 then
+		if self.opt.postprocs and proc.cooldown < 600 and proc.cooldown > 4 then
 			self:Print("New cooldown found for "..proc.name..": "..proc.cooldown.."s")
 		end
 	end
@@ -344,7 +340,11 @@ function Proculas:processProc(spellID,procName)
 		end
 		bar:SetTimer(proc.cooldown, proc.cooldown)
 	end
-		
+
+	-- Set the lastprocced time and increment the proc count
+	proc.lastprocced = time()
+	proc.count = proc.count+1
+	
 	-- Calls the postProc function, duh?
 	self:postProc(proc)
 end
