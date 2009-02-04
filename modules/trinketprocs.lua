@@ -441,6 +441,15 @@ local PROCS = {
 		-- name: Soul Preserver 
 		-- type: trinket 
 	},
+	[40371] = {
+		spellID = 60443,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 263 
+		-- name: Bandit's Insignia 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()

@@ -38,6 +38,15 @@ local PROCS = {
 		-- name: Eclipse 
 		-- type: DRUID 
 	},
+	[46833] = {
+		name = "Wrath of Elune",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 262 
+		-- name: Wrath of Elune 
+		-- type: DRUID 
+	},
 }
 
 function ProculasDruid:OnInitialize()

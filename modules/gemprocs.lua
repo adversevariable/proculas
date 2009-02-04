@@ -11,7 +11,7 @@ local ProculasGem = Proculas:NewModule("GemProcs")
 local PROCS = {
 	[55382] = {
 		itemID = 41401,
-		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		types = {"SPELL_ENERGIZE"},
 		selfOnly = 0,
 		-- Proc Info
 		-- ID: 42 
