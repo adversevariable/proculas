@@ -56,6 +56,15 @@ local PROCS = {
 		-- name: Inspiration 
 		-- type: PRIEST 
 	},
+	[15269] = {
+		name = "Blackout",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 265 
+		-- name: Blackout 
+		-- type: PRIEST 
+	},
 }
 
 function ProculasPriest:OnInitialize()
