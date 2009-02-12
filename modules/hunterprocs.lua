@@ -47,6 +47,69 @@ local PROCS = {
 		-- name: Improved Steady Shot 
 		-- type: HUNTER 
 	},
+	[57669] = {
+		name = "Hunting Party",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 1,
+		-- Proc Info
+		-- ID: 268 
+		-- name: Hunting Party 
+		-- type: HUNTER 
+	},
+	[34501] = {
+		name = "Expose Weakness",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 270 
+		-- name: Expose Weakness 
+		-- type: HUNTER 
+	},
+	[34833] = {
+		name = "Master Tactician",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 271 
+		-- name: Master Tactician 
+		-- type: HUNTER 
+	},
+	[34834] = {
+		name = "Master Tactician",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 271 
+		-- name: Master Tactician 
+		-- type: HUNTER 
+	},
+	[34835] = {
+		name = "Master Tactician",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 271 
+		-- name: Master Tactician 
+		-- type: HUNTER 
+	},
+	[34836] = {
+		name = "Master Tactician",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 271 
+		-- name: Master Tactician 
+		-- type: HUNTER 
+	},
+	[34837] = {
+		name = "Master Tactician",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 271 
+		-- name: Master Tactician 
+		-- type: HUNTER 
+	},
 }
 
 function ProculasHunter:OnInitialize()
