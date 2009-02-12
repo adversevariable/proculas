@@ -450,6 +450,15 @@ local PROCS = {
 		-- name: Bandit's Insignia 
 		-- type: trinket 
 	},
+	[44912] = {
+		spellID = 60064,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 267 
+		-- name: Flow of Knowledge 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()

@@ -56,6 +56,15 @@ local PROCS = {
 		-- name: Demonic Soul 
 		-- type: WARLOCK 
 	},
+	[47383] = {
+		name = "Molten Core",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 266 
+		-- name: Molten Core 
+		-- type: WARLOCK 
+	},
 }
 
 function ProculasWarlock:OnInitialize()
