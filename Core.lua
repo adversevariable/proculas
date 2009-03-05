@@ -168,6 +168,7 @@ function Proculas:scanForProcs()
 				procInfo.spellID = spellID
 				local name, rank, icon, cost, isFunnel, powerType, castTime, minRange, maxRange = GetSpellInfo(spellID)
 				procInfo.icon = icon
+				procInfo.name = name
 				self:addProc(procInfo)
 			end
 		end
@@ -190,6 +191,7 @@ function Proculas:scanItem(slotID)
 					local procInfo = self.Procs.Enchants[enchID]
 					local name, rank, icon, cost, isFunnel, powerType, castTime, minRange, maxRange = GetSpellInfo(procInfo.spellID)
 					procInfo.icon = icon
+					procInfo.name = name
 					self:addProc(procInfo)
 				end
 			end
