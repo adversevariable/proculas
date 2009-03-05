@@ -74,6 +74,24 @@ local PROCS = {
 		-- name: Replenishment 
 		-- type: PRIEST 
 	},
+	[14743] = {
+		name = "Martyrdom",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 272 
+		-- name: Martyrdom 
+		-- type: PRIEST 
+	},
+	[27828] = {
+		name = "Martyrdom",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 272 
+		-- name: Martyrdom 
+		-- type: PRIEST 
+	},
 }
 
 function ProculasPriest:OnInitialize()

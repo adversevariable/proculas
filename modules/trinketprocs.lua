@@ -459,6 +459,42 @@ local PROCS = {
 		-- name: Flow of Knowledge 
 		-- type: trinket 
 	},
+	[40373] = {
+		spellID = 60488,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 273 
+		-- name: Extract of Necromantic Power 
+		-- type: trinket 
+	},
+	[34470] = {
+		spellID = 45055,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 274 
+		-- name: Timbal's Focusing Crystal 
+		-- type: trinket 
+	},
+	[37559] = {
+		spellID = 54739,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 1,
+		-- Proc Info
+		-- ID: 276 
+		-- name: Serrah's Star 
+		-- type: trinket 
+	},
+	[43838] = {
+		spellID = 61619,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 1,
+		-- Proc Info
+		-- ID: 277 
+		-- name: Chuchu's Tiny Box of Horrors 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()
