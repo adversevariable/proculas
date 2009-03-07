@@ -65,6 +65,24 @@ local PROCS = {
 		-- name: Molten Core 
 		-- type: WARLOCK 
 	},
+	[47283] = {
+		name = "Empowered Imp",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 278 
+		-- name: Empowered Imp 
+		-- type: WARLOCK 
+	},
+	[34936] = {
+		name = "Backlash",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 279 
+		-- name: Backlash 
+		-- type: WARLOCK 
+	},
 }
 
 function ProculasWarlock:OnInitialize()
