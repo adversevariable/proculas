@@ -21,7 +21,7 @@ local dataobj = ldb:NewDataObject("Proculas", {
 function ProculasLDB:OnInitialize()
 	self.opt = Proculas.opt
 	self.icon = LibStub("LibDBIcon-1.0")
-	tooltip = LibQTip:Acquire("ProculasProcStats", 4, "LEFT", "CENTER", "CENTER", "RIGHT")
+	
 	
 	self.icon:Register("Proculas", dataobj, self.opt.minimapButton)
 end
@@ -37,6 +37,7 @@ end
 local function Yellow(text) return "|cffffd200"..text.."|r" end
 local function Green(text) return "|cff00ff00"..text.."|r" end
 function dataobj:OnEnter()
+	tooltip = LibQTip:Acquire("ProculasProcStats", 4, "LEFT", "CENTER", "CENTER", "RIGHT")
 	tooltip:Hide()
 	tooltip:Clear()
 
@@ -93,6 +94,8 @@ end
 
 function dataobj:OnLeave()
 	tooltip:Hide()
+	LibQTip:Release(self.tooltip)
+	tooltip = nil
 end
 
 function dataobj:OnClick(button)
