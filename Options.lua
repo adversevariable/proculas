@@ -18,7 +18,7 @@ local defaults = {
 		postprocs = true,
 		PostChatFrame = false,
 		Messages = {
-			message = "%s procced",
+			message = L["DEFAULT_PROC_MESSAGE"],
 			color = {r = 1, g = 1, b = 1},
 		},
 		Effects = {
@@ -527,7 +527,7 @@ local options = {
 					end,
 					disabled = function() return Proculas.editingproc == nil end,
 				},
-				headerAnnounce = {order=20, type="header", name="Proc Announcements"},
+				headerAnnounce = {order=20, type="header", name=L["PROC_ANNOUNCEMENTS"]},
 				postproc = {
 					type="toggle",
 					name = L["ANNOUNCE_PROC"],
@@ -552,7 +552,7 @@ local options = {
 					tristate = true,
 					disabled = function() return Proculas.editingproc == nil end,
 				},
-				headerSound = {order=30, type="header", name="Sound Settings"},
+				headerSound = {order=30, type="header", name=L["SOUND_SETTINGS"]},
 				soundfile = {
 					type = "select", dialogControl = 'LSM30_Sound',
 					order = 31,
