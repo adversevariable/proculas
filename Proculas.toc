@@ -16,6 +16,7 @@ locale\deDE.lua
 locale\zhCN.lua
 locale\zhTW.lua
 locale\frFR.lua
+locale\esES.lua
 
 Core.lua
 Options.lua
