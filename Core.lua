@@ -95,6 +95,11 @@ function Proculas:OnInitialize()
 	-- Player stuff
 	self.playerClass = select(2,UnitClass("player"))
 	self.playerName = UnitName("player")
+	
+	-- Register Custom Sounds
+	for name,info in pairs(self.opt.customSounds) do
+		LSM:Register("sound", info.name, info.location)
+	end
 end
 
 -- OnEnable
@@ -105,6 +110,17 @@ function Proculas:OnEnable()
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	-- Check for procs
 	self:scanForProcs()
+end
+
+-- Add Custom Sound
+function Proculas:addCustomSound(sname,slocation)
+	self.opt.customSounds[sname] = {name = sname,location = slocation}
+	LSM:Register("sound", sname, slocation)
+end
+
+-- Delete Custom Sound
+function Proculas:deleteCustomSound(sname)
+	self.opt.customSounds[sname] = nil
 end
 
 -------------------------------------------------------

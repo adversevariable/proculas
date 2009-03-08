@@ -54,6 +54,7 @@ local defaults = {
 		},
 		procstats = {},
 		tracked = {},
+		customSounds = {},
 	},
 }
 Proculas.defaults = defaults
@@ -353,10 +354,65 @@ local options = {
 				},
 				SoundFile = {
 					type = "select", dialogControl = 'LSM30_Sound',
-					order = 4,
+					order = 2,
 					name = L["SOUND_TO_PLAY"],
 					desc = L["SOUND_TO_PLAY"],
 					values = AceGUIWidgetLSMlists.sound,
+				},
+				newCustomSoundHeader = {order = 3, type = "header", name = "New Custom Sound"},
+				csName = {
+					type = "input",
+					name = "Name",
+					desc = "Name",
+					order = 4,
+				},
+				csFile = {
+					type = "input",
+					name = "Location",
+					desc = "Example: Path\to\file",
+					order = 5,
+				},
+				csAdd = {
+					type = "execute",
+					name = "Add",
+					desc = "Add Sound",
+					func = function()
+						Proculas:addCustomSound(Proculas.opt.Sound.csName,Proculas.opt.Sound.csFile);
+						Proculas.opt.Sound.csName = ""
+						Proculas.opt.Sound.csFile = ""
+					end,
+					order = 6,
+				},
+				deleteCustomSoundHeader = {order = 7, type = "header", name = "Delete Custom Sounds"},
+				customsound = {
+					type = "select",
+					order = 8,
+					name = "Select Sound",
+					desc = "Select the custom sound to delete",
+					values = function()
+						local sounds = {}
+						for name,location in pairs(Proculas.opt.customSounds) do
+							sounds[name] = name
+						end
+						return sounds
+					end,
+					get = function() 
+						if Proculas.editingsound ~= nil then
+							 return Proculas.editingsound
+						end
+					end,
+					set = function(info,value) 
+						Proculas.editingsound = value
+					end
+				},
+				csDelete = {
+					type = "execute",
+					name = "Delete",
+					desc = "Delete Sound",
+					func = function()
+						Proculas:deleteCustomSound(Proculas.editingsound);
+					end,
+					order = 9,
 				},
 			},
 		}, -- Sound
