@@ -96,4 +96,5 @@ L["START_COLOR_DESC"] = "Choisir la couleur débutant la barre de cooldown."
 L["TOTAL_PROCS"] = "Procs totaux"
 L["UPDATE_COOLDOWN"] = "Mettre à jour le cooldown"
 L["UPDATE_COOLDOWN_DESC"] = "Décocher pour empêcher Proculas de changer le temps de cooldown"
+L["UPTIME"] = "Uptime" -- Requires localization
 L["WHERE_TO_POST"] = "Où doivent se placer les messages de proc. de Proculas ?"

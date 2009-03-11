@@ -96,4 +96,5 @@ L["START_COLOR_DESC"] = "Elija el color inicial de la barra de reutilización" -
 L["TOTAL_PROCS"] = "Activaciones totales" -- Needs review
 L["UPDATE_COOLDOWN"] = "Actualizar reutilización" -- Needs review
 L["UPDATE_COOLDOWN_DESC"] = "Quitar marca para evitar que Proculas cambie el tiempo de reutilización." -- Needs review
+L["UPTIME"] = "Uptime" -- Requires localization
 L["WHERE_TO_POST"] = "¿Dónde deberían aparecer los mensajes de activación?" -- Needs review

@@ -96,4 +96,5 @@ L["START_COLOR_DESC"] = "选择冷却栏淡出开始颜色."
 L["TOTAL_PROCS"] = "效果统计"
 L["UPDATE_COOLDOWN"] = "Update Cooldown" -- Requires localization
 L["UPDATE_COOLDOWN_DESC"] = "Uncheck this to stop Proculas from changing the cooldown time." -- Requires localization
+L["UPTIME"] = "Uptime" -- Requires localization
 L["WHERE_TO_POST"] = "提交效果信息位置"

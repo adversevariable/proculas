@@ -71,6 +71,7 @@ function Proculas:OnInitialize()
 	self.procstats = self.dbpc.profile.procstats or {}
 	self.tracked = self.opt.tracked
 	self.procopts = self.optpc.procoptions
+	self.activeprocs = {}
 	
 	-- DB Updater
 	if not self.opt.lastver then
@@ -80,6 +81,13 @@ function Proculas:OnInitialize()
 			end
 		end
 		self.opt.lastver = 1
+	end
+	if(self.opt.lastver < 2) then
+		for a,b in pairs(self.procstats) do
+			b.started = 0
+			b.seconds = 0
+		end
+		self.opt.lastver = 2
 	end
 	
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
@@ -130,6 +138,11 @@ end
 function Proculas:combatTick()
 	combatTime = combatTime+1;
 	for key,proc in pairs(self.procstats) do
+		-- Update Seconds for Update Calculation
+		if proc.started > 0 then
+			proc.seconds = proc.seconds + 1
+		end
+		-- Update Total Time
 		proc.totaltime = proc.totaltime + 1
 	end
 end
@@ -316,7 +329,7 @@ function Proculas:GetProcOptions(id)
 end
 
 -- Does the required things when something procs
-function Proculas:processProc(spellID,procName)
+function Proculas:processProc(spellID,procName,isaura)
 	-- Check if the procstats record exists or not
 	if not self.procstats[spellID] then
 		self.procstats[spellID] = {
@@ -326,30 +339,40 @@ function Proculas:processProc(spellID,procName)
 			totaltime = 0, 
 			cooldown = 0, 
 			lastprocced = 0,
+			started = 0,
+			seconds = 0,
 			icon = self.opt.tracked[spellID].icon,
 		}
 	end
 	if not self.procopts[spellID] then
 		self:insertProcOpts(spellID)
 	end
-	
+		
 	-- Get the proc info
 	local proc = self.procstats[spellID]
 	local procOpt = self.procopts[spellID]
-
+	
 	-- Check if its enabled or not.
 	if not procOpt.enabled then
 		return nil
 	end
 	
 	-- Check Cooldown
-	if procOpt.updatecd and proc.lastprocced > 0 and (proc.count == 0 or (time() - proc.lastprocced < proc.cooldown)) then
+	if procOpt.updatecd and proc.lastprocced > 0 and (proc.cooldown == 0 and proc.count > 0 or (time() - proc.lastprocced < proc.cooldown)) then
 		proc.cooldown = time() - proc.lastprocced
-		if self.opt.postprocs and proc.cooldown < 600 and proc.cooldown > 4 then
+		if self.opt.postprocs and time() - proc.lastprocced < 600 and time() - proc.lastprocced > 4 then
 			self:Print("New cooldown found for "..proc.name..": "..proc.cooldown.."s")
 		end
 	end
 
+	-- Update Calculation
+	if(isaura) then
+		if proc.started == 0 then
+			proc.started = time()
+			self.activeprocs[spellID] = spellID
+		end
+	end
+	
 	-- Reset cooldown bar
 	if (procOpt.cooldown or (self.opt.Cooldowns.cooldowns and (procOpt.cooldown ~= false or procOpt.cooldown == nil))) and proc.cooldown > 0 then
 		local bar = self.procCooldowns:GetBar(proc.name)
@@ -462,6 +485,12 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
 	
+	-- Check if the type is SPELL_AURA_APPLIED
+	local isaura = false
+	if(type == "SPELL_AURA_APPLIED") then
+		isaura = true
+	end
+	
 	-- Gems
 	-- Done like this because finding the GemID isn't easy.
 	if(self.Procs.Gems[spellId]) then
@@ -471,12 +500,12 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		if(checktype(procInfo.types,type)) then
 			if(name == self.playerName) then
 				if(procInfo.selfOnly and name == self.playerName and name2 == self.playerName) then
-					self:processProc(spellId,procInfo.name)
+					self:processProc(spellId,procInfo.name,isaura)
 				elseif procInfo.selfOnly == 0 then
-					self:processProc(spellId,procInfo.name)
+					self:processProc(spellId,procInfo.name,isaura)
 				end
 			elseif(name == nil and name2 == self.playerName) then
-				self:processProc(spellId,procInfo.name)
+				self:processProc(spellId,procInfo.name,isaura)
 			end
 		end
 	end
@@ -487,12 +516,26 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		if(checktype(procInfo.types,type)) then
 			if(name == self.playerName) then
 				if(procInfo.selfOnly and name2 == self.playerName) then
-					self:processProc(spellId,procInfo.name)
+					self:processProc(spellId,procInfo.name,isaura)
 				elseif procInfo.selfOnly == 0 then
-					self:processProc(spellId,procInfo.name)
+					self:processProc(spellId,procInfo.name,isaura)
 				end
 			elseif(name == nil and name2 == self.playerName) then
-				self:processProc(spellId,procInfo.name)
+				self:processProc(spellId,procInfo.name,isaura)
+			end
+		end
+	end
+	
+	-- Aura Removed/Expired
+	if(self.opt.tracked[spellId]) then
+		local procInfo = self.opt.tracked[spellId]
+		if(type == "SPELL_AURA_REMOVED") then
+			if(name == self.playerName) then
+				for index,spellid in pairs(self.activeprocs) do
+					local proc = self.procstats[spellid]
+					proc.started = 0
+					self.activeprocs[index] = nil
+				end
 			end
 		end
 	end

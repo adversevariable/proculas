@@ -37,7 +37,7 @@ end
 local function Yellow(text) return "|cffffd200"..text.."|r" end
 local function Green(text) return "|cff00ff00"..text.."|r" end
 function dataobj:OnEnter()
-	tooltip = LibQTip:Acquire("ProculasProcStats", 4, "LEFT", "CENTER", "CENTER", "RIGHT")
+	tooltip = LibQTip:Acquire("ProculasProcStats", 5, "LEFT", "CENTER", "CENTER", "CENTER","RIGHT")
 	tooltip:Hide()
 	tooltip:Clear()
 
@@ -45,7 +45,7 @@ function dataobj:OnEnter()
 	tooltip:AddLine(" ")
 	
 	--Proculas:procStatsTooltip(tooltip)
-	tooltip:AddLine(Yellow(L["PROC"].." "),Yellow(" "..L["TOTAL_PROCS"].." "),Yellow(" "..L["PPM"].." "),Yellow(" "..L["COOLDOWN"]))
+	tooltip:AddLine(Yellow(L["PROC"].." "),Yellow(" "..L["TOTAL_PROCS"].." "),Yellow(" "..L["PPM"].." "),Yellow(" "..L["COOLDOWN"].." "),Yellow(" "..L["UPTIME"]))
 	for a,proc in pairs(Proculas.procstats) do
 		if Proculas.procopts[proc.spellID] then
 			local procOpt = Proculas.procopts[proc.spellID]
@@ -54,11 +54,14 @@ function dataobj:OnEnter()
 			end
 		end
 		if(proc.name) then
+			-- Proc Count
 			if proc.count > 0 then
 				procCount = proc.count
 			else
 				procCount = "N/A"
 			end
+			
+			-- Proc Cooldown
 			if proc.cooldown > 0 then
 				procCooldown = proc.cooldown
 			elseif proc.cooldown == 0 and proc.count > 1 then
@@ -67,18 +70,31 @@ function dataobj:OnEnter()
 				procCooldown = "N/A"
 			end
 			
+			-- Procs Per Minute
 			local ppm = 0
 			if proc.count > 0 then
 				ppm = proc.count / (proc.totaltime / 60)
 			end
-			
 			if ppm > 0 then
 				procPPM = string.format("%.2f", ppm)
 			else
 				procPPM = "N/A"
 			end
 			
-			tooltip:AddLine(Green(proc.name), procCount, procPPM, procCooldown)
+			-- Proc Uptime
+			if not proc.seconds then
+				proc.seconds = 0
+			end
+			local uptime = 0
+			if proc.seconds > 0 and proc.totaltime > 0 then
+				uptime = proc.seconds / proc.totaltime * 100
+			end
+			if(uptime > 0) then
+				procUptime = string.format("%.2f", uptime).."%";
+			else
+				procUptime = "N/A"
+			end
+			tooltip:AddLine(Green(proc.name), procCount, procPPM, procCooldown, procUptime)
 		end
 	end
 	tooltip:AddLine(" ")
