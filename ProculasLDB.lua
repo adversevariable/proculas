@@ -82,12 +82,12 @@ function dataobj:OnEnter()
 			end
 			
 			-- Proc Uptime
-			if not proc.seconds then
-				proc.seconds = 0
+			if not proc.uptime then
+				proc.uptime = 0
 			end
 			local uptime = 0
-			if proc.seconds > 0 and proc.totaltime > 0 then
-				uptime = proc.seconds / proc.totaltime * 100
+			if proc.uptime > 0 and proc.totaltime > 0 then
+				uptime = proc.uptime / proc.totaltime * 100
 			end
 			if(uptime > 0) then
 				procUptime = string.format("%.2f", uptime).."%";

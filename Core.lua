@@ -85,7 +85,7 @@ function Proculas:OnInitialize()
 	if(self.opt.lastver < 2) then
 		for a,b in pairs(self.procstats) do
 			b.started = 0
-			b.seconds = 0
+			b.uptime = 0
 		end
 		self.opt.lastver = 2
 	end
@@ -140,7 +140,7 @@ function Proculas:combatTick()
 	for key,proc in pairs(self.procstats) do
 		-- Update Seconds for Update Calculation
 		if proc.started > 0 then
-			proc.seconds = proc.seconds + 1
+			proc.uptime = proc.uptime + 1
 		end
 		-- Update Total Time
 		proc.totaltime = proc.totaltime + 1
@@ -340,7 +340,7 @@ function Proculas:processProc(spellID,procName,isaura)
 			cooldown = 0, 
 			lastprocced = 0,
 			started = 0,
-			seconds = 0,
+			uptime = 0,
 			icon = self.opt.tracked[spellID].icon,
 		}
 	end
