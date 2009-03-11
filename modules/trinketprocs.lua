@@ -495,6 +495,15 @@ local PROCS = {
 		-- name: Chuchu's Tiny Box of Horrors 
 		-- type: trinket 
 	},
+	[11815] = {
+		spellID = 15601,
+		types = {"SWING_EXTRA_ATTACKS"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 280 
+		-- name: Hand of Justice 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()
