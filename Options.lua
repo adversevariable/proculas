@@ -482,7 +482,16 @@ local options = {
 							return Proculas.procstats[Proculas.editingproc.spellID].cooldown 
 						end
 					end,
-					set = function(info,value) Proculas.procstats[Proculas.editingproc.spellID].cooldown = value end,
+					set = function(info,value)
+						if(value == 0) then
+							Proculas.procstats[Proculas.editingproc.spellID].zerocd = true
+							Proculas.procstats[Proculas.editingproc.spellID].cooldown = 0
+						else
+							Proculas.procstats[Proculas.editingproc.spellID].zerocd = nil
+							Proculas.procstats[Proculas.editingproc.spellID].cooldown = value
+						end
+					end,
+					--set = function(info,value) Proculas.procstats[Proculas.editingproc.spellID].cooldown = value end,
 					disabled = function() return Proculas.editingproc == nil end,
 				},
 				updatecd = {

@@ -358,8 +358,16 @@ function Proculas:processProc(spellID,procName,isaura)
 	end
 	
 	-- Check Cooldown
-	if procOpt.updatecd and proc.lastprocced > 0 and (proc.cooldown == 0 and proc.count > 0 or (time() - proc.lastprocced < proc.cooldown)) then
-		proc.cooldown = time() - proc.lastprocced
+	if procOpt.updatecd and proc.lastprocced > 0 and ((proc.cooldown == 0) or (time() - proc.lastprocced < proc.cooldown)) then
+		local proccd = time() - proc.lastprocced
+		if(proccd == 0) then
+			proc.zerocd = true
+		end
+		if(proc.zerocd) then
+			proc.cooldown = 0
+		else
+			proc.cooldown = time() - proc.lastprocced
+		end
 		if self.opt.postprocs and time() - proc.lastprocced < 600 and time() - proc.lastprocced > 4 then
 			self:Print("New cooldown found for "..proc.name..": "..proc.cooldown.."s")
 		end
