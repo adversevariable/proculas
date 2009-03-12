@@ -66,6 +66,7 @@ L["MESSAGE"] = "Message"
 L["MESSAGE_DESC"] = "Message à afficher, %s désigne le nom du proc"
 L["MINIMAPBUTTONSETTINGS"] = "Paramètres du bouton de minimap"
 L["MOVABLEFRAME"] = "Fenêtre déplaçable"
+L["NA"] = "N/A" -- Requires localization
 L["NAME"] = "Name" -- Requires localization
 L["NEW_CUSTOM_SOUND"] = "New Custom Sound" -- Requires localization
 L["POST_PROCS"] = "Envoi de message de proc."

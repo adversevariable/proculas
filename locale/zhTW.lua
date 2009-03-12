@@ -66,6 +66,7 @@ L["MESSAGE"] = "信息"
 L["MESSAGE_DESC"] = "使用s%顯示效果資訊."
 L["MINIMAPBUTTONSETTINGS"] = "小地圖按鈕設置"
 L["MOVABLEFRAME"] = "可移動框架"
+L["NA"] = "N/A" -- Requires localization
 L["NAME"] = "Name" -- Requires localization
 L["NEW_CUSTOM_SOUND"] = "New Custom Sound" -- Requires localization
 L["POST_PROCS"] = "提交效果資訊"

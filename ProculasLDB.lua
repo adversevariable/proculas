@@ -58,7 +58,7 @@ function dataobj:OnEnter()
 			if proc.count > 0 then
 				procCount = proc.count
 			else
-				procCount = "N/A"
+				procCount = L["NA"]
 			end
 			
 			-- Proc Cooldown
@@ -67,7 +67,7 @@ function dataobj:OnEnter()
 			elseif proc.cooldown == 0 and proc.count > 1 then
 				procCooldown = 0
 			else
-				procCooldown = "N/A"
+				procCooldown = L["NA"]
 			end
 			
 			-- Procs Per Minute
@@ -78,7 +78,7 @@ function dataobj:OnEnter()
 			if ppm > 0 then
 				procPPM = string.format("%.2f", ppm)
 			else
-				procPPM = "N/A"
+				procPPM = L["NA"]
 			end
 			
 			-- Proc Uptime
@@ -92,7 +92,7 @@ function dataobj:OnEnter()
 			if(uptime > 0) then
 				procUptime = string.format("%.2f", uptime).."%";
 			else
-				procUptime = "N/A"
+				procUptime = L["NA"]
 			end
 			tooltip:AddLine(Green(proc.name), procCount, procPPM, procCooldown, procUptime)
 		end
@@ -110,7 +110,7 @@ end
 
 function dataobj:OnLeave()
 	tooltip:Hide()
-	LibQTip:Release(self.tooltip)
+	LibQTip:Release(tooltip)
 	tooltip = nil
 end
 

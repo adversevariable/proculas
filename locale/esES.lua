@@ -66,6 +66,7 @@ L["MESSAGE"] = "Mensaje" -- Needs review
 L["MESSAGE_DESC"] = "Mensaje a mostrar. Utilizar %s como el nombre de la activación." -- Needs review
 L["MINIMAPBUTTONSETTINGS"] = "Opciones del botón del minimapa" -- Needs review
 L["MOVABLEFRAME"] = "Marco móvil" -- Needs review
+L["NA"] = "N/A" -- Requires localization
 L["NAME"] = "Name" -- Requires localization
 L["NEW_CUSTOM_SOUND"] = "New Custom Sound" -- Requires localization
 L["POST_PROCS"] = "Mensajes tras la activación" -- Needs review
