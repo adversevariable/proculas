@@ -332,6 +332,10 @@ end
 function Proculas:processProc(spellID,procName,isaura)
 	-- Check if the procstats record exists or not
 	if not self.procstats[spellID] then
+		local theIcon = ''
+		if self.opt.tracked[spellID] then
+			theIcon = self.opt.tracked[spellID].icon
+		end
 		self.procstats[spellID] = {
 			spellID = spellID,
 			name = procName,
@@ -341,7 +345,7 @@ function Proculas:processProc(spellID,procName,isaura)
 			lastprocced = 0,
 			started = 0,
 			uptime = 0,
-			icon = self.opt.tracked[spellID].icon,
+			icon = theIcon,
 		}
 	end
 	if not self.procopts[spellID] then
