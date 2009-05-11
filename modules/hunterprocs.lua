@@ -110,6 +110,24 @@ local PROCS = {
 		-- name: Master Tactician 
 		-- type: HUNTER 
 	},
+	[64861] = {
+		name = "Precision Shots",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 283 
+		-- name: Precision Shots 
+		-- type: HUNTER 
+	},
+	[53254] = {
+		name = "Wild Quiver Auto Shot",
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 284 
+		-- name: Wild Quiver Auto Shot 
+		-- type: HUNTER 
+	},
 }
 
 function ProculasHunter:OnInitialize()

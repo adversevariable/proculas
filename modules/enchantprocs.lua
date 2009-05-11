@@ -89,6 +89,16 @@ local PROCS = {
 		-- name: Berserking 
 		-- type: enchant 
 	},
+	[0] = {
+		spellID = 64440,
+		name = "Blade Warding",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 282 
+		-- name: Blade Warding 
+		-- type: enchant 
+	},
 }
 
 function ProculasEnchant:OnInitialize()

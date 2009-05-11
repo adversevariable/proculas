@@ -83,6 +83,15 @@ local PROCS = {
 		-- name: Frostbite 
 		-- type: MAGE 
 	},
+	[64868] = {
+		name = "Praxis",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 1,
+		-- Proc Info
+		-- ID: 281 
+		-- name: Praxis 
+		-- type: MAGE 
+	},
 }
 
 function ProculasMage:OnInitialize()
