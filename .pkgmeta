@@ -49,7 +49,7 @@ externals:
         url: svn://svn.wowace.com/wow/libeffects-1-0/mainline/trunk/LibEffects-1.0
         tag: latest
     Libs/LibQTip-1.0:
-        url: svn://svn.wowace.com/wow/libqtip-1-0/mainline/trunk/LibQTip-1.0
+        url: svn://svn.wowace.com/wow/libqtip-1-0/mainline/trunk
         tag: latest
     Libs/LibDataBroker-1.1:
         url: git://github.com/tekkub/libdatabroker-1-1.git
