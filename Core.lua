@@ -7,7 +7,7 @@
 
 -------------------------------------------------------
 -- Proculas
-Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "LibSink-2.0", "LibBars-1.0", "LibEffects-1.0")
+Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "LibSink-2.0", "LibEffects-1.0") -- "LibBars-1.0", 
 local L = LibStub("AceLocale-3.0"):GetLocale("Proculas", false)
 local LSM = LibStub("LibSharedMedia-3.0")
 
@@ -95,7 +95,7 @@ function Proculas:OnInitialize()
 	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
 
 	-- Create the Cooldown bars frame.
-	self:CreateCDFrame()
+	--self:CreateCDFrame()
 	
 	-- Set the Sink options.
 	self:SetSinkStorage(self.opt.SinkOptions)
@@ -386,13 +386,13 @@ function Proculas:processProc(spellID,procName,isaura)
 	end
 	
 	-- Reset cooldown bar
-	if (procOpt.cooldown or (self.opt.Cooldowns.cooldowns and (procOpt.cooldown ~= false or procOpt.cooldown == nil))) and proc.cooldown > 0 then
+	--[[if (procOpt.cooldown or (self.opt.Cooldowns.cooldowns and (procOpt.cooldown ~= false or procOpt.cooldown == nil))) and proc.cooldown > 0 then
 		local bar = self.procCooldowns:GetBar(proc.name)
 		if not bar then
 			bar = self.procCooldowns:NewTimerBar(proc.name, proc.name, proc.cooldown, proc.cooldown, proc.icon, self.opt.Cooldowns.flashTimer)
 		end
 		bar:SetTimer(proc.cooldown, proc.cooldown)
-	end
+	end]]
 
 	-- Set the lastprocced time and increment the proc count
 	proc.lastprocced = time()
