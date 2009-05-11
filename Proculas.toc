@@ -1,4 +1,4 @@
-## Interface: 30000
+## Interface: 30100
 ## Title: Proculas
 ## Notes: Tells you when things proc and logs proc stats.
 ## Author: Clorell [US Argent Dawn]
