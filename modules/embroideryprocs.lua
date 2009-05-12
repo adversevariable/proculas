@@ -22,7 +22,7 @@ local PROCS = {
 	[3722] = {
 		spellID = 55637,
 		name = "Lightweave Embroidery",
-		types = {"SPELL_DAMAGE"},
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
 		selfOnly = 0,
 		-- Proc Info
 		-- ID: 221 
