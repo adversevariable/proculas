@@ -504,6 +504,51 @@ local PROCS = {
 		-- name: Hand of Justice 
 		-- type: trinket 
 	},
+	[44914] = {
+		spellID = 60065,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 285 
+		-- name: Anvil of Titans 
+		-- type: trinket 
+	},
+	[45286] = {
+		spellID = 65014,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 286 
+		-- name: Pyrite Infuser 
+		-- type: trinket 
+	},
+	[45522] = {
+		spellID = 64790,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 287 
+		-- name: Blood of the Old God 
+		-- type: trinket 
+	},
+	[43829] = {
+		spellID = 61671,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 288 
+		-- name: Crusader's Locket 
+		-- type: trinket 
+	},
+	[11815] = {
+		spellID = 15601,
+		types = {"SWING_EXTRA_ATTACKS"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 294 
+		-- name: Hand of Justice 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()

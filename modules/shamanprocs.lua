@@ -74,6 +74,51 @@ local PROCS = {
 		-- name: Windfury 
 		-- type: SHAMAN 
 	},
+	[53819] = {
+		name = "Maelstrom Weapon",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 289 
+		-- name: Maelstrom Weapon 
+		-- type: SHAMAN 
+	},
+	[53818] = {
+		name = "Maelstrom Weapon",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 290 
+		-- name: Maelstrom Weapon 
+		-- type: SHAMAN 
+	},
+	[53816] = {
+		name = "Maelstrom Weapon",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 291 
+		-- name: Maelstrom Weapon 
+		-- type: SHAMAN 
+	},
+	[53817] = {
+		name = "Maelstrom Weapon",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 292 
+		-- name: Maelstrom Weapon 
+		-- type: SHAMAN 
+	},
+	[53814] = {
+		name = "Maelstrom Weapon",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 293 
+		-- name: Maelstrom Weapon 
+		-- type: SHAMAN 
+	},
 }
 
 function ProculasShaman:OnInitialize()
