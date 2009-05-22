@@ -349,6 +349,9 @@ function Proculas:processProc(spellID,procName,isaura)
 		}
 	end
 	if not self.procopts[spellID] then
+		if not spellID then
+			return nil
+		end
 		self:insertProcOpts(spellID)
 	end
 		
