@@ -47,6 +47,15 @@ local PROCS = {
 		-- name: Wrath of Elune 
 		-- type: DRUID 
 	},
+	[62606] = {
+		name = "Savage Defense",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 295 
+		-- name: Savage Defense 
+		-- type: DRUID 
+	},
 }
 
 function ProculasDruid:OnInitialize()
