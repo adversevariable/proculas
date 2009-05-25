@@ -309,6 +309,9 @@ end
 
 -- Used to setup the default proc options.
 function Proculas:insertProcOpts(id)
+	if not id then
+		return nil
+	end
 	self.optpc.procoptions[id] = {
 		name = self.opt.tracked[id].name,
 		spellID = self.opt.tracked[id].spellID,
@@ -330,6 +333,9 @@ end
 
 -- Does the required things when something procs
 function Proculas:processProc(spellID,procName,isaura)
+	if not spellID then
+		return nil
+	end
 	-- Check if the procstats record exists or not
 	if not self.procstats[spellID] then
 		local theIcon = ''
