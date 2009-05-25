@@ -549,6 +549,15 @@ local PROCS = {
 		-- name: Hand of Justice 
 		-- type: trinket 
 	},
+	[45490] = {
+		spellID = 64741,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 296 
+		-- name: Pandora's Plea 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()
