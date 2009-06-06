@@ -312,6 +312,9 @@ function Proculas:insertProcOpts(id)
 	if not id then
 		return false
 	end
+	if id == nil then
+		return false
+	end
 	self.optpc.procoptions[id] = {
 		name = self.opt.tracked[id].name,
 		spellID = self.opt.tracked[id].spellID,
