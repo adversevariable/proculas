@@ -92,6 +92,15 @@ local PROCS = {
 		-- name: Martyrdom 
 		-- type: PRIEST 
 	},
+	[64911] = {
+		name = "Disciplined Power",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 301 
+		-- name: Disciplined Power 
+		-- type: PRIEST 
+	},
 }
 
 function ProculasPriest:OnInitialize()

@@ -128,6 +128,15 @@ local PROCS = {
 		-- name: Wild Quiver Auto Shot 
 		-- type: HUNTER 
 	},
+	[64861] = {
+		name = "",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 299 
+		-- name:  
+		-- type: HUNTER 
+	},
 }
 
 function ProculasHunter:OnInitialize()

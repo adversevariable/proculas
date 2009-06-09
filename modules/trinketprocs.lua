@@ -558,6 +558,24 @@ local PROCS = {
 		-- name: Pandora's Plea 
 		-- type: trinket 
 	},
+	[45866] = {
+		spellID = 65004,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 298 
+		-- name: Elemental Focus Stone 
+		-- type: trinket 
+	},
+	[45931] = {
+		spellID = 65019,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 300 
+		-- name: Mjolnir Runestone 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()
