@@ -1,8 +1,13 @@
-Proculas License v1.1
-Created by Clorell/Keruni of Argent Dawn [US]
+Copyright (c) Clorell
+All Rights Reserved
 
-The "Project" is the name of the project.
+"The Project" is the program/addon/script.
+"The Author" is Clorell.
+"The User" is the person or persons using The Project.
 
-You may change, modify and redistribute the Project as long as you keep
-the above credit in all files and documenatation that came with the Project,
-any derivatives must be under this license version or higher.
+By using The Project, you agree that:
+- No one may modify, clone, use or reproduce ANY part of The Project without written permission from The Author.
+- No one may redistribute The Project without written permission from The Author.
+- The Project is supplied AS IS and The Author takes no resposibility for what harm, damages, loss of data The Project may cuase.
+- The Author may not be blamed, sued or fined for whatever The Project may or may not do.
+- The User accepts all responsibility for what The Project may cause, be it damages or loss of data.
