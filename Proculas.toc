@@ -19,6 +19,7 @@ locale\zhTW.lua
 locale\frFR.lua
 locale\esES.lua
 locale\ruRU.lua
+locale\koKR.lua
 
 Core.lua
 Options.lua

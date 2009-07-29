@@ -315,9 +315,10 @@ function Proculas:insertProcOpts(id)
 	if id == nil then
 		return false
 	end
+	local spellName = GetSpellInfo(id)
 	self.optpc.procoptions[id] = {
-		name = self.opt.tracked[id].name,
-		spellID = self.opt.tracked[id].spellID,
+		name = spellName,
+		spellID = id,
 		enabled = true,
 		custommessage = false,
 		message = self.opt.Messages.message,
@@ -608,7 +609,7 @@ end
 -- About Proculas
 function Proculas:AboutProculas()
 	self:Print("Version "..VERSION)
-	self:Print("Created by Clorell/Keruni of Argent Dawn [US]")
+	self:Print("Created by Clorell/Keruni/Novantu of Argent Dawn [US]")
 end
 
 -- Used to bring up the Config/Options window
