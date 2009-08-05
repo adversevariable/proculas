@@ -360,42 +360,6 @@ local PROCS = {
 		-- name: Dying Curse 
 		-- type: trinket 
 	},
-	[42987] = {
-		spellID = {60234,60235,60229,60233},
-		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
-		selfOnly = 0,
-		-- Proc Info
-		-- ID: 228 
-		-- name: Darkmoon Card: Greatness 
-		-- type: trinket 
-	},
-	[44254] = {
-		spellID = {60234,60235,60229,60233},
-		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
-		selfOnly = 0,
-		-- Proc Info
-		-- ID: 229 
-		-- name: Darkmoon Card: Greatness 
-		-- type: trinket 
-	},
-	[44253] = {
-		spellID = {60234,60235,60229,60233},
-		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
-		selfOnly = 0,
-		-- Proc Info
-		-- ID: 230 
-		-- name: Darkmoon Card: Greatness 
-		-- type: trinket 
-	},
-	[44255] = {
-		spellID = {60234,60235,60229,60233},
-		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
-		selfOnly = 0,
-		-- Proc Info
-		-- ID: 231 
-		-- name: Darkmoon Card: Greatness 
-		-- type: trinket 
-	},
 	[37064] = {
 		spellID = 60307,
 		types = {"SPELL_DAMAGE"},
