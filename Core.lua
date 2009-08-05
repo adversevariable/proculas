@@ -42,6 +42,7 @@ Proculas.Procs = {
 	Enchants = {},
 	Embroideries = {},
 	Gems = {},
+	Special = {},
 	PALADIN = {},
 	DEATHKNIGHT = {},
 	SHAMAN = {},
@@ -525,6 +526,24 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		local procInfo = self.Procs.Gems[spellId]
 		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(procInfo.itemID)
 		procInfo.icon = itemTexture
+		if(checktype(procInfo.types,type)) then
+			if(name == self.playerName) then
+				if(procInfo.selfOnly and name == self.playerName and name2 == self.playerName) then
+					self:processProc(spellId,procInfo.name,isaura)
+				elseif procInfo.selfOnly == 0 then
+					self:processProc(spellId,procInfo.name,isaura)
+				end
+			elseif(name == nil and name2 == self.playerName) then
+				self:processProc(spellId,procInfo.name,isaura)
+			end
+		end
+	end
+	
+	-- Special
+	-- For those procs that don't want to work right,
+	-- like Darkmoon Card: Greatness
+	if(self.Procs.Special[spellId]) then
+		local procInfo = self.Procs.Special[spellId]
 		if(checktype(procInfo.types,type)) then
 			if(name == self.playerName) then
 				if(procInfo.selfOnly and name == self.playerName and name2 == self.playerName) then

@@ -16,4 +16,5 @@
   <Script file="modules\warlockprocs.lua"/>
   <Script file="modules\warriorprocs.lua"/>
   <Script file="modules\weaponprocs.lua"/>
+  <Script file="modules\specialprocs.lua"/>
 </Ui>
