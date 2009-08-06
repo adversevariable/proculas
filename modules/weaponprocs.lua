@@ -549,6 +549,15 @@ local PROCS = {
 		-- name: Serenity 
 		-- type: 1hmace 
 	},
+	[46017] = {
+		spellID = 64411,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 303 
+		-- name: Val'anyr, Hammer of Ancient Kings 
+		-- type: 1hmace 
+	},
 	[30311] = {
 		spellID = 36479,
 		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},

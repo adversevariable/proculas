@@ -119,6 +119,15 @@ local PROCS = {
 		-- name: Maelstrom Weapon 
 		-- type: SHAMAN 
 	},
+	[39805] = {
+		name = "Lightning Overload",
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 304 
+		-- name: Lightning Overload 
+		-- type: SHAMAN 
+	},
 }
 
 function ProculasShaman:OnInitialize()
