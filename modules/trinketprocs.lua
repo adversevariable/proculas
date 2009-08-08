@@ -549,6 +549,15 @@ local PROCS = {
 		-- name: The Black Heart 
 		-- type: trinket 
 	},
+	[47215] = {
+		spellID = 67666,
+		types = {"SPELL_ENERGIZE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 307 
+		-- name: Tears of the Vanquished 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()
