@@ -540,6 +540,15 @@ local PROCS = {
 		-- name: Mjolnir Runestone 
 		-- type: trinket 
 	},
+	[47216] = {
+		spellID = 67631,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 305 
+		-- name: The Black Heart 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()

@@ -101,6 +101,60 @@ local PROCS = {
 		-- name: Disciplined Power 
 		-- type: PRIEST 
 	},
+	[63853] = {
+		name = "Rapture",
+		types = {"SPELL_ENERGIZE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 306 
+		-- name: Rapture 
+		-- type: PRIEST 
+	},
+	[47755] = {
+		name = "Rapture",
+		types = {"SPELL_ENERGIZE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 306 
+		-- name: Rapture 
+		-- type: PRIEST 
+	},
+	[63655] = {
+		name = "Rapture",
+		types = {"SPELL_ENERGIZE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 306 
+		-- name: Rapture 
+		-- type: PRIEST 
+	},
+	[63652] = {
+		name = "Rapture",
+		types = {"SPELL_ENERGIZE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 306 
+		-- name: Rapture 
+		-- type: PRIEST 
+	},
+	[63653] = {
+		name = "Rapture",
+		types = {"SPELL_ENERGIZE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 306 
+		-- name: Rapture 
+		-- type: PRIEST 
+	},
+	[63654] = {
+		name = "Rapture",
+		types = {"SPELL_ENERGIZE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 306 
+		-- name: Rapture 
+		-- type: PRIEST 
+	},
 }
 
 function ProculasPriest:OnInitialize()
