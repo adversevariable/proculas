@@ -65,6 +65,15 @@ local PROCS = {
 		-- name: Elune's Wrath 
 		-- type: DRUID 
 	},
+	[16886] = {
+		name = "Nature's Grace",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 309 
+		-- name: Nature's Grace 
+		-- type: DRUID 
+	},
 }
 
 function ProculasDruid:OnInitialize()
