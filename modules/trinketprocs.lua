@@ -558,6 +558,15 @@ local PROCS = {
 		-- name: Tears of the Vanquished 
 		-- type: trinket 
 	},
+	[47213] = {
+		spellID = 67669,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 308 
+		-- name: Abyssal Rune 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()
