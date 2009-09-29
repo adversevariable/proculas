@@ -1,7 +1,7 @@
 --
 -- ProculasLDB
 -- Sends the Proc Stats to DataBroker
--- Created by Clorell/Keruni of Argent Dawn [US]
+-- Created by Clorell of Hellscream [US]
 -- $Id$
 --
 
@@ -10,6 +10,10 @@ local L = LibStub("AceLocale-3.0"):GetLocale("Proculas", false)
 local tooltip
 local LibQTip = LibStub:GetLibrary( "LibQTip-1.0" )
 ProculasLDB = Proculas:NewModule("ProculasLDB")
+
+if not Proculas.enabled then
+	return nil
+end
 
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local dataobj = ldb:NewDataObject("Proculas", {
@@ -21,8 +25,6 @@ local dataobj = ldb:NewDataObject("Proculas", {
 function ProculasLDB:OnInitialize()
 	self.opt = Proculas.opt
 	self.icon = LibStub("LibDBIcon-1.0")
-	
-	
 	self.icon:Register("Proculas", dataobj, self.opt.minimapButton)
 end
 

@@ -1,7 +1,7 @@
 --
 -- Proculas
 -- Tells you when things like Mongoose, Clearcasting, etc proc.
--- Created by Clorell/Keruni of Argent Dawn [US]
+-- Created by Clorell of Hellscream [US]
 -- $Id$
 --
 
@@ -10,6 +10,8 @@
 Proculas = LibStub("AceAddon-3.0"):NewAddon("Proculas", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "LibSink-2.0", "LibEffects-1.0", "LibBars-1.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("Proculas", false)
 local LSM = LibStub("LibSharedMedia-3.0")
+
+Proculas.enabled = true
 
 -------------------------------------------------------
 -- Proculas Version
@@ -628,7 +630,7 @@ end
 -- About Proculas
 function Proculas:AboutProculas()
 	self:Print("Version "..VERSION)
-	self:Print("Created by Clorell/Keruni/Novantu of Argent Dawn [US]")
+	self:Print("Created by Clorell of Hellscream [US]")
 end
 
 -- Used to bring up the Config/Options window

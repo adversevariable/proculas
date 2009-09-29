@@ -1,6 +1,6 @@
 --
 -- Proculas
--- Created by Clorell/Keruni of Argent Dawn [US]
+-- Created by Clorell of Hellscream [US]
 -- $Id$
 --
 
@@ -8,6 +8,10 @@ local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasOptions = Proculas:NewModule("ProculasOptions")
 local L = LibStub("AceLocale-3.0"):GetLocale("Proculas", false)
 local LSM = LibStub("LibSharedMedia-3.0")
+
+if not Proculas.enabled then
+	return nil
+end
 
 -------------------------------------------------------
 -- Proculas Options Stuff

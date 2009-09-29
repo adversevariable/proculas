@@ -1,6 +1,6 @@
 --
 --	Proculas
---	Created by Clorell/Keruni of Argent Dawn [US]
+--	Created by Clorell Hellscream [US]
 --	$Id$
 --
 
