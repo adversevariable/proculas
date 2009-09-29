@@ -8,6 +8,10 @@
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasGem = Proculas:NewModule("GemProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[55382] = {
 		itemID = 41401,
@@ -16,6 +20,15 @@ local PROCS = {
 		-- Proc Info
 		-- ID: 42 
 		-- name: Insightful Earthsiege Diamond 
+		-- type: gem 
+	},
+	[55341] = {
+		itemID = 41385,
+		types = {"SPELL_HEAL"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 322 
+		-- name: Invigorating Earthsiege Health Regen 
 		-- type: gem 
 	},
 }

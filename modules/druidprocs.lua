@@ -10,6 +10,10 @@ if select(2, UnitClass("player")) ~= "DRUID" then return end
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasDruid = Proculas:NewModule("DruidProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[16870] = {
 		name = "Clearcasting",

@@ -10,6 +10,10 @@ if select(2, UnitClass("player")) ~= "HUNTER" then return end
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasHunter = Proculas:NewModule("HunterProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[6150] = {
 		name = "Quick Shots",

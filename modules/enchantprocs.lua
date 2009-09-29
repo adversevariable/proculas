@@ -8,6 +8,10 @@
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasEnchant = Proculas:NewModule("EnchantProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[803] = {
 		spellID = 50265,

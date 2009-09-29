@@ -8,6 +8,10 @@
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasRelic = Proculas:NewModule("RelicProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[40706] = {
 		spellID = 60819,
@@ -61,6 +65,15 @@ local PROCS = {
 		-- Proc Info
 		-- ID: 50 
 		-- name: Sigil of Haunted Dreams 
+		-- type: sigil 
+	},
+	[47673] = {
+		spellID = 67383,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 320 
+		-- name: Sigil of Virulence 
 		-- type: sigil 
 	},
 	[33506] = {

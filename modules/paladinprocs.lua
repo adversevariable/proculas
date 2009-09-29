@@ -10,6 +10,10 @@ if select(2, UnitClass("player")) ~= "PALADIN" then return end
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasPaladin = Proculas:NewModule("PaladinProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[31930] = {
 		name = "Judgements of the Wise",
@@ -126,6 +130,15 @@ local PROCS = {
 		-- Proc Info
 		-- ID: 259 
 		-- name: Vindication 
+		-- type: PALADIN 
+	},
+	[20178] = {
+		name = "Reckoning",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 324 
+		-- name: Reckoning 
 		-- type: PALADIN 
 	},
 }

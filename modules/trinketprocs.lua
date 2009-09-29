@@ -8,6 +8,10 @@
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasTrinket = Proculas:NewModule("TrinketProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[28034] = {
 		spellID = 33649,
@@ -577,7 +581,7 @@ local PROCS = {
 		-- type: trinket 
 	},
 	[47464] = {
-		spellID = 67771,
+		spellID = {67773,67772},
 		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
 		selfOnly = 0,
 		-- Proc Info
@@ -586,7 +590,7 @@ local PROCS = {
 		-- type: trinket 
 	},
 	[47303] = {
-		spellID = 67702,
+		spellID = {67708,67703},
 		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
 		selfOnly = 0,
 		-- Proc Info
@@ -601,6 +605,33 @@ local PROCS = {
 		-- Proc Info
 		-- ID: 317 
 		-- name: Dark Matter 
+		-- type: trinket 
+	},
+	[49078] = {
+		spellID = 60062,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 318 
+		-- name: Ancient Pickled Egg 
+		-- type: trinket 
+	},
+	[49076] = {
+		spellID = 60064,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 319 
+		-- name: Mithril Pocketwatch 
+		-- type: trinket 
+	},
+	[49074] = {
+		spellID = 60065,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 323 
+		-- name: Coren's Chromium Coaster 
 		-- type: trinket 
 	},
 }

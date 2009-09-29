@@ -8,6 +8,10 @@
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasRing = Proculas:NewModule("RingProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[44308] = {
 		spellID = 60318,

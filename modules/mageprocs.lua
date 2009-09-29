@@ -10,6 +10,10 @@ if select(2, UnitClass("player")) ~= "MAGE" then return end
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasMage = Proculas:NewModule("MageProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[44401] = {
 		name = "Missile Barrage",

@@ -8,6 +8,10 @@
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasWeapon = Proculas:NewModule("WeaponProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[9453] = {
 		spellID = 11790,

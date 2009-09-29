@@ -8,6 +8,10 @@
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasSpecial = Proculas:NewModule("SpecialProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[60234] = {
 		name = "Greatness",

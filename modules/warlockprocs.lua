@@ -10,6 +10,10 @@ if select(2, UnitClass("player")) ~= "WARLOCK" then return end
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasWarlock = Proculas:NewModule("WarlockProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[17941] = {
 		name = "Nightfall",

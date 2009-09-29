@@ -8,6 +8,10 @@
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasEmbroidery = Proculas:NewModule("EmbroideryProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[3728] = {
 		spellID = 55767,

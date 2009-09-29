@@ -10,6 +10,10 @@ if select(2, UnitClass("player")) ~= "DEATHKNIGHT" then return end
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local ProculasDeathKnight = Proculas:NewModule("DeathKnightProcs")
 
+if not Proculas.enabled then
+	return nil
+end
+
 local PROCS = {
 	[50466] = {
 		name = "Death Trance!",
@@ -135,6 +139,15 @@ local PROCS = {
 		-- Proc Info
 		-- ID: 256 
 		-- name: Rune of the Fallen Crusader 
+		-- type: DEATHKNIGHT 
+	},
+	[67117] = {
+		name = "Unholy Might",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 321 
+		-- name: Unholy Might 
 		-- type: DEATHKNIGHT 
 	},
 }
