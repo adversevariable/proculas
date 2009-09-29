@@ -586,7 +586,7 @@ local PROCS = {
 		selfOnly = 0,
 		-- Proc Info
 		-- ID: 313 
-		-- name: Death's Choice 
+		-- name: Death's Choice (Heroic) 
 		-- type: trinket 
 	},
 	[47303] = {
