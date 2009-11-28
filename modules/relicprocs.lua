@@ -103,6 +103,24 @@ local PROCS = {
 		-- name: Totem of the Tundra 
 		-- type: totem 
 	},
+	[47667] = {
+		spellID = 67391,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 330 
+		-- name: Totem of Quaking Earth 
+		-- type: totem 
+	},
+	[47666] = {
+		spellID = 67385,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 333 
+		-- name: Totem of Electrifying Wind 
+		-- type: totem 
+	},
 }
 
 function ProculasRelic:OnInitialize()

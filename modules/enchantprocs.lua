@@ -103,6 +103,16 @@ local PROCS = {
 		-- name: Blade Warding 
 		-- type: enchant 
 	},
+	[3239] = {
+		spellID = 44525,
+		name = "Icebreaker",
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 331 
+		-- name: Icebreaker 
+		-- type: enchant 
+	},
 }
 
 function ProculasEnchant:OnInitialize()

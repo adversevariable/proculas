@@ -238,6 +238,24 @@ local PROCS = {
 		-- name: Gutwrencher 
 		-- type: dagger 
 	},
+	[49437] = {
+		spellID = 69180,
+		types = {"SPELL_AURA_APPLIED","SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 328 
+		-- name: Rusted Gutgore Ripper 
+		-- type: dagger 
+	},
+	[49465] = {
+		spellID = 69181,
+		types = {"SPELL_AURA_APPLIED","SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 329 
+		-- name: Tarnished Gutgore Ripper 
+		-- type: dagger 
+	},
 	[28774] = {
 		spellID = 34696,
 		types = {"SPELL_LEECH"},
@@ -839,6 +857,24 @@ local PROCS = {
 		-- Proc Info
 		-- ID: 188 
 		-- name: Battleworn Thrash Blade 
+		-- type: 1hsword 
+	},
+	[49495] = {
+		spellID = 69208,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 334 
+		-- name: Burnished Quel'Serrar 
+		-- type: 1hsword 
+	},
+	[49303] = {
+		spellID = 69207,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 335 
+		-- name: Gleaming Quel'Serrar 
 		-- type: 1hsword 
 	},
 	[7717] = {

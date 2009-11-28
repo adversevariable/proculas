@@ -634,6 +634,24 @@ local PROCS = {
 		-- name: Coren's Chromium Coaster 
 		-- type: trinket 
 	},
+	[47316] = {
+		spellID = 67714,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 336 
+		-- name: Reign of the Dead 
+		-- type: trinket 
+	},
+	[47477] = {
+		spellID = 67760,
+		types = {"SPELL_DAMAGE"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 337 
+		-- name: Reign of the Dead Heroic 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()

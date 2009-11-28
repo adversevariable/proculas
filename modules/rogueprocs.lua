@@ -40,6 +40,15 @@ local PROCS = {
 		-- name: Blade Twisting 
 		-- type: ROGUE 
 	},
+	[66923] = {
+		name = "Hack and Slash",
+		types = {"SWING_EXTRA_ATTACKS"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 332 
+		-- name: Hack and Slash 
+		-- type: ROGUE 
+	},
 }
 
 function ProculasRogue:OnInitialize()
