@@ -1,4 +1,4 @@
-## Interface: 30200
+## Interface: 30300
 ## Title: Proculas
 ## Notes: Tells you when things proc and logs proc stats.
 ## Author: Clorell [US Hellscream]
