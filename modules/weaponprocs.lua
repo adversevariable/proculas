@@ -1066,6 +1066,15 @@ local PROCS = {
 		-- name: Night Reaver 
 		-- type: 2haxe 
 	},
+	[50415] = {
+		spellID = 71838,
+		types = {"SPELL_LEECH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 341 
+		-- name: Bryntroll, the Bone Arbiter 
+		-- type: 2haxe 
+	},
 }
 
 function ProculasWeapon:OnInitialize()

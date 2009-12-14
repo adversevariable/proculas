@@ -652,6 +652,33 @@ local PROCS = {
 		-- name: Reign of the Dead Heroic 
 		-- type: trinket 
 	},
+	[47115] = {
+		spellID = {67708,67703},
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 338 
+		-- name: Death's Verdict 
+		-- type: trinket 
+	},
+	[47131] = {
+		spellID = {67772,67773},
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 339 
+		-- name: Death's Verdict Heroic 
+		-- type: trinket 
+	},
+	[50198] = {
+		spellID = 71403,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 340 
+		-- name: Needle-Encrusted Scorpion 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()

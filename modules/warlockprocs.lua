@@ -69,6 +69,24 @@ local PROCS = {
 		-- name: Molten Core 
 		-- type: WARLOCK 
 	},
+	[71162] = {
+		name = "Molten Core",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 266 
+		-- name: Molten Core 
+		-- type: WARLOCK 
+	},
+	[71165] = {
+		name = "Molten Core",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 266 
+		-- name: Molten Core 
+		-- type: WARLOCK 
+	},
 	[47283] = {
 		name = "Empowered Imp",
 		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
@@ -157,6 +175,24 @@ local PROCS = {
 		-- Proc Info
 		-- ID: 316 
 		-- name: Pyroclasm 
+		-- type: WARLOCK 
+	},
+	[63165] = {
+		name = "Decimation",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 342 
+		-- name: Decimation 
+		-- type: WARLOCK 
+	},
+	[63167] = {
+		name = "Decimation",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 342 
+		-- name: Decimation 
 		-- type: WARLOCK 
 	},
 }
