@@ -408,7 +408,7 @@ function Proculas:processProc(spellID,procName,isaura)
 	if (procOpt.cooldown or (self.opt.Cooldowns.cooldowns and (procOpt.cooldown ~= false or procOpt.cooldown == nil))) and proc.cooldown > 0 then
 		local bar = self.procCooldowns:GetBar(proc.name)
 		if not bar then
-			bar = self.procCooldowns:NewTimerBar(proc.name, proc.name, proc.cooldown, proc.cooldown, proc.icon, self.opt.Cooldowns.flashTimer)
+			bar = self.procCooldowns:NewTimerBar(proc.spellID, proc.name, proc.cooldown, proc.cooldown, proc.icon, self.opt.Cooldowns.flashTimer)
 		end
 		bar:SetTimer(proc.cooldown, proc.cooldown)
 	end
