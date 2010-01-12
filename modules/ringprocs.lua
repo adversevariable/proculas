@@ -22,6 +22,15 @@ local PROCS = {
 		-- name: Signet of Edward the Odd 
 		-- type: ring 
 	},
+	[50399] = {
+		spellID = 72418,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 344 
+		-- name: Ashen Band of Unmatched Wisdom 
+		-- type: ring 
+	},
 }
 
 function ProculasRing:OnInitialize()

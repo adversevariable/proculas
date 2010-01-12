@@ -58,6 +58,15 @@ local PROCS = {
 		-- name: Idol of Terror 
 		-- type: idol 
 	},
+	[47671] = {
+		spellID = 67358,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 343 
+		-- name: Idol of Flaring Growth 
+		-- type: idol 
+	},
 	[40715] = {
 		spellID = 60828,
 		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},

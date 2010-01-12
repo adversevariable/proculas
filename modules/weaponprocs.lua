@@ -580,6 +580,24 @@ local PROCS = {
 		-- name: Val'anyr, Hammer of Ancient Kings 
 		-- type: 1hmace 
 	},
+	[50028] = {
+		spellID = 71864,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 1,
+		-- Proc Info
+		-- ID: 345 
+		-- name: Trauma 
+		-- type: 1hmace 
+	},
+	[50685] = {
+		spellID = 71866,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 1,
+		-- Proc Info
+		-- ID: 346 
+		-- name: Trauma [Heroic[ 
+		-- type: 1hmace 
+	},
 	[30311] = {
 		spellID = 36479,
 		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},

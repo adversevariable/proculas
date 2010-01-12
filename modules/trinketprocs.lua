@@ -679,6 +679,42 @@ local PROCS = {
 		-- name: Needle-Encrusted Scorpion 
 		-- type: trinket 
 	},
+	[50362] = {
+		spellID = {71484,71485,71486,71487,71491,71492},
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 347 
+		-- name: Deathbringer's Will 
+		-- type: trinket 
+	},
+	[50363] = {
+		spellID = {71484,71485,71486,71487,71491,71492},
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 348 
+		-- name: Deathbringer's Will [Heroic] 
+		-- type: trinket 
+	},
+	[50342] = {
+		spellID = 71401,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 349 
+		-- name: Whispering Fanged Skull 
+		-- type: trinket 
+	},
+	[50343] = {
+		spellID = 71541,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 350 
+		-- name: Whispering Fanged Skull [Heroic] 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()
