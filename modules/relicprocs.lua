@@ -85,6 +85,24 @@ local PROCS = {
 		-- name: Sigil of Virulence 
 		-- type: sigil 
 	},
+	[45144] = {
+		spellID = 64963,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 358 
+		-- name: Sigil of Deflection 
+		-- type: sigil 
+	},
+	[47672] = {
+		spellID = 67380,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 359 
+		-- name: Sigil of Insolence 
+		-- type: sigil 
+	},
 	[33506] = {
 		spellID = 43751,
 		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},

@@ -31,6 +31,42 @@ local PROCS = {
 		-- name: Ashen Band of Unmatched Wisdom 
 		-- type: ring 
 	},
+	[50397] = {
+		spellID = 72416,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 351 
+		-- name: Ashen Band of Unmatched Destruction 
+		-- type: ring 
+	},
+	[50401] = {
+		spellID = 72412,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 352 
+		-- name: Ashen Band of Unmatched Vengeance 
+		-- type: ring 
+	},
+	[50403] = {
+		spellID = 72414,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 353 
+		-- name: Ashen Band of Unmatched Courage 
+		-- type: ring 
+	},
+	[50400] = {
+		spellID = 72418,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 360 
+		-- name: Ashen Band of Endless Wisdom 
+		-- type: ring 
+	},
 }
 
 function ProculasRing:OnInitialize()

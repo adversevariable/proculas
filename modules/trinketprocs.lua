@@ -715,6 +715,33 @@ local PROCS = {
 		-- name: Whispering Fanged Skull [Heroic] 
 		-- type: trinket 
 	},
+	[45929] = {
+		spellID = 65003,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 355 
+		-- name: Sif's Remembrance 
+		-- type: trinket 
+	},
+	[50355] = {
+		spellID = 71396,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 356 
+		-- name: Herkuml War Token 
+		-- type: trinket 
+	},
+	[50359] = {
+		spellID = 71610,
+		types = {"SPELL_HEAL"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 357 
+		-- name: Althor's Abacus 
+		-- type: trinket 
+	},
 }
 
 function ProculasTrinket:OnInitialize()

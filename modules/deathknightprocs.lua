@@ -150,6 +150,51 @@ local PROCS = {
 		-- name: Unholy Might 
 		-- type: DEATHKNIGHT 
 	},
+	[63583] = {
+		name = "Desolation",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 354 
+		-- name: Desolation 
+		-- type: DEATHKNIGHT 
+	},
+	[66800] = {
+		name = "Desolation",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 354 
+		-- name: Desolation 
+		-- type: DEATHKNIGHT 
+	},
+	[66801] = {
+		name = "Desolation",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 354 
+		-- name: Desolation 
+		-- type: DEATHKNIGHT 
+	},
+	[66802] = {
+		name = "Desolation",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 354 
+		-- name: Desolation 
+		-- type: DEATHKNIGHT 
+	},
+	[66803] = {
+		name = "Desolation",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 354 
+		-- name: Desolation 
+		-- type: DEATHKNIGHT 
+	},
 }
 
 function ProculasDeathKnight:OnInitialize()
