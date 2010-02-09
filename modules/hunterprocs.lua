@@ -141,6 +141,33 @@ local PROCS = {
 		-- name:  
 		-- type: HUNTER 
 	},
+	[70728] = {
+		name = "Exploit Weakness",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 367 
+		-- name: Exploit Weakness 
+		-- type: HUNTER 
+	},
+	[53220] = {
+		name = "Improved Steady Shot",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 368 
+		-- name: Improved Steady Shot 
+		-- type: HUNTER 
+	},
+	[71007] = {
+		name = "Stinger",
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 369 
+		-- name: Stinger 
+		-- type: HUNTER 
+	},
 }
 
 function ProculasHunter:OnInitialize()

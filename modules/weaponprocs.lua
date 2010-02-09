@@ -256,6 +256,24 @@ local PROCS = {
 		-- name: Tarnished Gutgore Ripper 
 		-- type: dagger 
 	},
+	[49982] = {
+		spellID = {71886,71888,71885,71887,71883,71881,71882,71884},
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 361 
+		-- name: Heartpierce 
+		-- type: dagger 
+	},
+	[50641] = {
+		spellID = {71886,71888,71885,71887,71883,71881,71882,71884},
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 362 
+		-- name: Heartpierce [Heroic] 
+		-- type: dagger 
+	},
 	[28774] = {
 		spellID = 34696,
 		types = {"SPELL_LEECH"},

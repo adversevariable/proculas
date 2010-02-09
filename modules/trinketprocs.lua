@@ -680,7 +680,7 @@ local PROCS = {
 		-- type: trinket 
 	},
 	[50362] = {
-		spellID = {71484,71485,71486,71487,71491,71492},
+		spellID = {71484,71485,71486,71487,71491,71492,71491,71559,71484,71561},
 		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
 		selfOnly = 0,
 		-- Proc Info
@@ -689,7 +689,7 @@ local PROCS = {
 		-- type: trinket 
 	},
 	[50363] = {
-		spellID = {71484,71485,71486,71487,71491,71492},
+		spellID = {71484,71485,71486,71487,71491,71492,71491,71559,71484,71561},
 		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
 		selfOnly = 0,
 		-- Proc Info
@@ -740,6 +740,42 @@ local PROCS = {
 		-- Proc Info
 		-- ID: 357 
 		-- name: Althor's Abacus 
+		-- type: trinket 
+	},
+	[50341] = {
+		spellID = 71575,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 363 
+		-- name: Unidentifiable Organ 
+		-- type: trinket 
+	},
+	[50344] = {
+		spellID = 71577,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 364 
+		-- name: Unidentifiable Organ [Heroic] 
+		-- type: trinket 
+	},
+	[50353] = {
+		spellID = 71601,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 365 
+		-- name: Dislodged Foreign Object 
+		-- type: trinket 
+	},
+	[50348] = {
+		spellID = 71644,
+		types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},
+		selfOnly = 0,
+		-- Proc Info
+		-- ID: 366 
+		-- name: Dislodged Foreign Object 
 		-- type: trinket 
 	},
 }
