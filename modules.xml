@@ -1,20 +1,3 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
-  <Script file="modules\amuletprocs.lua"/>
-  <Script file="modules\deathknightprocs.lua"/>
-  <Script file="modules\druidprocs.lua"/>
-  <Script file="modules\embroideryprocs.lua"/>
-  <Script file="modules\enchantprocs.lua"/>
-  <Script file="modules\gemprocs.lua"/>
-  <Script file="modules\hunterprocs.lua"/>
-  <Script file="modules\mageprocs.lua"/>
-  <Script file="modules\paladinprocs.lua"/>
-  <Script file="modules\priestprocs.lua"/>
-  <Script file="modules\relicprocs.lua"/>
-  <Script file="modules\ringprocs.lua"/>
-  <Script file="modules\shamanprocs.lua"/>
-  <Script file="modules\trinketprocs.lua"/>
-  <Script file="modules\warlockprocs.lua"/>
-  <Script file="modules\warriorprocs.lua"/>
-  <Script file="modules\weaponprocs.lua"/>
-  <Script file="modules\specialprocs.lua"/>
+  <Script file="modules\PaladinProcs.lua"/>
 </Ui>
