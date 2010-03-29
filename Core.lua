@@ -121,12 +121,12 @@ end
 -- Increments the proc uptime count
 function Proculas:combatTick()
 	for key,proc in pairs(self.optpc.tracked) do
-		-- Update Seconds for Update Calculation
-		if proc.started > 0 then
-			proc.uptime = proc.uptime + 1
+		-- Update seconds for uptime calculation
+		if self.active[proc.spellID] then
+			proc.uptime = proc.uptime+1
 		end
 		-- Update Total Time
-		proc.time = proc.time + 1
+		proc.time = proc.time+1
 	end
 end
 
@@ -233,10 +233,10 @@ end
 function Proculas:addProc(procInfo)
 	if not self.optpc.tracked[procInfo.spellID] then
 		procInfo.count = 0
-		procInfo.started = 0;
-		procInfo.uptime = 0;
-		procInfo.cooldown = 0;
-		procInfo.lastProc = 0;
+		procInfo.started = 0
+		procInfo.uptime = 0
+		procInfo.cooldown = 0
+		procInfo.lastProc = 0
 		procInfo.updateCD = true
 		procInfo.enabled = true
 		procInfo.time = 0
@@ -386,12 +386,11 @@ function Proculas:processProc(spellID,isAura)
 		end
 	end
 
-	-- Update Calculation
-	if(isAura) then
-		if procInfo.started == 0 then
+	-- Uptime Calculation
+	if isAura and procInfo.started == 0 then
 			procInfo.started = time()
 			self.active[spellID] = spellID
-		end
+		
 	end
 	
 	-- Reset cooldown bar
@@ -442,15 +441,12 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	end
 	
 	-- Aura Removed/Expired
-	if(self.optpc.tracked[spellId]) then
-		local procInfo = self.optpc.tracked[spellId]
-		if(type == "SPELL_AURA_REMOVED") then
-			if(name == playerName) then
-				for index,spellID in pairs(self.active) do
-					local proc = self.optpc.tracked[spellID]
-					proc.started = 0
-					self.active[index] = nil
-				end
+	if self.optpc.tracked[spellId] and type == "SPELL_AURA_REMOVED" then
+		if name == playerName and self.active[spellId] then
+			local procInfo = self.optpc.tracked[spellId]
+			for index,spID in pairs(self.active) do
+				procInfo.started = 0
+				self.active[spellId] = nil
 			end
 		end
 	end

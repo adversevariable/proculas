@@ -219,6 +219,72 @@ local options = {
 					disabled = function() return Proculas.editingproc == nil end,
 				},
 				headerCooldown = {order = 3, type = "header", name = L["Cooldown Options"]},
+				updateCD = {
+					type = "toggle",
+					name = L["Update Cooldown"],
+					desc = L["Check to enable updating the cooldown time."],
+					order = 4,
+					disabled = function() return Proculas.editingproc == nil end,
+				},
+				cooldownTime = {
+					type = "range",
+					name = L["Cooldown Time"],
+					desc = L["The proc cooldown time in seconds."],
+					order = 5,
+					min = 0,
+					max = 600,
+					step = 1,
+					get = function() 
+						if Proculas.editingproc ~= nil then
+							return Proculas.optpc.tracked[Proculas.editingproc.spellID].cooldown 
+						end
+					end,
+					set = function(info,value)
+						if(value == 0) then
+							Proculas.optpc.tracked[Proculas.editingproc.spellID].zeroCD = true
+							Proculas.optpc.tracked[Proculas.editingproc.spellID].cooldown = 0
+						else
+							Proculas.optpc.tracked[Proculas.editingproc.spellID].zeroCD = nil
+							Proculas.optpc.tracked[Proculas.editingproc.spellID].cooldown = value
+						end
+					end,
+					disabled = function() return Proculas.editingproc == nil end,
+				},
+				headerMessage = {order = 10, type = "header", name = L["Announce Message"]},
+				customMessage = {
+					type="toggle",
+					name = L["Custom Message"],
+					desc = L["Use a custom message for the proc."],
+					order = 11,
+					disabled = function() return Proculas.editingproc == nil end,
+				},
+				message = {
+					type = "input",
+					name = L["Message"],
+					desc = L["Enter a custom message."],
+					order = 12,
+					disabled = function() return Proculas.editingproc == nil end,
+				},
+				color = {
+					type = "color",
+					order = 13,
+					name = L["Color"],
+					desc = L["Proc message color"],
+					hasAlpha = true,
+					get = function(info)
+						if not Proculas.editingproc then return nil end
+						local c
+						if not Proculas.editingproc.color then c = Proculas.opt.announce.color else c = Proculas.editingproc.color end
+						return c.r, c.g, c.b
+					end,
+					set = function(info, r, g, b, a)
+						if not Proculas.editingproc then return nil end
+						if not Proculas.editingproc.color then Proculas.editingproc.color = {r = 1,g = 1,b = 1} end
+						local c = Proculas.editingproc.color
+						c.r, c.g, c.b = r, g, b
+					end,
+					disabled = function() return Proculas.editingproc == nil end,
+				},
 			},
 		}, -- Procs
 	}
