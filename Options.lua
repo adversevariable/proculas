@@ -178,6 +178,49 @@ local options = {
 				Sink = Proculas:GetSinkAce3OptionsDataTable(),
 			}
 		}, -- Announce
+		procs = {
+			order = 3,
+			type = "group",
+			name = L["Proc Options"],
+			desc = L["Proc Options"],
+			get = function(info) return Proculas.editingproc ~= nil and Proculas.editingproc[ info[#info] ] end,
+			set = function(info, value)
+				if not Proculas.editingproc then return nil end
+				Proculas.editingproc[ info[#info] ] = value
+			end,
+			args = {
+				proc = {
+					type = "select",
+					width = "full",
+					order = 1,
+					name = L["Select Proc"],
+					desc = L["Select a proc to see it's options."],
+					values = function()
+						local procs = {}
+						for index, proc in pairs(Proculas.optpc.tracked) do
+							procs[proc.spellID] = proc.name
+						end
+						return procs
+					end,
+					get = function() 
+						if Proculas.editingproc ~= nil then
+							 return Proculas.editingproc.spellID
+						end
+					end,
+					set = function(info,value) 
+						Proculas.editingproc = Proculas.optpc.tracked[value]
+					end
+				},
+				enabled = {
+					type = "toggle",
+					name = L["Enabled"],
+					desc = L["Enable tracking of this proc."],
+					order = 2,
+					disabled = function() return Proculas.editingproc == nil end,
+				},
+				headerCooldown = {order = 3, type = "header", name = L["Cooldown Options"]},
+			},
+		}, -- Procs
 	}
 }
 options.args.announce.args.Sink.order = 5
@@ -199,6 +242,7 @@ function Options:SetupOptions()
 	-- The ordering here matters, it determines the order in the Blizzard Interface Options
 	self.optionsFrames.Proculas = ACD3:AddToBlizOptions("Proculas", nil, nil, "general")
 	self.optionsFrames.Announce = ACD3:AddToBlizOptions("Proculas", L["Announce Options"], "Proculas", "announce")
+	self.optionsFrames.Procs = ACD3:AddToBlizOptions("Proculas", L["Proc Options"], "Proculas", "procs")
 	self:RegisterModuleOptions("Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(Proculas.db), L["Profiles"])
 end
 

@@ -8,7 +8,7 @@
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local L = LibStub("AceLocale-3.0"):GetLocale("Proculas", false)
 local tooltip
-local LibQTip = LibStub:GetLibrary( "LibQTip-1.0" )
+local LibQTip = LibStub:GetLibrary( "LibQTip-1.0")
 ProculasLDB = Proculas:NewModule("ProculasLDB")
 
 if not Proculas.enabled then
@@ -47,64 +47,63 @@ function dataobj:OnEnter()
 	tooltip:AddLine(" ")
 	
 	--Proculas:procStatsTooltip(tooltip)
-	tooltip:AddLine(Yellow(L["PROC"].." "),Yellow(" "..L["TOTAL_PROCS"].." "),Yellow(" "..L["PPM"].." "),Yellow(" "..L["COOLDOWN"].." "),Yellow(" "..L["UPTIME"]))
-	for a,proc in pairs(Proculas.procstats) do
-		if Proculas.procopts[proc.spellID] then
-			local procOpt = Proculas.procopts[proc.spellID]
-			if not procOpt.enabled then
-				break
-			end
+	tooltip:AddLine(Yellow(L["Proc"].." "),Yellow(" "..L["Total"].." "),Yellow(" "..L["PPM"].." "),Yellow(" "..L["CD"].." "),Yellow(" "..L["Uptime"]))
+	for a,proc in pairs(Proculas.optpc.tracked) do
+		if not proc.enabled then
+			break
 		end
 		if(proc.name) then
-			-- Proc Count
 			if proc.count > 0 then
-				procCount = proc.count
-			else
-				procCount = L["NA"]
+				-- Proc Count
+				if proc.count > 0 then
+					procCount = proc.count
+				else
+					procCount = L["NA"]
+				end
+				
+				-- Proc Cooldown
+				if proc.cooldown > 0 then
+					procCooldown = proc.cooldown
+				elseif proc.cooldown == 0 and proc.count > 1 then
+					procCooldown = 0
+				else
+					procCooldown = L["NA"]
+				end
+				
+				-- Procs Per Minute
+				local ppm = 0
+				if proc.count > 0 then
+					ppm = proc.count / (proc.time / 60)
+				end
+				if ppm > 0 then
+					procPPM = string.format("%.2f", ppm)
+				else
+					procPPM = L["NA"]
+				end
+				
+				-- Proc Uptime
+				if not proc.uptime then
+					proc.uptime = 0
+				end
+				local uptime = 0
+				if proc.uptime > 0 and proc.time > 0 then
+					uptime = proc.uptime / proc.time * 100
+				end
+				if(uptime > 0) then
+					procUptime = string.format("%.2f", uptime).."%";
+				else
+					procUptime = L["NA"]
+				end
+				tooltip:AddLine(Green(proc.name), procCount, procPPM, procCooldown, procUptime)
 			end
-			
-			-- Proc Cooldown
-			if proc.cooldown > 0 then
-				procCooldown = proc.cooldown
-			elseif proc.cooldown == 0 and proc.count > 1 then
-				procCooldown = 0
-			else
-				procCooldown = L["NA"]
-			end
-			
-			-- Procs Per Minute
-			local ppm = 0
-			if proc.count > 0 then
-				ppm = proc.count / (proc.totaltime / 60)
-			end
-			if ppm > 0 then
-				procPPM = string.format("%.2f", ppm)
-			else
-				procPPM = L["NA"]
-			end
-			
-			-- Proc Uptime
-			if not proc.uptime then
-				proc.uptime = 0
-			end
-			local uptime = 0
-			if proc.uptime > 0 and proc.totaltime > 0 then
-				uptime = proc.uptime / proc.totaltime * 100
-			end
-			if(uptime > 0) then
-				procUptime = string.format("%.2f", uptime).."%";
-			else
-				procUptime = L["NA"]
-			end
-			tooltip:AddLine(Green(proc.name), procCount, procPPM, procCooldown, procUptime)
 		end
 	end
 	tooltip:AddLine(" ")
 	
 	local lineNumA = tooltip:AddLine("a")
-	tooltip:SetCell(lineNumA, 1, Green(L["RC2OPENOPTIONS"]), "LEFT", 4)
+	tooltip:SetCell(lineNumA, 1, Green(L["Right click to open config"]), "LEFT", 4)
 	local lineNumB = tooltip:AddLine("b")
-	tooltip:SetCell(lineNumB, 1, Green(L["ALTCLICK2RESET"]), "LEFT", 4)
+	tooltip:SetCell(lineNumB, 1, Green(L["Alt click to reset stats"]), "LEFT", 4)
 	
 	tooltip:SmartAnchorTo(self)
 	tooltip:Show()

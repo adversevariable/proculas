@@ -1,5 +1,5 @@
 ## Interface: 30300
-## Title: Proculas
+## Title: Proculas |cff8080ff2.0|r
 ## Notes: Tracks Proc stats such as PPM and Uptime.
 ## Author: Clorell [US Hellscream]
 ## Version: @project-version@
@@ -16,5 +16,6 @@ locale\enUS.lua
 
 Core.lua
 Options.lua
+ProculasLDB.lua
 
 modules.xml

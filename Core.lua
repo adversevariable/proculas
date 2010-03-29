@@ -57,6 +57,9 @@ Proculas.procs = {
 
 -------------------------------------------------------
 -- Things that need to be defined locally
+local playerClass = select(2,UnitClass("player"))
+local playerName = UnitName("player")
+local combatTickTimer
 
 -------------------------------------------------------
 -- Startup stuff
@@ -91,8 +94,8 @@ end
 
 -- OnEnable
 function Proculas:OnEnable()
-	--self:RegisterEvent("PLAYER_REGEN_DISABLED")
-	--self:RegisterEvent("PLAYER_REGEN_ENABLED")
+	self:RegisterEvent("PLAYER_REGEN_DISABLED")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	self:scanForProcs();
@@ -117,14 +120,24 @@ end
 
 -- Increments the proc uptime count
 function Proculas:combatTick()
-	for key,proc in pairs(self.tracked) do
+	for key,proc in pairs(self.optpc.tracked) do
 		-- Update Seconds for Update Calculation
 		if proc.started > 0 then
 			proc.uptime = proc.uptime + 1
 		end
 		-- Update Total Time
-		proc.totaltime = proc.totaltime + 1
+		proc.time = proc.time + 1
 	end
+end
+
+-- Does the required things for when the player enters combat
+function Proculas:PLAYER_REGEN_DISABLED()
+	combatTickTimer = self:ScheduleRepeatingTimer("combatTick", 1)
+end
+
+-- Does the required things for when the player leaves combat
+function Proculas:PLAYER_REGEN_ENABLED()
+	self:CancelTimer(combatTickTimer)
 end
 
 -------------------------------------------------------
@@ -150,7 +163,7 @@ function Proculas:scanItem(slotID)
 			if tonumber(enchantId) ~= 0 then
 				local enchID = tonumber(enchantId)
 				if(self.procs.ENCHANTS[enchID]) then
-					if not self.tracked[enchID] then
+					if not self.optpc.tracked[enchID] then
 						local procInfo = self.Procs.Enchants[enchID]
 						local name, rank, icon, cost, isFunnel, powerType, castTime, minRange, maxRange = GetSpellInfo(procInfo.spellID)
 						procInfo.icon = icon
@@ -164,7 +177,7 @@ function Proculas:scanItem(slotID)
 			itemId = tonumber(itemId)
 			if self.procs.ITEMS[itemId] then
 				for _,spell in pairs(self.procs.ITEMS[itemId].spellIds) do
-					if not self.tracked[spell] then
+					if not self.optpc.tracked[spell] then
 						local procInfo = self.procs.ITEMS[itemId];
 						procInfo.name = itemName
 						procInfo.icon = itemTexture
@@ -180,6 +193,8 @@ end
 
 -- Scans for Procs
 function Proculas:scanForProcs()
+	self:Print("Scanning for procs");
+	
 	-- Find Procs
 	self:scanItem(GetInventorySlotInfo("MainHandSlot"))
 	self:scanItem(GetInventorySlotInfo("SecondaryHandSlot"))
@@ -216,13 +231,18 @@ end
 
 -- Adds a proc to the tracked procs
 function Proculas:addProc(procInfo)
-	procInfo.count = 0
-	procInfo.started = 0;
-	procInfo.uptime = 0;
-	procInfo.cooldown = 0;
-	procInfo.lastProc = 0;
-	procInfo.updateCD = true
-	self.tracked[procInfo.spellID] = procInfo
+	if not self.optpc.tracked[procInfo.spellID] then
+		procInfo.count = 0
+		procInfo.started = 0;
+		procInfo.uptime = 0;
+		procInfo.cooldown = 0;
+		procInfo.lastProc = 0;
+		procInfo.updateCD = true
+		procInfo.enabled = true
+		procInfo.time = 0
+		self.optpc.tracked[procInfo.spellID] = procInfo
+		self:Print("Added proc: "..procInfo.name);
+	end
 end
 
 -- Resets the proc stats
@@ -312,7 +332,7 @@ local function checkType(types,type)
 end
 
 function Proculas:postProc(spellID)
-	local procInfo = self.tracked[spellID]
+	local procInfo = self.optpc.tracked[spellID]
 	
 	-- Sink
 	local pourBefore = ""
@@ -348,7 +368,7 @@ function Proculas:processProc(spellID,isAura)
 		self.active[spellID] = spellID
 	end
 	
-	local procInfo = self.tracked[spellID]
+	local procInfo = self.optpc.tracked[spellID]
 	
 	-- Post Proc
 	self:postProc(spellID)
@@ -367,7 +387,7 @@ function Proculas:processProc(spellID,isAura)
 	end
 
 	-- Update Calculation
-	if(isaura) then
+	if(isAura) then
 		if procInfo.started == 0 then
 			procInfo.started = time()
 			self.active[spellID] = spellID
@@ -402,9 +422,9 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	end
 	
 	-- Check if its a proc
-	if(self.tracked[spellId]) then
+	if(self.optpc.tracked[spellId]) then
 		-- Fetch procInfo
-		local procInfo = self.tracked[spellId]
+		local procInfo = self.optpc.tracked[spellId]
 		
 		-- Check if this is the right combat event for the proc
 		if(checkType(procInfo.types,type)) then
@@ -422,12 +442,12 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	end
 	
 	-- Aura Removed/Expired
-	if(self.tracked[spellId]) then
-		local procInfo = self.tracked[spellId]
+	if(self.optpc.tracked[spellId]) then
+		local procInfo = self.optpc.tracked[spellId]
 		if(type == "SPELL_AURA_REMOVED") then
 			if(name == playerName) then
 				for index,spellID in pairs(self.active) do
-					local proc = self.tracked[spellID]
+					local proc = self.optpc.tracked[spellID]
 					proc.started = 0
 					self.active[index] = nil
 				end
@@ -442,7 +462,7 @@ end
 -- About Proculas
 function Proculas:AboutProculas()
 	self:Print("Version "..VERSION)
-	self:Print("Created by Clorell/Mcstabin/Graverage of US Hellscream")
+	self:Print("Created by Clorell/Mcstabin/Shift of US Hellscream")
 end
 
 -------------------------------------------------------
