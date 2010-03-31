@@ -1,5 +1,5 @@
 ## Interface: 30300
-## Title: Proculas |cff8080ff2.0|r
+## Title: Proculas |cff69ccf02.0|r
 ## Notes: Tracks Proc stats such as PPM and Uptime.
 ## Author: Clorell [US Hellscream]
 ## Version: @project-version@

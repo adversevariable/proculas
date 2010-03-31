@@ -193,7 +193,7 @@ end
 
 -- Scans for Procs
 function Proculas:scanForProcs()
-	self:Print("Scanning for procs");
+	--self:Print("Scanning for procs");
 	
 	-- Find Procs
 	self:scanItem(GetInventorySlotInfo("MainHandSlot"))
@@ -400,6 +400,23 @@ function Proculas:processProc(spellID,isAura)
 			bar = self.procCooldowns:NewTimerBar(procInfo.spellID, procInfo.name, procInfo.cooldown, procInfo.cooldown, procInfo.icon, self.opt.cooldowns.flashTimer)
 		end
 		bar:SetTimer(procInfo.cooldown, procInfo.cooldown)
+	end
+	
+	-- Sound
+	--[[if procOpt.soundfile ~= nil then
+		PlaySoundFile(LSM:Fetch("sound", procOpt.soundfile)) 
+	elseif self.opt.Sound.SoundFile then
+		PlaySoundFile(LSM:Fetch("sound", self.opt.Sound.SoundFile))
+	end]]
+
+	-- Flash Screen
+	if procInfo.flash or (self.opt.effects.flash and (procInfo.flash ~= false or procInfo.flash == nil)) then
+		self:Flash()
+	end
+
+	-- Shake Screen
+	if procInfo.shake or (self.opt.effects.shake and (procInfo.shake ~= false or procInfo.shake == nil)) then
+		self:Shake()
 	end
 	
 	-- Count
