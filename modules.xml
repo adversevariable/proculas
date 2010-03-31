@@ -1,5 +1,6 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
   <Script file="modules\PaladinProcs.lua"/>
   <Script file="modules\DruidProcs.lua"/>
+  <Script file="modules\RogueProcs.lua"/>
   <Script file="modules\TrinketProcs.lua"/>
 </Ui>
