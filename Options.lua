@@ -179,6 +179,144 @@ local options = {
 				Sink = Proculas:GetSinkAce3OptionsDataTable(),
 			}
 		}, -- Announce
+		cooldowns = {
+			type = "group",
+			name = L["Cooldown Bars"],
+			order = 1,
+			get = function(info) return Proculas.opt.cooldowns[ info[#info] ] end,
+			set = function(info, value)
+				Proculas.opt.cooldowns[ info[#info] ] = value
+				Proculas:updateCooldownsFrame()
+			end,
+			args = {
+				--[[procCooldownsDesc = {
+					order = 1,
+					type = "description",
+					name = L["Cooldown Settigns"],
+				},]]
+				barOptions = {
+					type = "group",
+					guiInline = true,
+					name = L["Bar Options"],
+					args = {
+						cooldowns = {
+							order = 2,
+							name = L["Show Cooldowns"],
+							desc = L["Show Cooldowns"],
+							type = "toggle",
+						},
+						show = {
+							order = 2,
+							name = L["Enable"],
+							desc = L["Enable showing cooldown bars."],
+							type = "toggle",
+						},
+						movableFrame = {
+							type = "toggle",
+							name = L["Movable"],
+							desc = L["Show the anchor to allow moving."],
+							order = 3,
+						},
+						barTexture = {
+							type = "select", dialogControl = 'LSM30_Statusbar',
+							name = L["Texture"],
+							desc = L["Bar texture."],
+							order = 4,
+							values = AceGUIWidgetLSMlists.statusbar,
+						}, 
+						barFont = {
+							type = "select", dialogControl = 'LSM30_Font',
+							name = L["Font"],
+							desc = L["Font used for the bars."],
+							order = 5,
+							values = AceGUIWidgetLSMlists.font,
+						},                        		
+						barFontSize = {
+							type = "range",
+							name = L["Font Size"],
+							desc = L["Size of the font."],
+							min = 4, max = 30, step = 1,
+							order = 7,
+						},
+						barWidth = {
+							type = "range",
+							name = L["Bar Width"],
+							desc = L["Width of the bar."],
+							min = 40,
+							max = 300,
+							step = 1,
+							order = 7,
+						},
+						barHeight = {
+							type = "range",
+							name = L["Bar Height"],
+							desc = L["Height of the bar."],
+							min = 8,
+							max = 60,
+							step = 1,
+							order = 8,
+						},
+						--divider = {order = 10, type = "header", name = ""},
+						colorStart = {
+							type = "color",
+							order = 9,
+							name = L["Start Color"],
+							desc = L["Color the bar starts as."],
+							hasAlpha = true,
+							get = function(info)
+								local c = Proculas.opt.cooldowns.colorStart
+								return c.r, c.g, c.b, c.a
+							end,
+							set = function(info, r, g, b, a)
+								local c = Proculas.opt.cooldowns.colorStart
+								c.r, c.g, c.b, c.a = r, g, b, a
+							end,
+						},
+						colorEnd = {
+							type = "color",
+							order = 10,
+							name = L["End Color"],
+							desc = L["Color the bar fades to."],
+							hasAlpha = true,
+							get = function(info)
+								local c = Proculas.opt.cooldowns.colorEnd
+								return c.r, c.g, c.b, c.a
+							end,
+							set = function(info, r, g, b, a)
+								local c = Proculas.opt.cooldowns.colorEnd
+								c.r, c.g, c.b, c.a = r, g, b, a
+							end,
+						},
+						reverseGrowth = {
+							type = "toggle",
+							name = L["Grow Upwards"],
+							desc = L["Grow bars upwards."],
+							order = 11,
+						},
+						flashTimer = {
+							type = "toggle",
+							name = L["Flash Bar"],
+							desc = L["Check to flash the cooldown bar when its close to ending."],
+							order = 12,
+							get = function(info)
+								if Proculas.opt.cooldowns.flashTimer == 4 then 
+									return true
+								else
+									return false
+								end
+							end,
+							set = function(info,value)
+								if value then 
+									Proculas.opt.cooldowns.flashTimer = 4
+								else
+									Proculas.opt.cooldowns.flashTimer = 0
+								end
+							end,
+						},
+					}
+				}
+			}
+		}, -- Cooldown Frame/Bars options
 		procs = {
 			order = 3,
 			type = "group",
@@ -547,6 +685,7 @@ function Options:SetupOptions()
 	-- The ordering here matters, it determines the order in the Blizzard Interface Options
 	self.optionsFrames.Proculas = ACD3:AddToBlizOptions("Proculas", nil, nil, "general")
 	self.optionsFrames.Announce = ACD3:AddToBlizOptions("Proculas", L["Announce Options"], "Proculas", "announce")
+	self.optionsFrames.CooldownBars = ACD3:AddToBlizOptions("Proculas", L["Cooldown Bars"], "Proculas", "cooldowns")
 	self.optionsFrames.Procs = ACD3:AddToBlizOptions("Proculas", L["Proc Options"], "Proculas", "procs")
 	self.optionsFrames.AddProc = ACD3:AddToBlizOptions("Proculas", L["Add Proc"], "Proculas", "addProc")
 	self:RegisterModuleOptions("Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(Proculas.db), L["Profiles"])
