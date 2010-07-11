@@ -122,9 +122,9 @@ end
 
 -- Increments the proc uptime count
 function Proculas:combatTick()
-	for key,proc in pairs(self.optpc.tracked) do
+	for key,proc in pairs(self.optpc.procs) do
 		-- Update seconds for uptime calculation
-		if self.active[proc.spellID] then
+		if self.active[proc.name..proc.rank] then
 			proc.uptime = proc.uptime+1
 		end
 		-- Update Total Time
@@ -233,7 +233,7 @@ end
 
 -- Adds a proc to the tracked procs
 function Proculas:addProc(procInfo)
-	if not self.optpc.tracked[procInfo.spellId] then
+	if not self.optpc.procs[procInfo.name..procInfo.rank] then
 		local procStats = {}
 		procStats.name = procInfo.name
 		procStats.rank = procInfo.rank
@@ -246,20 +246,61 @@ function Proculas:addProc(procInfo)
 		procStats.enabled = true
 		procStats.time = 0
 		procStats.icon = procInfo.icon
+		if procInfo.heroic then
+			procStats.heroic = true
+		end
 		self.optpc.procs[procInfo.name..procInfo.rank] = procStats
 		
-		local procData = {}
-		procData.name = procInfo.name
-		procData.rank = procInfo.rank
-		procData.types = procInfo.types
-		procData.onSelfOnly = procInfo.onSelfOnly
-		if procInfo.itemID then
-			procData.itemID = procInfo.itemID
-		end
-		self.optpc.tracked[tonumber(procInfo.spellId)] = procData
+		procInfo.spellId = string.explode(",",procInfo.spellId)
 		
+		--if type(procInfo.spellId) == "table" then
+			for _,spellId in pairs(procInfo.spellId) do
+				local procData = {}
+				procData.name = procInfo.name
+				procData.rank = procInfo.rank
+				procData.types = procInfo.types
+				procData.onSelfOnly = procInfo.onSelfOnly
+				if procInfo.itemID then
+					procData.itemID = procInfo.itemID
+				end
+				if procInfo.heroic then
+					procData.heroic = true
+				end
+				self.optpc.tracked[tonumber(spellId)] = procData
+			end
+		--[[else
+			local procData = {}
+			procData.name = procInfo.name
+			procData.rank = procInfo.rank
+			procData.types = procInfo.types
+			procData.onSelfOnly = procInfo.onSelfOnly
+			if procInfo.itemID then
+				procData.itemID = procInfo.itemID
+			end
+			if procInfo.heroic then
+				procData.heroic = true
+			end
+			self.optpc.tracked[tonumber(procInfo.spellId)] = procData
+		end]]
 		self:Print("Added proc: "..procInfo.name);
 	end
+end
+
+function string.trim(str)
+	-- Function by Colandus
+	return (string.gsub(str, "^%s*(.-)%s*$", "%1"))
+end
+ 
+function string.explode(sep, str) 
+	-- Function by Colandus
+	local pos, t = 1, {}
+	--if #sep == 0 or #str == 0 then return end
+	for s, e in function() return string.find(str, sep, pos) end do
+		table.insert(t, string.trim(string.sub(str, pos, s-1)))
+		pos = e+1
+	end
+	table.insert(t, string.trim(string.sub(str, pos)))
+	return t
 end
 
 -- Adds the proc from the options panel.
@@ -267,19 +308,25 @@ function Proculas:addNewProc()
 	-- blarg...
 	local procInfo = {types={}}
 	
-	if self.newproc.item then
+	if not self.newproc.name or not self.newproc.spellId then
+		return
+	end
+	if not #self.newproc.types > 0 then
 		return
 	end
 	
 	if self.newproc.item then
+		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(self.newproc.itemId) 
+		procInfo.icon = itemTexture
 		procInfo.rank = ''
+		procInfo.item = true
 	else
-		local name, rank, icon = GetSpellInfo(self.newproc.spellIds)
+		local name, rank, icon = GetSpellInfo(self.newproc.spellId)
 		procInfo.icon = icon
 		procInfo.rank = rank
-		procInfo.spellId = self.newproc.spellIds
 	end
-	
+	procInfo.spellId = self.newproc.spellId
+		
 	--procInfo.types = self.newproc.types
 	procInfo.name = self.newproc.name
 	procInfo.onSelfOnly = self.newproc.selfOnly
@@ -291,16 +338,6 @@ function Proculas:addNewProc()
 	end
 	
 	self:addProc(procInfo)
-	
-	--[[for a,b in pairs(procInfo) do
-		if type(b) == "table" then
-			for c,d in pairs(b) do
-				print(c..":"..d)
-			end
-		else
-			print(a..": "..b)
-		end
-	end]]
 	
 	-- Reset newproc array
 	Proculas.newproc = {types={}}
@@ -426,12 +463,12 @@ function Proculas:postProc(spellID)
 end
 
 function Proculas:processProc(spellID,isAura)
-	if isAura then
-		self.active[spellID] = spellID
-	end
-	
 	local procInfo = self.optpc.tracked[spellID]
 	local procData = self.optpc.procs[procInfo.name..procInfo.rank]
+	
+	if isAura then
+		self.active[procInfo.name..procInfo.rank] = spellID
+	end
 	
 	-- Post Proc
 	self:postProc(spellID)
@@ -500,10 +537,6 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		isaura = true
 	end
 	
-	if spellName == "Stealth" then
-		print(spellId)
-	end
-	
 	-- Check if its a proc
 	if self.optpc.tracked[spellId] then
 		-- Fetch procInfo
@@ -532,7 +565,7 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 			local procData = self.optpc.procs[procInfo.name..procInfo.rank]
 			for index,spID in pairs(self.active) do
 				procData.started = 0
-				self.active[spellId] = nil
+				self.active[procInfo.name..procInfo.rank] = nil
 			end
 		end
 	end

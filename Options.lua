@@ -314,7 +314,7 @@ local options = {
 					desc = L["Name of the proc."],
 					order = 1,
 				},
-				spellIds = {
+				spellId = {
 					type = "input",
 					name = L["Spell IDs"],
 					desc = L["IDs of the spells to look for, for example: 2415,2451,5241"],
