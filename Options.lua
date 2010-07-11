@@ -287,6 +287,127 @@ local options = {
 				},
 			},
 		}, -- Procs
+		addProc = {
+			order = 3,
+			type = "group",
+			name = L["Add Proc"],
+			desc = L["Add Proc"],
+			get = function(info)
+				if not Proculas.newproc then return nil end
+				return Proculas.newproc[ info[#info] ]
+			end,
+			set = function(info, value)
+				if not Proculas.newproc then return nil end
+				Proculas.newproc[ info[#info] ] = value
+			end,
+			args = {
+				addProcHeader = {
+					order = 1,
+					type = "header",
+					name = L["Add Proc"],
+				},
+				name = {
+					type = "input",
+					name = L["Name"],
+					desc = L["Name of the proc."],
+					order = 1,
+				},
+				spellIds = {
+					type = "input",
+					name = L["Spell IDs"],
+					desc = L["IDs of the spells to look for, for example: 2415,2451,5241"],
+					order = 2,
+				},
+				eventHeader = {
+					order = 10,
+					type = "header",
+					name = L["Combat Log Events"],
+				},
+				SPELL_AURA_APPLIED = {
+					type = "toggle",
+					name = "SPELL_AURA_APPLIED",
+					desc = "SPELL_AURA_APPLIED",
+					order = 11,
+				},
+				SPELL_AURA_REFRESH = {
+					type = "toggle",
+					name = "SPELL_AURA_REFRESH",
+					desc = "SPELL_AURA_REFRESH",
+					order = 12,
+				},
+				SPELL_EXTRA_ATTACKS = {
+					type = "toggle",
+					name = "SPELL_EXTRA_ATTACKS",
+					desc = "SPELL_EXTRA_ATTACKS",
+					order = 13,
+				},
+				SPELL_PERIODIC_DAMAGE = {
+					type = "toggle",
+					name = "SPELL_PERIODIC_DAMAGE",
+					desc = "SPELL_PERIODIC_DAMAGE",
+					order = 14,
+				},
+				SPELL_ENERGIZE = {
+					type = "toggle",
+					name = "SPELL_ENERGIZE",
+					desc = "SPELL_ENERGIZE",
+					order = 15,
+				},
+				SPELL_DAMAGE = {
+					type = "toggle",
+					name = "SPELL_DAMAGE",
+					desc = "SPELL_DAMAGE",
+					order = 16,
+				},
+				SPELL_SUMMON = {
+					type = "toggle",
+					name = "SPELL_SUMMON",
+					desc = "SPELL_SUMMON",
+					order = 17,
+				},
+				SPELL_LEECH = {
+					type = "toggle",
+					name = "SPELL_LEECH",
+					desc = "SPELL_LEECH",
+					order = 18,
+				},
+				SPELL_DRAIN = {
+					type = "toggle",
+					name = "SPELL_DRAIN",
+					desc = "SPELL_DRAIN",
+					order = 19,
+				},
+				SPELL_DISPEL = {
+					type = "toggle",
+					name = "SPELL_DISPEL",
+					desc = "SPELL_DISPEL",
+					order = 20,
+				},
+				SPELL_HEAL = {
+					type = "toggle",
+					name = "SPELL_HEAL",
+					desc = "SPELL_HEAL",
+					order = 21,
+				},
+				SWING_EXTRA_ATTACKS = {
+					type = "toggle",
+					name = "SWING_EXTRA_ATTACKS",
+					desc = "SWING_EXTRA_ATTACKS",
+					order = 22,
+				},
+				optionsHeader = {
+					order = 40,
+					type = "header",
+					name = L["Options"],
+				},
+				selfOnly = {
+					type = "toggle",
+					name = L['Self Only'],
+					desc = L['Only track this proc on myself.'],
+					order = 41,
+				},
+			},
+		}, -- Add Proc
 	}
 }
 options.args.announce.args.Sink.order = 5
@@ -309,6 +430,7 @@ function Options:SetupOptions()
 	self.optionsFrames.Proculas = ACD3:AddToBlizOptions("Proculas", nil, nil, "general")
 	self.optionsFrames.Announce = ACD3:AddToBlizOptions("Proculas", L["Announce Options"], "Proculas", "announce")
 	self.optionsFrames.Procs = ACD3:AddToBlizOptions("Proculas", L["Proc Options"], "Proculas", "procs")
+	self.optionsFrames.AddProc = ACD3:AddToBlizOptions("Proculas", L["Add Proc"], "Proculas", "addProc")
 	self:RegisterModuleOptions("Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(Proculas.db), L["Profiles"])
 end
 
