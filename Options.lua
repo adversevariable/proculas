@@ -107,7 +107,33 @@ local options = {
 						Proculas.opt.effects[ info[#info] ] = value
 					end,
 				},
-				shake = {
+				soundDesc = {
+					order = 4,
+					type = "header",
+					name = L['Sound Settings'],
+				},
+				playSound = {
+					order = 5,
+					name = L["Play Sound"],
+					desc = L["Play Sound"],
+					type = "toggle",
+					get = function(info) return Proculas.opt.sound[ info[#info] ] end,
+					set = function(info, value)
+						Proculas.opt.sound[ info[#info] ] = value
+					end,
+				},
+				soundFile = {
+					type = "select", dialogControl = 'LSM30_Sound',
+					order = 6,
+					name = L["Sound to play"],
+					desc = L["Sound to play"],
+					values = AceGUIWidgetLSMlists.sound,
+					get = function(info) return Proculas.opt.sound[ info[#info] ] end,
+					set = function(info, value)
+						Proculas.opt.sound[ info[#info] ] = value
+					end,
+				},
+				--[[shake = {
 					order = 4,
 					name = L["Shake Screen"],
 					desc = L["Toggle Screen Shaking."],
@@ -116,14 +142,14 @@ local options = {
 					set = function(info, value)
 						Proculas.opt.effects[ info[#info] ] = value
 					end,
-				},
+				},]]
 				miscellaneous = {
-					order = 5,
+					order = 8,
 					type = "header",
 					name = L["Miscellaneous"],
 				},
 				minimapButtonHide = {
-					order = 6,
+					order = 9,
 					name = L["Hide Minimap Button"],
 					desc = L["Toggle the visiblity of the Minimap Button."],
 					type = "toggle",
@@ -423,6 +449,40 @@ local options = {
 						local c = Proculas.editingproc.color
 						c.r, c.g, c.b = r, g, b
 					end,
+					disabled = function() return Proculas.editingproc == nil end,
+				},
+				headerAnnounce = {order=20, type="header", name=L["Proc Announcements"]},
+				postproc = {
+					type="toggle",
+					name = L["Announce Proc"],
+					desc = L["Announce Proc"],
+					order = 22,
+					tristate = true,
+					disabled = function() return Proculas.editingproc == nil end,
+				},
+				flash = {
+					type = "toggle",
+					name = L["Flash Screen"],
+					desc = L["Flash the screen."],
+					order = 23,
+					tristate = true,
+					disabled = function() return Proculas.editingproc == nil end,
+				},                            
+				--[[shake = {
+					type = "toggle",
+					name = L["Shake Screen"],
+					desc = L["Shake the screen."],
+					order = 24,
+					tristate = true,
+					disabled = function() return Proculas.editingproc == nil end,
+				},]]
+				headerSound = {order=30, type="header", name=L["Sound Settings"]},
+				soundFile = {
+					type = "select", dialogControl = 'LSM30_Sound',
+					order = 31,
+					name = L["Sound to play"],
+					desc = L["Sound to play"],
+					values = AceGUIWidgetLSMlists.sound,
 					disabled = function() return Proculas.editingproc == nil end,
 				},
 			},

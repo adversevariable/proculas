@@ -311,9 +311,9 @@ function Proculas:addNewProc()
 	if not self.newproc.name or not self.newproc.spellId then
 		return
 	end
-	if not #self.newproc.types > 0 then
+	--[[if not #self.newproc.types > 0 then
 		return
-	end
+	end]]
 	
 	if self.newproc.item then
 		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(self.newproc.itemId) 
@@ -453,13 +453,6 @@ function Proculas:postProc(spellID)
 		end
 		self:Pour(pourBefore..procMessage:format(procData.name),color.r,color.g,color.b);
 	end
-	
-	-- Sound
-	if procData.soundFile ~= nil then
-		PlaySoundFile(LSM:Fetch("sound", procData.soundFile)) 
-	elseif self.opt.sound.soundFile then
-		PlaySoundFile(LSM:Fetch("sound", self.opt.sound.soundFile))
-	end
 end
 
 function Proculas:processProc(spellID,isAura)
@@ -503,11 +496,11 @@ function Proculas:processProc(spellID,isAura)
 	end
 	
 	-- Sound
-	--[[if procOpt.soundfile ~= nil then
-		PlaySoundFile(LSM:Fetch("sound", procOpt.soundfile)) 
-	elseif self.opt.Sound.SoundFile then
-		PlaySoundFile(LSM:Fetch("sound", self.opt.Sound.SoundFile))
-	end]]
+	if procData.soundFile ~= nil then
+		PlaySoundFile(LSM:Fetch("sound", procData.soundFile)) 
+	elseif self.opt.sound.soundFile and self.opt.sound.playSound then
+		PlaySoundFile(LSM:Fetch("sound", self.opt.sound.soundFile))
+	end
 
 	-- Flash Screen
 	if procData.flash or (self.opt.effects.flash and (procData.flash ~= false or procData.flash == nil)) then
@@ -516,7 +509,7 @@ function Proculas:processProc(spellID,isAura)
 
 	-- Shake Screen
 	if procData.shake or (self.opt.effects.shake and (procData.shake ~= false or procData.shake == nil)) then
-		self:Shake()
+		--self:Shake()
 	end
 	
 	-- Count
