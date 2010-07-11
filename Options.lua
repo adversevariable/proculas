@@ -62,7 +62,8 @@ Proculas.defaults = defaults
 
 local defaultsPC = {
 	profile = {
-		tracked = {}
+		tracked = {},
+		procs = {}
 	}
 }
 Proculas.defaultsPC = defaultsPC
@@ -197,18 +198,19 @@ local options = {
 					desc = L["Select a proc to see it's options."],
 					values = function()
 						local procs = {}
-						for index, proc in pairs(Proculas.optpc.tracked) do
-							procs[proc.spellID] = proc.name
+						for index, proc in pairs(Proculas.optpc.procs) do
+							procs[proc.name..proc.rank] = proc.name
 						end
 						return procs
 					end,
 					get = function() 
 						if Proculas.editingproc ~= nil then
-							 return Proculas.editingproc.spellID
+							 return Proculas.editingprocIdent
 						end
 					end,
 					set = function(info,value) 
-						Proculas.editingproc = Proculas.optpc.tracked[value]
+						Proculas.editingproc = Proculas.optpc.procs[value]
+						Proculas.editingprocIdent = Proculas.optpc.procs[value].name..Proculas.optpc.procs[value].rank
 					end
 				},
 				enabled = {
@@ -236,16 +238,16 @@ local options = {
 					step = 1,
 					get = function() 
 						if Proculas.editingproc ~= nil then
-							return Proculas.optpc.tracked[Proculas.editingproc.spellID].cooldown 
+							return Proculas.optpc.procs[Proculas.editingprocIdent].cooldown 
 						end
 					end,
 					set = function(info,value)
 						if(value == 0) then
-							Proculas.optpc.tracked[Proculas.editingproc.spellID].zeroCD = true
-							Proculas.optpc.tracked[Proculas.editingproc.spellID].cooldown = 0
+							Proculas.optpc.procs[Proculas.editingprocIdent].zeroCD = true
+							Proculas.optpc.procs[Proculas.editingprocIdent].cooldown = 0
 						else
-							Proculas.optpc.tracked[Proculas.editingproc.spellID].zeroCD = nil
-							Proculas.optpc.tracked[Proculas.editingproc.spellID].cooldown = value
+							Proculas.optpc.procs[Proculas.editingprocIdent].zeroCD = nil
+							Proculas.optpc.procs[Proculas.editingprocIdent].cooldown = value
 						end
 					end,
 					disabled = function() return Proculas.editingproc == nil end,
@@ -318,82 +320,190 @@ local options = {
 					desc = L["IDs of the spells to look for, for example: 2415,2451,5241"],
 					order = 2,
 				},
+				item = {
+					type = "toggle",
+					name = L["Item"],
+					desc = L["Check if this proc is from an item."],
+					order = 3,
+				},
+				itemId = {
+					type = "input",
+					name = L["Item ID"],
+					desc = L["Enter the ID of the item."],
+					order = 4,
+				},
 				eventHeader = {
 					order = 10,
 					type = "header",
-					name = L["Combat Log Events"],
+					name = L["Combat Log Events."],
 				},
 				SPELL_AURA_APPLIED = {
 					type = "toggle",
 					name = "SPELL_AURA_APPLIED",
 					desc = "SPELL_AURA_APPLIED",
 					order = 11,
+					get = function(info)
+						if not Proculas.newproc then return nil end
+						return Proculas.newproc.types[ info[#info] ]
+					end,
+					set = function(info, value)
+						if not Proculas.newproc then return nil end
+						Proculas.newproc.types[ info[#info] ] = value
+					end,
 				},
 				SPELL_AURA_REFRESH = {
 					type = "toggle",
 					name = "SPELL_AURA_REFRESH",
 					desc = "SPELL_AURA_REFRESH",
 					order = 12,
+					get = function(info)
+						if not Proculas.newproc then return nil end
+						return Proculas.newproc.types[ info[#info] ]
+					end,
+					set = function(info, value)
+						if not Proculas.newproc then return nil end
+						Proculas.newproc.types[ info[#info] ] = value
+					end,
 				},
 				SPELL_EXTRA_ATTACKS = {
 					type = "toggle",
 					name = "SPELL_EXTRA_ATTACKS",
 					desc = "SPELL_EXTRA_ATTACKS",
 					order = 13,
+					get = function(info)
+						if not Proculas.newproc then return nil end
+						return Proculas.newproc.types[ info[#info] ]
+					end,
+					set = function(info, value)
+						if not Proculas.newproc then return nil end
+						Proculas.newproc.types[ info[#info] ] = value
+					end,
 				},
 				SPELL_PERIODIC_DAMAGE = {
 					type = "toggle",
 					name = "SPELL_PERIODIC_DAMAGE",
 					desc = "SPELL_PERIODIC_DAMAGE",
 					order = 14,
+					get = function(info)
+						if not Proculas.newproc then return nil end
+						return Proculas.newproc.types[ info[#info] ]
+					end,
+					set = function(info, value)
+						if not Proculas.newproc then return nil end
+						Proculas.newproc.types[ info[#info] ] = value
+					end,
 				},
 				SPELL_ENERGIZE = {
 					type = "toggle",
 					name = "SPELL_ENERGIZE",
 					desc = "SPELL_ENERGIZE",
 					order = 15,
+					get = function(info)
+						if not Proculas.newproc then return nil end
+						return Proculas.newproc.types[ info[#info] ]
+					end,
+					set = function(info, value)
+						if not Proculas.newproc then return nil end
+						Proculas.newproc.types[ info[#info] ] = value
+					end,
 				},
 				SPELL_DAMAGE = {
 					type = "toggle",
 					name = "SPELL_DAMAGE",
 					desc = "SPELL_DAMAGE",
 					order = 16,
+					get = function(info)
+						if not Proculas.newproc then return nil end
+						return Proculas.newproc.types[ info[#info] ]
+					end,
+					set = function(info, value)
+						if not Proculas.newproc then return nil end
+						Proculas.newproc.types[ info[#info] ] = value
+					end,
 				},
 				SPELL_SUMMON = {
 					type = "toggle",
 					name = "SPELL_SUMMON",
 					desc = "SPELL_SUMMON",
 					order = 17,
+					get = function(info)
+						if not Proculas.newproc then return nil end
+						return Proculas.newproc.types[ info[#info] ]
+					end,
+					set = function(info, value)
+						if not Proculas.newproc then return nil end
+						Proculas.newproc.types[ info[#info] ] = value
+					end,
 				},
 				SPELL_LEECH = {
 					type = "toggle",
 					name = "SPELL_LEECH",
 					desc = "SPELL_LEECH",
 					order = 18,
+					get = function(info)
+						if not Proculas.newproc then return nil end
+						return Proculas.newproc.types[ info[#info] ]
+					end,
+					set = function(info, value)
+						if not Proculas.newproc then return nil end
+						Proculas.newproc.types[ info[#info] ] = value
+					end,
 				},
 				SPELL_DRAIN = {
 					type = "toggle",
 					name = "SPELL_DRAIN",
 					desc = "SPELL_DRAIN",
 					order = 19,
+					get = function(info)
+						if not Proculas.newproc then return nil end
+						return Proculas.newproc.types[ info[#info] ]
+					end,
+					set = function(info, value)
+						if not Proculas.newproc then return nil end
+						Proculas.newproc.types[ info[#info] ] = value
+					end,
 				},
 				SPELL_DISPEL = {
 					type = "toggle",
 					name = "SPELL_DISPEL",
 					desc = "SPELL_DISPEL",
 					order = 20,
+					get = function(info)
+						if not Proculas.newproc then return nil end
+						return Proculas.newproc.types[ info[#info] ]
+					end,
+					set = function(info, value)
+						if not Proculas.newproc then return nil end
+						Proculas.newproc.types[ info[#info] ] = value
+					end,
 				},
 				SPELL_HEAL = {
 					type = "toggle",
 					name = "SPELL_HEAL",
 					desc = "SPELL_HEAL",
 					order = 21,
+					get = function(info)
+						if not Proculas.newproc then return nil end
+						return Proculas.newproc.types[ info[#info] ]
+					end,
+					set = function(info, value)
+						if not Proculas.newproc then return nil end
+						Proculas.newproc.types[ info[#info] ] = value
+					end,
 				},
 				SWING_EXTRA_ATTACKS = {
 					type = "toggle",
 					name = "SWING_EXTRA_ATTACKS",
 					desc = "SWING_EXTRA_ATTACKS",
 					order = 22,
+					get = function(info)
+						if not Proculas.newproc then return nil end
+						return Proculas.newproc.types[ info[#info] ]
+					end,
+					set = function(info, value)
+						if not Proculas.newproc then return nil end
+						Proculas.newproc.types[ info[#info] ] = value
+					end,
 				},
 				optionsHeader = {
 					order = 40,
@@ -405,6 +515,14 @@ local options = {
 					name = L['Self Only'],
 					desc = L['Only track this proc on myself.'],
 					order = 41,
+				},
+				addIt = {
+					type = "execute",
+					name = L["Add Proc"],
+					desc = L["Add to tracked procs."],
+					func = function()
+						Proculas:addNewProc()
+					end,
 				},
 			},
 		}, -- Add Proc

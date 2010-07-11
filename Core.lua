@@ -90,6 +90,8 @@ function Proculas:OnInitialize()
 	for name,info in pairs(self.opt.customSounds) do
 		LSM:Register("sound", info.name, info.location)
 	end
+	
+	self.newproc = {types={}}
 end
 
 -- OnEnable
@@ -232,17 +234,75 @@ end
 -- Adds a proc to the tracked procs
 function Proculas:addProc(procInfo)
 	if not self.optpc.tracked[procInfo.spellID] then
-		procInfo.count = 0
-		procInfo.started = 0
-		procInfo.uptime = 0
-		procInfo.cooldown = 0
-		procInfo.lastProc = 0
-		procInfo.updateCD = true
-		procInfo.enabled = true
-		procInfo.time = 0
-		self.optpc.tracked[procInfo.spellID] = procInfo
+		local procStats = {}
+		procStats.name = procInfo.name
+		procStats.rank = procInfo.rank
+		procStats.count = 0
+		procStats.started = 0
+		procStats.uptime = 0
+		procStats.cooldown = 0
+		procStats.lastProc = 0
+		procStats.updateCD = true
+		procStats.enabled = true
+		procStats.time = 0
+		self.optpc.procs[procInfo.name..procInfo.rank] = procStats
+		
+		local procData = {}
+		procData.name = procInfo.name
+		procData.rank = procInfo.rank
+		procData.types = procInfo.types
+		procData.onSelfOnly = procInfo.onSelfOnly
+		if procInfo.itemID then
+			procData.itemID = procInfo.itemID
+		end
+		self.optpc.tracked[procInfo.spellId] = procData
+		
 		self:Print("Added proc: "..procInfo.name);
 	end
+end
+
+-- Adds the proc from the options panel.
+function Proculas:addNewProc()
+	-- blarg...
+	local procInfo = {types={}}
+	
+	if self.newproc.item then
+		return
+	end
+	
+	if self.newproc.item then
+		procInfo.rank = ''
+	else
+		local name, rank, icon = GetSpellInfo(self.newproc.spellIds)
+		procInfo.icon = icon
+		procInfo.rank = rank
+		procInfo.spellId = self.newproc.spellIds
+	end
+	
+	--procInfo.types = self.newproc.types
+	procInfo.name = self.newproc.name
+	procInfo.onSelfOnly = self.newproc.selfOnly
+	
+	for t,v in pairs(self.newproc.types) do
+		if t then
+			table.insert(procInfo.types, t)
+		end
+	end
+	
+	self:addProc(procInfo)
+	
+	--[[for a,b in pairs(procInfo) do
+		if type(b) == "table" then
+			for c,d in pairs(b) do
+				print(c..":"..d)
+			end
+		else
+			print(a..": "..b)
+		end
+	end]]
+	
+	-- Reset newproc array
+	Proculas.newproc = {types={}}
 end
 
 -- Resets the proc stats
@@ -475,7 +535,6 @@ end
 -- About Proculas
 function Proculas:AboutProculas()
 	self:Print("Version "..VERSION)
-	self:Print("Created by Clorell/Mcstabin/Shift of US Hellscream")
 end
 
 -------------------------------------------------------

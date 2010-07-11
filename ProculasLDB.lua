@@ -48,7 +48,7 @@ function dataobj:OnEnter()
 	
 	--Proculas:procStatsTooltip(tooltip)
 	tooltip:AddLine(Yellow(L["Proc"].." "),Yellow(" "..L["Total"].." "),Yellow(" "..L["PPM"].." "),Yellow(" "..L["CD"].." "),Yellow(" "..L["Uptime"]))
-	for a,proc in pairs(Proculas.optpc.tracked) do
+	for a,proc in pairs(Proculas.optpc.procs) do
 		if not proc.enabled then
 			break
 		end
@@ -94,7 +94,14 @@ function dataobj:OnEnter()
 				else
 					procUptime = L["NA"]
 				end
-				tooltip:AddLine(Green(proc.name), procCount, procPPM, procCooldown, procUptime)
+				
+				-- Proc Name
+				if not proc.rank == "" then
+					procName = proc.name.." "..proc.rank
+				else
+					procName = proc.name
+				end
+				tooltip:AddLine(Green(procName), procCount, procPPM, procCooldown, procUptime)
 			end
 		end
 	end
