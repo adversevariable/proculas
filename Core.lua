@@ -220,7 +220,7 @@ function Proculas:scanForProcs()
 	for index,procs in pairs(self.procs) do
 		if(index == playerClass) then
 			for spellID,procInfo in pairs(procs) do
-				procInfo.spellID = spellID
+				procInfo.spellId = spellID
 				local name, rank, icon = GetSpellInfo(spellID)
 				procInfo.icon = icon
 				procInfo.name = name
@@ -233,7 +233,7 @@ end
 
 -- Adds a proc to the tracked procs
 function Proculas:addProc(procInfo)
-	if not self.optpc.tracked[procInfo.spellID] then
+	if not self.optpc.tracked[procInfo.spellId] then
 		local procStats = {}
 		procStats.name = procInfo.name
 		procStats.rank = procInfo.rank
@@ -245,6 +245,7 @@ function Proculas:addProc(procInfo)
 		procStats.updateCD = true
 		procStats.enabled = true
 		procStats.time = 0
+		procStats.icon = procInfo.icon
 		self.optpc.procs[procInfo.name..procInfo.rank] = procStats
 		
 		local procData = {}
@@ -255,7 +256,7 @@ function Proculas:addProc(procInfo)
 		if procInfo.itemID then
 			procData.itemID = procInfo.itemID
 		end
-		self.optpc.tracked[procInfo.spellId] = procData
+		self.optpc.tracked[tonumber(procInfo.spellId)] = procData
 		
 		self:Print("Added proc: "..procInfo.name);
 	end
@@ -284,7 +285,7 @@ function Proculas:addNewProc()
 	procInfo.onSelfOnly = self.newproc.selfOnly
 	
 	for t,v in pairs(self.newproc.types) do
-		if t then
+		if v then
 			table.insert(procInfo.types, t)
 		end
 	end
@@ -393,31 +394,32 @@ end
 
 function Proculas:postProc(spellID)
 	local procInfo = self.optpc.tracked[spellID]
+	local procData = self.optpc.procs[procInfo.name..procInfo.rank]
 	
 	-- Sink
 	local pourBefore = ""
 	if(self.opt.sinkOptions.sink20OutputSink == "Channel") then
 		pourBefore = "[Proculas]: "
 	end
-	if procInfo.postProc or (self.opt.postProcs and (procInfo.postProc ~= false or procInfo.postProc == nil)) then
+	if procData.postProc or (self.opt.postProcs and (procData.postProc ~= false or procData.postProc == nil)) then
 		local procMessage
-		if procInfo.customMessage then
-			procMessage = procInfo.message
+		if procData.customMessage then
+			procMessage = procData.message
 		else
 			procMessage = self.opt.announce.message
 		end
 		local color = nil
-		if not procInfo.color then
+		if not procData.color then
 			color = self.opt.announce.color
 		else
-			color = procInfo.color
+			color = procData.color
 		end
-		self:Pour(pourBefore..procMessage:format(procInfo.name),color.r,color.g,color.b);
+		self:Pour(pourBefore..procMessage:format(procData.name),color.r,color.g,color.b);
 	end
 	
 	-- Sound
-	if procInfo.soundFile ~= nil then
-		PlaySoundFile(LSM:Fetch("sound", procInfo.soundFile)) 
+	if procData.soundFile ~= nil then
+		PlaySoundFile(LSM:Fetch("sound", procData.soundFile)) 
 	elseif self.opt.sound.soundFile then
 		PlaySoundFile(LSM:Fetch("sound", self.opt.sound.soundFile))
 	end
@@ -429,37 +431,38 @@ function Proculas:processProc(spellID,isAura)
 	end
 	
 	local procInfo = self.optpc.tracked[spellID]
+	local procData = self.optpc.procs[procInfo.name..procInfo.rank]
 	
 	-- Post Proc
 	self:postProc(spellID)
 	
 	-- Check Cooldown
-	if procInfo.updateCD and procInfo.lastProc > 0 and ((procInfo.cooldown == 0) or (time() - procInfo.lastProc < procInfo.cooldown)) then
-		local proccd = time() - procInfo.lastProc
+	if procData.updateCD and procData.lastProc > 0 and ((procData.cooldown == 0) or (time() - procData.lastProc < procData.cooldown)) then
+		local proccd = time() - procData.lastProc
 		if(proccd == 0) then
-			procInfo.zeroCD = true
+			procData.zeroCD = true
 		end
-		if(procInfo.zeroCD) then
-			procInfo.cooldown = 0
+		if(procData.zeroCD) then
+			procData.cooldown = 0
 		else
-			procInfo.cooldown = time() - procInfo.lastProc
+			procData.cooldown = time() - procData.lastProc
 		end
 	end
 
 	-- Uptime Calculation
-	if isAura and procInfo.started == 0 then
-			procInfo.started = time()
+	if isAura and procData.started == 0 then
+			procData.started = time()
 			self.active[spellID] = spellID
 		
 	end
 	
 	-- Reset cooldown bar
-	if (procInfo.cooldown or (self.opt.cooldowns.cooldowns and (procInfo.cooldown ~= false or procInfo.cooldown == nil))) and procInfo.cooldown > 0 then
-		local bar = self.procCooldowns:GetBar(procInfo.name)
+	if (procData.cooldown or (self.opt.cooldowns.cooldowns and (procData.cooldown ~= false or procData.cooldown == nil))) and procData.cooldown > 0 then
+		local bar = self.procCooldowns:GetBar(procData.name..procData.rank)
 		if not bar then
-			bar = self.procCooldowns:NewTimerBar(procInfo.spellID, procInfo.name, procInfo.cooldown, procInfo.cooldown, procInfo.icon, self.opt.cooldowns.flashTimer)
+			bar = self.procCooldowns:NewTimerBar(procData.name..procData.rank, procData.name, procData.cooldown, procData.cooldown, procData.icon, self.opt.cooldowns.flashTimer)
 		end
-		bar:SetTimer(procInfo.cooldown, procInfo.cooldown)
+		bar:SetTimer(procData.cooldown, procData.cooldown)
 	end
 	
 	-- Sound
@@ -470,18 +473,18 @@ function Proculas:processProc(spellID,isAura)
 	end]]
 
 	-- Flash Screen
-	if procInfo.flash or (self.opt.effects.flash and (procInfo.flash ~= false or procInfo.flash == nil)) then
+	if procData.flash or (self.opt.effects.flash and (procData.flash ~= false or procData.flash == nil)) then
 		self:Flash()
 	end
 
 	-- Shake Screen
-	if procInfo.shake or (self.opt.effects.shake and (procInfo.shake ~= false or procInfo.shake == nil)) then
+	if procData.shake or (self.opt.effects.shake and (procData.shake ~= false or procData.shake == nil)) then
 		self:Shake()
 	end
 	
 	-- Count
-	procInfo.count = procInfo.count+1
-	procInfo.lastProc = time()
+	procData.count = procData.count+1
+	procData.lastProc = time()
 end
 
 -------------------------------------------------------
@@ -497,10 +500,15 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		isaura = true
 	end
 	
+	if spellName == "Stealth" then
+		print(spellId)
+	end
+	
 	-- Check if its a proc
-	if(self.optpc.tracked[spellId]) then
+	if self.optpc.tracked[spellId] then
 		-- Fetch procInfo
 		local procInfo = self.optpc.tracked[spellId]
+		local procData = self.optpc.procs[procInfo.name..procInfo.rank]
 		
 		-- Check if this is the right combat event for the proc
 		if(checkType(procInfo.types,type)) then
@@ -521,8 +529,9 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	if self.optpc.tracked[spellId] and type == "SPELL_AURA_REMOVED" then
 		if name == playerName and self.active[spellId] then
 			local procInfo = self.optpc.tracked[spellId]
+			local procData = self.optpc.procs[procInfo.name..procInfo.rank]
 			for index,spID in pairs(self.active) do
-				procInfo.started = 0
+				procData.started = 0
 				self.active[spellId] = nil
 			end
 		end
