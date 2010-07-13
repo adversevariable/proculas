@@ -170,6 +170,7 @@ function Proculas:scanItem(slotID)
 						local name, rank, icon, cost, isFunnel, powerType, castTime, minRange, maxRange = GetSpellInfo(procInfo.spellID)
 						procInfo.icon = icon
 						procInfo.name = name
+						procInfo.rank = rank
 						self:addProc(procInfo)
 					end
 				end
@@ -233,6 +234,9 @@ end
 
 -- Adds a proc to the tracked procs
 function Proculas:addProc(procInfo)
+	if not procInfo.rank then
+		procInfo.rank = ""
+	end
 	if not self.optpc.procs[procInfo.name..procInfo.rank] then
 		local procStats = {}
 		procStats.name = procInfo.name
@@ -253,22 +257,7 @@ function Proculas:addProc(procInfo)
 		
 		procInfo.spellId = string.explode(",",procInfo.spellId)
 		
-		--if type(procInfo.spellId) == "table" then
-			for _,spellId in pairs(procInfo.spellId) do
-				local procData = {}
-				procData.name = procInfo.name
-				procData.rank = procInfo.rank
-				procData.types = procInfo.types
-				procData.onSelfOnly = procInfo.onSelfOnly
-				if procInfo.itemID then
-					procData.itemID = procInfo.itemID
-				end
-				if procInfo.heroic then
-					procData.heroic = true
-				end
-				self.optpc.tracked[tonumber(spellId)] = procData
-			end
-		--[[else
+		for _,spellId in pairs(procInfo.spellId) do
 			local procData = {}
 			procData.name = procInfo.name
 			procData.rank = procInfo.rank
@@ -280,8 +269,8 @@ function Proculas:addProc(procInfo)
 			if procInfo.heroic then
 				procData.heroic = true
 			end
-			self.optpc.tracked[tonumber(procInfo.spellId)] = procData
-		end]]
+			self.optpc.tracked[tonumber(spellId)] = procData
+		end
 		self:Print("Added proc: "..procInfo.name);
 	end
 end

@@ -452,7 +452,7 @@ local options = {
 					disabled = function() return Proculas.editingproc == nil end,
 				},
 				headerAnnounce = {order=20, type="header", name=L["Proc Announcements"]},
-				postproc = {
+				postProc = {
 					type="toggle",
 					name = L["Announce Proc"],
 					desc = L["Announce Proc"],
