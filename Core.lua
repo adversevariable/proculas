@@ -233,7 +233,7 @@ function Proculas:scanForProcs()
 end
 
 -- Adds a proc to the tracked procs
-function Proculas:addProc(procInfo)
+function Proculas:addProc(procInfo,explode)
 	if not procInfo.rank then
 		procInfo.rank = ""
 	end
@@ -255,7 +255,9 @@ function Proculas:addProc(procInfo)
 		end
 		self.optpc.procs[procInfo.name..procInfo.rank] = procStats
 		
-		procInfo.spellId = string.explode(",",procInfo.spellId)
+		if explode then
+			procInfo.spellId = string.explode(",",procInfo.spellId)
+		end
 		
 		for _,spellId in pairs(procInfo.spellId) do
 			local procData = {}
@@ -314,6 +316,7 @@ function Proculas:addNewProc()
 		procInfo.icon = icon
 		procInfo.rank = rank
 	end
+	
 	procInfo.spellId = self.newproc.spellId
 		
 	--procInfo.types = self.newproc.types
