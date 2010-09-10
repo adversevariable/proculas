@@ -724,6 +724,85 @@ local options = {
 				},
 			},
 		}, -- Add Proc
+		sound = {
+			order = 3,
+			type = "group",
+			name = L["Sound"],
+			desc = L["Sound"],
+			get = function(info) return Proculas.opt.sound[ info[#info] ] end,
+			set = function(info, value)
+				Proculas.opt.sound[ info[#info] ] = value
+			end,
+			args = {
+				intro = {
+					order = 1,
+					type = "description",
+					name = L["Proculas Sound Options"],
+				},
+				--[[soundFile = {
+					type = "select", dialogControl = 'LSM30_Sound',
+					order = 2,
+					name = L["Sound to play"],
+					desc = L["Sound to play"],
+					values = AceGUIWidgetLSMlists.sound,
+				},]]
+				newCustomSoundHeader = {order = 3, type = "header", name = L["New Custom Sound"]},
+				csName = {
+					type = "input",
+					name = L["Name"],
+					desc = L["Name"],
+					order = 4,
+				},
+				csFile = {
+					type = "input",
+					name = L["Location"],
+					desc = L["Custom sound location."],
+					order = 5,
+				},
+				csAdd = {
+					type = "execute",
+					name = L["Add"],
+					desc = L["Add Sound"],
+					func = function()
+						Proculas:addCustomSound(Proculas.opt.sound.csName,Proculas.opt.sound.csFile);
+						Proculas.opt.sound.csName = ""
+						Proculas.opt.sound.csFile = ""
+					end,
+					order = 6,
+				},
+				deleteCustomSoundHeader = {order = 7, type = "header", name = L["Delete Custom Sounds"]},
+				customsound = {
+					type = "select",
+					order = 8,
+					name = L["Select Sound"],
+					desc = L["Select custom sound."],
+					values = function()
+						local sounds = {}
+						for name,location in pairs(Proculas.opt.customSounds) do
+							sounds[name] = name
+						end
+						return sounds
+					end,
+					get = function() 
+						if Proculas.editingsound ~= nil then
+							 return Proculas.editingsound
+						end
+					end,
+					set = function(info,value) 
+						Proculas.editingsound = value
+					end
+				},
+				csDelete = {
+					type = "execute",
+					name = L["Delete"],
+					desc = L["Delete sound"],
+					func = function()
+						Proculas:deleteCustomSound(Proculas.editingsound);
+					end,
+					order = 9,
+				},
+			},
+		}, -- Sound
 	}
 }
 options.args.announce.args.Sink.order = 5
@@ -748,6 +827,7 @@ function Options:SetupOptions()
 	self.optionsFrames.CooldownBars = ACD3:AddToBlizOptions("Proculas", L["Cooldown Bars"], "Proculas", "cooldowns")
 	self.optionsFrames.Procs = ACD3:AddToBlizOptions("Proculas", L["Proc Options"], "Proculas", "procs")
 	self.optionsFrames.AddProc = ACD3:AddToBlizOptions("Proculas", L["Add Proc"], "Proculas", "addProc")
+	self.optionsFrames.Sounds = ACD3:AddToBlizOptions("Proculas", L["Sound"], "Proculas", "sound")
 	self:RegisterModuleOptions("Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(Proculas.db), L["Profiles"])
 end
 
