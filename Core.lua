@@ -166,7 +166,7 @@ function Proculas:scanItem(slotID)
 				local enchID = tonumber(enchantId)
 				if(self.procs.ENCHANTS[enchID]) then
 					if not self.optpc.tracked[enchID] then
-						local procInfo = self.Procs.Enchants[enchID]
+						local procInfo = self.procs.ENCHANTS[enchID]
 						local name, rank, icon, cost, isFunnel, powerType, castTime, minRange, maxRange = GetSpellInfo(procInfo.spellID)
 						procInfo.icon = icon
 						procInfo.name = name
@@ -184,8 +184,8 @@ function Proculas:scanItem(slotID)
 						local procInfo = self.procs.ITEMS[itemId];
 						procInfo.name = itemName
 						procInfo.icon = itemTexture
-						procInfo.itemID = itemId
-						procInfo.spellID = spell
+						procInfo.itemId = itemId
+						procInfo.spellId = spell
 						self:addProc(procInfo)
 					end
 				end
@@ -233,7 +233,8 @@ function Proculas:scanForProcs()
 end
 
 -- Adds a proc to the tracked procs
-function Proculas:addProc(procInfo,explode)
+function Proculas:addProc(procInfo)
+	self:debug("Adding proc: "..procInfo.name.." | "..procInfo.spellId)
 	if not procInfo.rank then
 		procInfo.rank = ""
 	end
@@ -255,9 +256,11 @@ function Proculas:addProc(procInfo,explode)
 		end
 		self.optpc.procs[procInfo.name..procInfo.rank] = procStats
 		
-		if explode then
+		--if explode then
+		--if not type(procInfo.spellId) == "table" then
+		--	self:debug("addProc(): spellId not table, exploding")
 			procInfo.spellId = string.explode(",",procInfo.spellId)
-		end
+		--end
 		
 		for _,spellId in pairs(procInfo.spellId) do
 			local procData = {}
@@ -318,7 +321,7 @@ function Proculas:addNewProc()
 	end
 	
 	procInfo.spellId = self.newproc.spellId
-		
+	
 	--procInfo.types = self.newproc.types
 	procInfo.name = self.newproc.name
 	procInfo.onSelfOnly = self.newproc.selfOnly
