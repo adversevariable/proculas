@@ -452,6 +452,8 @@ function Proculas:processProc(spellID,isAura)
 		self.active[procInfo.name..procInfo.rank] = spellID
 	end
 	
+	self:debug("Processing proc: "..procInfo.name)
+	
 	-- Post Proc
 	self:postProc(spellID)
 	
@@ -519,22 +521,38 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		isaura = true
 	end
 	
+	-- Ghetto proc searcher
+	-- Prints stuff from the combat log to the chat
+	-- with the spell ID, spell Name and event.
+	-- But only the things that have the players name on it.
+	--[[if name == playerName or name2 == playerName then
+		if not spellName then spellName = '' end
+		if not spellId then spellId = '' end
+		print(spellId.." :: "..spellName.." / "..type)
+	end]]
+	
 	-- Check if its a proc
 	if self.optpc.tracked[spellId] then
 		-- Fetch procInfo
 		local procInfo = self.optpc.tracked[spellId]
 		local procData = self.optpc.procs[procInfo.name..procInfo.rank]
 		
+		self:debug("Tracked proc found: "..procInfo.name)
+		
 		-- Check if this is the right combat event for the proc
 		if(checkType(procInfo.types,type)) then
+			self:debug("Tracked proc matched combat log event: "..procInfo.name.." / "..type)
 			-- Check if its from the right player
 			if(name == playerName) then
 				if(procInfo.onSelfOnly and name2 == playerName) then
+					self:debug("Sending tracked proc to processProc(): "..procInfo.name)
 					self:processProc(spellId,isaura)
-				elseif procInfo.onSelfOnly == 0 then
+				elseif not procInfo.onSelfOnly then
+					self:debug("Sending tracked proc to processProc(): "..procInfo.name)
 					self:processProc(spellId,isaura)
 				end
 			elseif(name == nil and name2 == playerName) then
+				self:debug("Sending tracked proc to processProc(): "..procInfo.name)
 				self:processProc(spellId,isaura)
 			end
 		end
@@ -559,6 +577,13 @@ end
 -- About Proculas
 function Proculas:AboutProculas()
 	self:Print("Version "..VERSION)
+end
+
+-- Debug function
+function Proculas:debug(msg)
+--@debug@
+	print("[Proculas]:[debug]: "..msg)
+--@end-debug@
 end
 
 -------------------------------------------------------
