@@ -334,7 +334,14 @@ end
 
 -- Resets the proc stats
 function Proculas:resetProcStats()
-	-- some kind of loop here to reset tracked proc stats.
+	for _,proc in pairs(self.optpc.procs) do
+		proc.started = 0
+		proc.time = 0
+		proc.lastProc = 0
+		proc.uptime = 0
+		proc.cooldown = 0
+		proc.count = 0
+	end
 end
 
 -------------------------------------------------------
