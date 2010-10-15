@@ -179,16 +179,16 @@ function Proculas:scanItem(slotID)
 			-- Items
 			itemId = tonumber(itemId)
 			if self.procs.ITEMS[itemId] then
-				for _,spell in pairs(self.procs.ITEMS[itemId].spellIds) do
+				--for _,spell in pairs(self.procs.ITEMS[itemId].spellIds) do
 					if not self.optpc.tracked[spell] then
 						local procInfo = self.procs.ITEMS[itemId];
 						procInfo.name = itemName
 						procInfo.icon = itemTexture
 						procInfo.itemId = itemId
-						procInfo.spellId = spell
+						--procInfo.spellId = spell
 						self:addProc(procInfo)
 					end
-				end
+				--end
 			end
 		end
 	end
@@ -234,7 +234,7 @@ end
 
 -- Adds a proc to the tracked procs
 function Proculas:addProc(procInfo)
-	self:debug("Adding proc: "..procInfo.name.." | "..procInfo.spellId)
+	self:debug("Adding proc: "..procInfo.name)--.." | "..procInfo.spellId)
 	if not procInfo.rank then
 		procInfo.rank = ""
 	end
@@ -259,10 +259,10 @@ function Proculas:addProc(procInfo)
 		--if explode then
 		--if not type(procInfo.spellId) == "table" then
 		--	self:debug("addProc(): spellId not table, exploding")
-			procInfo.spellId = string.explode(",",procInfo.spellId)
+		--	procInfo.spellId = string.explode(",",procInfo.spellId)
 		--end
 		
-		for _,spellId in pairs(procInfo.spellId) do
+		for _,spellId in pairs(procInfo.spellIds) do
 			local procData = {}
 			procData.name = procInfo.name
 			procData.rank = procInfo.rank
@@ -320,7 +320,8 @@ function Proculas:addNewProc()
 		procInfo.rank = rank
 	end
 	
-	procInfo.spellId = self.newproc.spellId
+	procInfo.spellIds = self.newproc.spellId
+	procInfo.spellIds = string.explode(",",procInfo.spellIds)
 	
 	--procInfo.types = self.newproc.types
 	procInfo.name = self.newproc.name
@@ -332,7 +333,11 @@ function Proculas:addNewProc()
 		end
 	end
 	
-	self:addProc(procInfo)
+	--for _,spellId in pairs(procInfo.spellId) do
+		--local procData = procInfo
+		--procData.spellId = spellId
+		self:addProc(procInfo)
+	--end
 	
 	-- Reset newproc array
 	Proculas.newproc = {types={}}
