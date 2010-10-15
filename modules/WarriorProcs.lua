@@ -15,7 +15,6 @@ if not Proculas.enabled then
 end
 
 local PROCS = {
-	[52437] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=1}, -- Proc #11: Sudden Death
 }
 
 function WarriorProcs:OnInitialize()

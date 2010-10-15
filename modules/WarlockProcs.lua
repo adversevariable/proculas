@@ -15,9 +15,6 @@ if not Proculas.enabled then
 end
 
 local PROCS = {
-	[47383] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=1}, -- Proc #10: Molten Core
-	[71165] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=1}, -- Proc #10: Molten Core
-	[71162] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=1}, -- Proc #10: Molten Core
 }
 
 function WarlockProcs:OnInitialize()

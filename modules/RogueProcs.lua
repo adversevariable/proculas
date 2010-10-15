@@ -15,7 +15,6 @@ if not Proculas.enabled then
 end
 
 local PROCS = {
-	[66923] = {types={"SPELL_EXTRA_ATTACKS"},onSelfOnly=0}, -- Proc #7: Hack and Slash
 }
 
 function RogueProcs:OnInitialize()

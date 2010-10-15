@@ -15,7 +15,6 @@ if not Proculas.enabled then
 end
 
 local PROCS = {
-	[16870] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #6: Omen of Clarity
 }
 
 function DruidProcs:OnInitialize()

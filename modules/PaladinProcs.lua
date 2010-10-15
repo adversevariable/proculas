@@ -15,13 +15,6 @@ if not Proculas.enabled then
 end
 
 local PROCS = {
-	[53489] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #1: The Art of War
-	[59578] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #1: The Art of War
-	[54203] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #2: Sheath of Light
-	[20050] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #3: Vengeance
-	[20052] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #3: Vengeance
-	[20053] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #3: Vengeance
-	[61840] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #4: Righteous Vengeance
 }
 
 function PaladinProcs:OnInitialize()
