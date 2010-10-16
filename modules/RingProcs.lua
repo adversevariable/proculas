@@ -13,7 +13,11 @@ if not Proculas.enabled then
 end
 
 local PROCS = {
-	[50402] = {spellIds={"72412"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #14: Ashen Band of Endless Vengeance
+	[50402] = {spellIds={"72412"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #6: Ashen Band of Endless Vengeance
+	[50404] = {spellIds={"72414"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #7: Ashen Band of Endless Courage
+	[50398] = {spellIds={"72416"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #8: Ashen Band of Endless Destruction
+	[52572] = {spellIds={"72412"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #9: Ashen Band of Endless Might
+	[50400] = {spellIds={"72418"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #10: Ashen Band of Endless Wisdom
 }
 
 function RingProcs:OnInitialize()
