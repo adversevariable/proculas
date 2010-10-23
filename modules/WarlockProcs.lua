@@ -15,6 +15,7 @@ if not Proculas.enabled then
 end
 
 local PROCS = {
+	[47283] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #11: Empowered Imp
 }
 
 function WarlockProcs:OnInitialize()
