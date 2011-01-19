@@ -111,3 +111,6 @@ L['Select custom sound.'] = true
 L['Delete Custom Sounds'] = true
 L['Delete'] = true
 L['Delete sound'] = true
+L['Delete Proc'] = true
+L['Delete proc from Proculas'] = true
+L['Actions'] = true

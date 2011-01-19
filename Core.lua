@@ -355,6 +355,18 @@ function Proculas:addNewProc()
 	Proculas.newproc = {types={}}
 end
 
+function Proculas:deleteProc(procId)
+	local procInfo = self.optpc.procs[procId]
+	
+	for index,info in pairs(self.optpc.tracked) do
+		if info.procId == procId then
+			self.optpc.tracked[index] = nil
+		end
+	end
+	
+	self.optpc.procs[procId] = nil
+end
+
 -- Resets the proc stats
 function Proculas:resetProcStats()
 	for _,proc in pairs(self.optpc.procs) do

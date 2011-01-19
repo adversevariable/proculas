@@ -363,7 +363,7 @@ local options = {
 					values = function()
 						local procs = {}
 						for index, proc in pairs(Proculas.optpc.procs) do
-							procs[proc.name..proc.rank] = proc.name
+							procs[proc.procId] = proc.name
 						end
 						return procs
 					end,
@@ -374,7 +374,8 @@ local options = {
 					end,
 					set = function(info,value) 
 						Proculas.editingproc = Proculas.optpc.procs[value]
-						Proculas.editingprocIdent = Proculas.optpc.procs[value].name..Proculas.optpc.procs[value].rank
+						--Proculas.editingprocIdent = Proculas.optpc.procs[value].name..Proculas.optpc.procs[value].rank
+						Proculas.editingprocIdent = Proculas.editingproc.procId
 					end
 				},
 				enabled = {
@@ -483,6 +484,17 @@ local options = {
 					name = L["Sound to play"],
 					desc = L["Sound to play"],
 					values = AceGUIWidgetLSMlists.sound,
+					disabled = function() return Proculas.editingproc == nil end,
+				},
+				headerSound = {order=40, type="header", name=L["Actions"]},
+				deleteIt = {
+					type = "execute",
+					name = L["Delete Proc"],
+					desc = L["Delete proc from Proculas"],
+					func = function()
+						Proculas:deleteProc(Proculas.editingproc.procId)
+					end,
+					order = 41,
 					disabled = function() return Proculas.editingproc == nil end,
 				},
 			},
