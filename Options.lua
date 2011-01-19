@@ -492,7 +492,10 @@ local options = {
 					name = L["Delete Proc"],
 					desc = L["Delete proc from Proculas"],
 					func = function()
-						Proculas:deleteProc(Proculas.editingproc.procId)
+						local delProcId = Proculas.editingproc.procId
+						Proculas.editingproc = nil
+						Proculas:deleteProc(delProcId)
+						
 					end,
 					order = 41,
 					disabled = function() return Proculas.editingproc == nil end,
