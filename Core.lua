@@ -15,8 +15,8 @@ Proculas.enabled = true
 
 -------------------------------------------------------
 -- Proculas Version
-Proculas.revision = tonumber(("@project-revision@"):match("%d+"))
-Proculas.version = GetAddOnMetadata('Proculas', 'Version').." r@project-revision@"
+Proculas.revision = tonumber(("266"):match("%d+"))
+Proculas.version = GetAddOnMetadata('Proculas', 'Version').." r266"
 if(Proculas.revision == nil) then
 	Proculas.version = "DEV"
 end
@@ -124,7 +124,7 @@ end
 function Proculas:combatTick()
 	for key,proc in pairs(self.optpc.procs) do
 		-- Update seconds for uptime calculation
-		if self.active[proc.name..proc.rank] then
+		if self.active[proc.procId] then
 			proc.uptime = proc.uptime+1
 		end
 		-- Update Total Time
@@ -251,10 +251,12 @@ function Proculas:addProc(procInfo)
 		procStats.enabled = true
 		procStats.time = 0
 		procStats.icon = procInfo.icon
+		procStats.procId = procInfo.procId
 		if procInfo.heroic then
 			procStats.heroic = true
 		end
-		self.optpc.procs[procInfo.name..procInfo.rank] = procStats
+		--self.optpc.procs[procInfo.name..procInfo.rank] = procStats
+		self.optpc.procs[procInfo.procId] = procStats
 		
 		--if explode then
 		--if not type(procInfo.spellId) == "table" then
@@ -268,6 +270,7 @@ function Proculas:addProc(procInfo)
 			procData.rank = procInfo.rank
 			procData.types = procInfo.types
 			procData.onSelfOnly = procInfo.onSelfOnly
+			procData.procId = procInfo.procId
 			if procInfo.itemID then
 				procData.itemID = procInfo.itemID
 			end
@@ -297,10 +300,19 @@ function string.explode(sep, str)
 	return t
 end
 
+local function countarray(array)
+	local count = 0
+	for a,b in pairs(array) do
+		count = count+1
+	end
+	return count
+end
+
 -- Adds the proc from the options panel.
 function Proculas:addNewProc()
 	-- blarg...
 	local procInfo = {types={}}
+	procInfo.procId = 'custom'..countarray(self.optpc.procs)
 	
 	if not self.newproc.name or not self.newproc.spellId then
 		return
@@ -438,7 +450,8 @@ end
 
 function Proculas:postProc(spellID)
 	local procInfo = self.optpc.tracked[spellID]
-	local procData = self.optpc.procs[procInfo.name..procInfo.rank]
+	--local procData = self.optpc.procs[procInfo.name..procInfo.rank]
+	local procData = self.optpc.procs[procInfo.procId]
 	
 	-- Sink
 	local pourBefore = ""
@@ -464,10 +477,11 @@ end
 
 function Proculas:processProc(spellID,isAura)
 	local procInfo = self.optpc.tracked[spellID]
-	local procData = self.optpc.procs[procInfo.name..procInfo.rank]
+	--local procData = self.optpc.procs[procInfo.name..procInfo.rank]
+	local procData = self.optpc.procs[procInfo.procId]
 	
 	if isAura then
-		self.active[procInfo.name..procInfo.rank] = spellID
+		self.active[procInfo.procId] = spellID
 	end
 	
 	self:debug("Processing proc: "..procInfo.name)
@@ -491,8 +505,7 @@ function Proculas:processProc(spellID,isAura)
 	-- Uptime Calculation
 	if isAura and procData.started == 0 then
 			procData.started = time()
-			self.active[spellID] = spellID
-		
+			self.active[procInfo.procId] = spellID
 	end
 	
 	-- Reset cooldown bar
@@ -553,7 +566,8 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	if self.optpc.tracked[spellId] then
 		-- Fetch procInfo
 		local procInfo = self.optpc.tracked[spellId]
-		local procData = self.optpc.procs[procInfo.name..procInfo.rank]
+		--local procData = self.optpc.procs[procInfo.name..procInfo.rank]
+		local procData = self.optpc.procs[procInfo.procId]
 		
 		self:debug("Tracked proc found: "..procInfo.name)
 		
@@ -578,12 +592,12 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	
 	-- Aura Removed/Expired
 	if self.optpc.tracked[spellId] and type == "SPELL_AURA_REMOVED" then
-		if name == playerName and self.active[spellId] then
-			local procInfo = self.optpc.tracked[spellId]
-			local procData = self.optpc.procs[procInfo.name..procInfo.rank]
+		local procInfo = self.optpc.tracked[spellId]
+		if name == playerName and self.active[procInfo.procId] then
+			local procData = self.optpc.procs[procInfo.procId]
 			for index,spID in pairs(self.active) do
 				procData.started = 0
-				self.active[procInfo.name..procInfo.rank] = nil
+				self.active[procInfo.procId] = nil
 			end
 		end
 	end
@@ -599,11 +613,11 @@ end
 
 -- Debug function
 function Proculas:debug(msg)
---@debug@
+--[===[@debug@
 	if self.opt.debug then
 		print("[Proculas]:[debug]: "..msg)
 	end
---@end-debug@
+--@end-debug@]===]
 end
 
 -------------------------------------------------------
