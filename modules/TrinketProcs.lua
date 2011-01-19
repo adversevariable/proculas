@@ -13,11 +13,10 @@ if not Proculas.enabled then
 end
 
 local PROCS = {
-	[47216] = {spellIds={"67631"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #1: The Black Heart
-	[50362] = {spellIds={"71484","71485","71486","71487","71491","71492"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #2: Deathbringers Will
-	[50363] = {spellIds={"71484","71485","71486","71487","71491","71492"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #3: Heroic Deathbringers Will
-	[50342] = {spellIds={"71401"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #4: Whispering Fanged Skull
-	[50343] = {spellIds={"71541"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0}, -- Proc #5: Heroic Whispering Fanged Skull
+	[59520] = {spellIds={"92108"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId=1}, -- Proc #1: Unheeded Warning
+	[59326] = {spellIds={"91007"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId=2}, -- Proc #2: Bell of Enraging Resonance
+	[59224] = {spellIds={"91816"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId=3}, -- Proc #3: Heart of Rage
+	[59441] = {spellIds={"92124"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId=4}, -- Proc #4: Prestor's Talisman of Machination
 }
 
 function TrinketProcs:OnInitialize()
