@@ -238,7 +238,7 @@ function Proculas:addProc(procInfo)
 	if not procInfo.rank then
 		procInfo.rank = ""
 	end
-	if not self.optpc.procs[procInfo.name..procInfo.rank] then
+	if not self.optpc.procs[procInfo.procId] then
 		local procStats = {}
 		procStats.name = procInfo.name
 		procStats.rank = procInfo.rank
