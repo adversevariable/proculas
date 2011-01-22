@@ -17,6 +17,10 @@ local PROCS = {
 	[59326] = {spellIds={"91007"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="2"}, -- Proc #2: Bell of Enraging Resonance
 	[59224] = {spellIds={"91816"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="3"}, -- Proc #3: Heart of Rage
 	[59441] = {spellIds={"92124"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="4"}, -- Proc #4: Prestor's Talisman of Machination
+	[59506] = {spellIds={"91821"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="11"}, -- Proc #11: Crushing Weight
+	[59473] = {spellIds={"92126"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="12"}, -- Proc #12: Essence of the Cyclone
+	[59500] = {spellIds={"91184"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="13"}, -- Proc #13: Fall of Mortality
+	[59519] = {spellIds={"91024"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="14"}, -- Proc #14: Theralion's Mirror
 }
 
 function TrinketProcs:OnInitialize()

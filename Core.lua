@@ -160,14 +160,16 @@ function Proculas:scanItem(slotID)
 		if(found) then
 			local _, itemId, enchantId, jewelId1, jewelId2, jewelId3, jewelId4, suffixId, uniqueId, fromLvl = strsplit(":", itemstring)
 			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(itemlink)
-		
+			
 			-- Enchants and Embroideries
 			if tonumber(enchantId) ~= 0 then
 				local enchID = tonumber(enchantId)
 				if(self.procs.ENCHANTS[enchID]) then
-					if not self.optpc.tracked[enchID] then
+					--if not self.optpc.tracked[enchID] then
+					local ench = self.procs.ENCHANTS[enchID]
+					if not self.optpc.procs[ench.procId] then
 						local procInfo = self.procs.ENCHANTS[enchID]
-						local name, rank, icon, cost, isFunnel, powerType, castTime, minRange, maxRange = GetSpellInfo(procInfo.spellID)
+						local name, rank, icon, cost, isFunnel, powerType, castTime, minRange, maxRange = GetSpellInfo(procInfo.spellIds[1])
 						procInfo.icon = icon
 						procInfo.name = name
 						procInfo.rank = rank
