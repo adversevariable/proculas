@@ -23,26 +23,26 @@ local PROCS = {
 	[59519] = {spellIds={"91024"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="14"}, -- Proc #14: Theralion's Mirror
 	[55266] = {spellIds={"92052"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="15"}, -- Proc #15: Grace of the Herald
 	[55787] = {spellIds={"90885"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="16"}, -- Proc #16: Witching Hourglass
-	[56295] = {spellIds={"92087"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="17"}, -- Proc #17: Grace of the Herald
-	[56320] = {spellIds={"90887"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="18"}, -- Proc #18: Witching Hourglass
+	[56295] = {spellIds={"92087"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="17",heroic=true}, -- Proc #17: Grace of the Herald
+	[56320] = {spellIds={"90887"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="18",heroic=true}, -- Proc #18: Witching Hourglass
 	[55995] = {spellIds={"91147"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="19"}, -- Proc #19: Blood of Isiset
 	[56102] = {spellIds={"92096"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="20"}, -- Proc #20: Left Eye of Rajh
 	[56100] = {spellIds={"91370"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="21"}, -- Proc #21: Right Eye of Rajh
 	[55889] = {spellIds={"90989"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="22"}, -- Proc #22: Anhuur's Hymnal
-	[56414] = {spellIds={"91149"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="23"}, -- Proc #23: Blood of Isiset
-	[56427] = {spellIds={"92094"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="24"}, -- Proc #24: Left Eye of Rajh
-	[56431] = {spellIds={"91368"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="25"}, -- Proc #25: Right Eye of Rajh
-	[56407] = {spellIds={"90992"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="26"}, -- Proc #26: Anhuur's Hymnal
+	[56414] = {spellIds={"91149"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="23",heroic=true}, -- Proc #23: Blood of Isiset
+	[56427] = {spellIds={"92094"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="24",heroic=true}, -- Proc #24: Left Eye of Rajh
+	[56431] = {spellIds={"91368"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="25",heroic=true}, -- Proc #25: Right Eye of Rajh
+	[56407] = {spellIds={"90992"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="26",heroic=true}, -- Proc #26: Anhuur's Hymnal
 	[55868] = {spellIds={"91363"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="27"}, -- Proc #27: Heart of Solace
-	[56393] = {spellIds={"91364"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="28"}, -- Proc #28: Heart of Solace
+	[56393] = {spellIds={"91364"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="28",heroic=true}, -- Proc #28: Heart of Solace
 	[55795] = {spellIds={"92069"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="29"}, -- Proc #29: Key to the Endless Chamber
 	[55819] = {spellIds={"91138"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="30"}, -- Proc #30: Tear of Blood
 	[55810] = {spellIds={"90896"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="31"}, -- Proc #31: Tendrils of Burrowing Dark
-	[56328] = {spellIds={"92091"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="32"}, -- Proc #32: Key to the Endless Chamber
-	[56351] = {spellIds={"91139"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="33"}, -- Proc #33: Tear of Blood
-	[56339] = {spellIds={"90898"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="34"}, -- Proc #34: Tendrils of Burrowing Dark
+	[56328] = {spellIds={"92091"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="32",heroic=true}, -- Proc #32: Key to the Endless Chamber
+	[56351] = {spellIds={"91139"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="33",heroic=true}, -- Proc #33: Tear of Blood
+	[56339] = {spellIds={"90898"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="34",heroic=true}, -- Proc #34: Tendrils of Burrowing Dark
 	[55237] = {spellIds={"92166"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="35"}, -- Proc #35: Porcelain Crab
-	[56280] = {spellIds={"92174"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="36"}, -- Proc #36: Porcelain Crab
+	[56280] = {spellIds={"92174"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="36",heroic=true}, -- Proc #36: Porcelain Crab
 }
 
 function TrinketProcs:OnInitialize()
