@@ -35,6 +35,14 @@ local PROCS = {
 	[56407] = {spellIds={"90992"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="26"}, -- Proc #26: Anhuur's Hymnal
 	[55868] = {spellIds={"91363"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="27"}, -- Proc #27: Heart of Solace
 	[56393] = {spellIds={"91364"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="28"}, -- Proc #28: Heart of Solace
+	[55795] = {spellIds={"92069"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="29"}, -- Proc #29: Key to the Endless Chamber
+	[55819] = {spellIds={"91138"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="30"}, -- Proc #30: Tear of Blood
+	[55810] = {spellIds={"90896"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="31"}, -- Proc #31: Tendrils of Burrowing Dark
+	[56328] = {spellIds={"92091"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="32"}, -- Proc #32: Key to the Endless Chamber
+	[56351] = {spellIds={"91139"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="33"}, -- Proc #33: Tear of Blood
+	[56339] = {spellIds={"90898"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="34"}, -- Proc #34: Tendrils of Burrowing Dark
+	[55237] = {spellIds={"92166"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="35"}, -- Proc #35: Porcelain Crab
+	[56280] = {spellIds={"92174"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="36"}, -- Proc #36: Porcelain Crab
 }
 
 function TrinketProcs:OnInitialize()
