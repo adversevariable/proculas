@@ -21,6 +21,20 @@ local PROCS = {
 	[59473] = {spellIds={"92126"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="12"}, -- Proc #12: Essence of the Cyclone
 	[59500] = {spellIds={"91184"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="13"}, -- Proc #13: Fall of Mortality
 	[59519] = {spellIds={"91024"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="14"}, -- Proc #14: Theralion's Mirror
+	[55266] = {spellIds={"92052"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="15"}, -- Proc #15: Grace of the Herald
+	[55787] = {spellIds={"90885"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="16"}, -- Proc #16: Witching Hourglass
+	[56295] = {spellIds={"92087"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="17"}, -- Proc #17: Grace of the Herald
+	[56320] = {spellIds={"90887"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="18"}, -- Proc #18: Witching Hourglass
+	[55995] = {spellIds={"91147"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="19"}, -- Proc #19: Blood of Isiset
+	[56102] = {spellIds={"92096"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="20"}, -- Proc #20: Left Eye of Rajh
+	[56100] = {spellIds={"91370"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="21"}, -- Proc #21: Right Eye of Rajh
+	[55889] = {spellIds={"90989"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="22"}, -- Proc #22: Anhuur's Hymnal
+	[56414] = {spellIds={"91149"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="23"}, -- Proc #23: Blood of Isiset
+	[56427] = {spellIds={"92094"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="24"}, -- Proc #24: Left Eye of Rajh
+	[56431] = {spellIds={"91368"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="25"}, -- Proc #25: Right Eye of Rajh
+	[56407] = {spellIds={"90992"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="26"}, -- Proc #26: Anhuur's Hymnal
+	[55868] = {spellIds={"91363"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="27"}, -- Proc #27: Heart of Solace
+	[56393] = {spellIds={"91364"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="28"}, -- Proc #28: Heart of Solace
 }
 
 function TrinketProcs:OnInitialize()
