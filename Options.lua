@@ -533,7 +533,7 @@ local options = {
 					desc = L["IDs of the spells to look for, for example: 2415,2451,5241"],
 					order = 2,
 				},
-				item = {
+				--[[item = {
 					type = "toggle",
 					name = L["Item"],
 					desc = L["Check if this proc is from an item."],
@@ -717,7 +717,7 @@ local options = {
 						if not Proculas.newproc then return nil end
 						Proculas.newproc.types[ info[#info] ] = value
 					end,
-				},
+				},]]
 				optionsHeader = {
 					order = 40,
 					type = "header",
@@ -734,6 +734,7 @@ local options = {
 					name = L["Add Proc"],
 					desc = L["Add to tracked procs."],
 					func = function()
+						Proculas.newproc.types = {SPELL_AURA_APPLIED,SPELL_AURA_REFRESHED}
 						Proculas:addNewProc()
 					end,
 				},

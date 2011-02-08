@@ -556,7 +556,73 @@ end
 -------------------------------------------------------
 -- The Proc scanner, scans the combat log for proc spells
 -- This sweet little Proc Tracker here is Copyright (c) Xocide
+local trackedEvents = {
+	"SPELL_AURA_APPLIED",
+	"SPELL_AURA_REFRESHED",
+	"SPELL_EXTRA_ATTACKS",
+	"SPELL_PERIODIC_DAMAGE",
+	"SPELL_ENERGIZE",
+	"SPELL_DAMAGE",
+	"SPELL_SUMMON",
+	"SPELL_LEECH",
+	"SPELL_DRAIN",
+	"SPELL_DISPEL",
+	-- wait a second...
+}
+local untrackedEvents = {
+	"SPELL_AURA_REMOVED",
+	-- this is better
+}
 function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
+	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
+	local spellId, spellName, spellSchool = select(9, ...)
+	
+	-- Check if the type is SPELL_AURA_APPLIED
+	local isaura = false
+	if(type == "SPELL_AURA_APPLIED") then
+		isaura = true
+	end
+	
+	if self.optpc.tracked[spellId] then
+		-- Fetch procInfo
+		local procInfo = self.optpc.tracked[spellId]
+		local procData = self.optpc.procs[procInfo.procId]
+		
+		self:debug("Tracked proc found: "..procInfo.name)
+		
+		if not untrackedEvents[event] then
+			if(name == playerName) then
+				if(procInfo.onSelfOnly and name2 == playerName) then
+					self:debug("Sending tracked proc to processProc(): "..procInfo.name)
+					self:processProc(spellId,isaura)
+				elseif not procInfo.onSelfOnly then
+					self:debug("Sending tracked proc to processProc(): "..procInfo.name)
+					self:processProc(spellId,isaura)
+				end
+			elseif(name == nil and name2 == playerName) then
+				self:debug("Sending tracked proc to processProc(): "..procInfo.name)
+				self:processProc(spellId,isaura)
+			end
+		end
+	end
+	
+	-- Aura Removed/Expired
+	if self.optpc.tracked[spellId] and type == "SPELL_AURA_REMOVED" then
+		local procInfo = self.optpc.tracked[spellId]
+		if name == playerName and self.active[procInfo.procId] then
+			local procData = self.optpc.procs[procInfo.procId]
+			for index,spID in pairs(self.active) do
+				procData.started = 0
+				self.active[procInfo.procId] = nil
+			end
+		end
+	end
+end
+
+-------------------------------------------------------
+-- The Proc scanner, scans the combat log for proc spells
+-- This sweet little Proc Tracker here is Copyright (c) Xocide
+function Proculas:old_COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
 	
