@@ -556,7 +556,7 @@ end
 -------------------------------------------------------
 -- The Proc scanner, scans the combat log for proc spells
 -- This sweet little Proc Tracker here is Copyright (c) Xocide
-local trackedEvents = {
+local trackedTypes = {
 	"SPELL_AURA_APPLIED",
 	"SPELL_AURA_REFRESHED",
 	"SPELL_EXTRA_ATTACKS",
@@ -569,7 +569,7 @@ local trackedEvents = {
 	"SPELL_DISPEL",
 	-- wait a second...
 }
-local untrackedEvents = {
+local untrackedTypes = {
 	"SPELL_AURA_REMOVED",
 	-- this is better
 }
@@ -590,7 +590,7 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		
 		self:debug("Tracked proc found: "..procInfo.name)
 		
-		if not untrackedEvents[event] then
+		if not untrackedTypes[type] then
 			if(name == playerName) then
 				if(procInfo.onSelfOnly and name2 == playerName) then
 					self:debug("Sending tracked proc to processProc(): "..procInfo.name)
