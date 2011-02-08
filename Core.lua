@@ -570,7 +570,7 @@ local trackedTypes = {
 	-- wait a second...
 }
 local untrackedTypes = {
-	"SPELL_AURA_REMOVED",
+	SPELL_AURA_REMOVED = true,
 	-- this is better
 }
 function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
@@ -590,7 +590,7 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		
 		self:debug("Tracked proc found: "..procInfo.name)
 		
-		if not untrackedTypes[type] then
+		if untrackedTypes[type] == nil then
 			if(name == playerName) then
 				if(procInfo.onSelfOnly and name2 == playerName) then
 					self:debug("Sending tracked proc to processProc(): "..procInfo.name)
