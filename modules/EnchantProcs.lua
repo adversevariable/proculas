@@ -14,6 +14,7 @@ end
 
 local PROCS = {
 	[4083] = {spellIds={"74221"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="10"}, -- Proc #10: Hurricane
+	[4084] = {spellIds={"74224"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="37"}, -- Proc #37: Heartsong
 }
 
 function EnchantProcs:OnInitialize()
