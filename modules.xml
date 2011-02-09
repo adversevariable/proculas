@@ -2,6 +2,7 @@
   <Script file="modules\PaladinProcs.lua"/>
   <Script file="modules\DruidProcs.lua"/>
   <Script file="modules\RogueProcs.lua"/>
+  <Script file="modules\MageProcs.lua"/>
   <Script file="modules\TrinketProcs.lua"/>
   <Script file="modules\EnchantProcs.lua"/>
 </Ui>

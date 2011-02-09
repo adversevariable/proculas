@@ -228,6 +228,8 @@ function Proculas:scanForProcs()
 				procInfo.icon = icon
 				procInfo.name = name
 				procInfo.rank = rank
+				procInfo.spellIds = {}
+				table.insert(procInfo.spellIds, spellID)
 				self:addProc(procInfo)
 			end
 		end
