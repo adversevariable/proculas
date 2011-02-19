@@ -7,7 +7,7 @@
 
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
 local L = LibStub("AceLocale-3.0"):GetLocale("Proculas", false)
-local tooltip
+local tooltip = nil
 local LibQTip = LibStub:GetLibrary( "LibQTip-1.0")
 ProculasLDB = Proculas:NewModule("ProculasLDB")
 
@@ -36,24 +36,55 @@ function ProculasLDB:ToggleMMButton(value)
 	end
 end
 
+local function wtfIsThis(wtfisit)
+	if type(wtfisit) == table then
+		for a,b in pairs(procId) do
+			if a then
+				print(a)
+			end
+			if b then
+				print(b)
+			end
+			print("------------------")
+		end
+	else
+		print(wtfisit)
+	end
+end
+
+local function StatsToChat(crapola, stats)
+	local procInfo = Proculas.optpc.procs[stats.procId]
+	
+	ChatFrame_OpenChat("[Proculas]: "..procInfo.name.." - "..stats.ppm.." PPM, "..stats.cd.." CD, "..stats.uptime.." UT", SELECTED_DOCK_FRAME)
+end
+
 local function Yellow(text) return "|cffffd200"..text.."|r" end
 local function Green(text) return "|cff00ff00"..text.."|r" end
 function dataobj:OnEnter()
+	if tooltip then
+		LibQTip:Release(tooltip)
+	end
 	tooltip = LibQTip:Acquire("ProculasProcStats", 5, "LEFT", "CENTER", "CENTER", "CENTER","RIGHT")
-	tooltip:Hide()
-	tooltip:Clear()
+	tooltip:SetAutoHideDelay(0.1, self)
+	--tooltip:Hide()
+	--tooltip:Clear()
 
 	tooltip:AddHeader(L["Proculas"])
 	tooltip:AddLine(" ")
 	
 	--Proculas:procStatsTooltip(tooltip)
+	local lineCount = 3
 	tooltip:AddLine(Yellow(L["Proc"].." "),Yellow(" "..L["Total"].." "),Yellow(" "..L["PPM"].." "),Yellow(" "..L["CD"].." "),Yellow(" "..L["Uptime"]))
 	for a,proc in pairs(Proculas.optpc.procs) do
+		
+		
 		if not proc.enabled then
 			break
 		end
 		if(proc.name) then
 			if proc.count > 0 then
+				lineCount = lineCount+1
+				
 				-- Proc Count
 				if proc.count > 0 then
 					procCount = proc.count
@@ -63,9 +94,13 @@ function dataobj:OnEnter()
 				
 				-- Proc Cooldown
 				if proc.cooldown > 0 then
-					procCooldown = proc.cooldown
+					if proc.cooldown > 60 then
+						procCooldown = string.format("%.2f", proc.cooldown / 60).."m" --proc.cooldown
+					else
+						procCooldown = proc.cooldown.."s"
+					end
 				elseif proc.cooldown == 0 and proc.count > 1 then
-					procCooldown = 0
+					procCooldown = "0s"
 				else
 					procCooldown = L["NA"]
 				end
@@ -102,6 +137,17 @@ function dataobj:OnEnter()
 					procName = proc.name
 				end
 				tooltip:AddLine(Green(procName), procCount, procPPM, procCooldown, procUptime)
+				
+				-- Proc stats to chat link
+				local procStats = {
+					procId = proc.procId,
+					ppm = procPPM,
+					cd = procCooldown,
+					uptime = procUptime,
+				}
+				if proc.count > 0 then
+					tooltip:SetLineScript(lineCount, "OnMouseUp", StatsToChat, procStats)
+				end
 			end
 		end
 	end
@@ -116,10 +162,31 @@ function dataobj:OnEnter()
 	tooltip:Show()
 end
 
-function dataobj:OnLeave()
+function dataobj:oldOnLeave()
 	tooltip:Hide()
 	LibQTip:Release(tooltip)
 	tooltip = nil
+end
+
+
+local configMenu = CreateFrame("Frame", "ProculasLDB_Menu")
+configMenu.displayMode = "MENU"
+configMenu.initialize = function(self, level)
+	if not level then return end
+	
+	tooltip:Hide()
+	
+	local title = UIDropDownMenu_CreateInfo()
+	title.text = "Proculas"
+	title.isTitle = true
+	title.notCheckable = true
+	UIDropDownMenu_AddButton(title, level)
+	
+	local openConfig = UIDropDownMenu_CreateInfo()
+	openConfig.text = L["Config"]
+	openConfig.notCheckable = true
+	openConfig.func = function() Proculas:ShowConfig() end
+	UIDropDownMenu_AddButton(openConfig, level)
 end
 
 function dataobj:OnClick(button)
@@ -127,5 +194,7 @@ function dataobj:OnClick(button)
 		Proculas:resetProcStats()
 	elseif button == "RightButton" then
 		Proculas:ShowConfig()
+		--configMenu.scale = UIParent:GetScale()
+		--ToggleDropDownMenu(1, nil, configMenu, self, 0, 0)
 	end
 end
