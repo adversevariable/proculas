@@ -20,6 +20,7 @@ local PROCS = {
 	[51124] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESHED"},onSelfOnly=0,procId="44"}, -- Proc #44: Killing Machine
 	[59052] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESHED"},onSelfOnly=0,procId="45"}, -- Proc #45: Rime
 	[81340] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESHED"},onSelfOnly=0,procId="46"}, -- Proc #46: Sudden Doom
+	[81141] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESHED"},onSelfOnly=0,procId="47"}, -- Proc #47: Crimson Scourge
 }
 
 function DeathKnightProcs:OnInitialize()

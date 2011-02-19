@@ -238,11 +238,11 @@ end
 
 -- Adds a proc to the tracked procs
 function Proculas:addProc(procInfo)
-	self:debug("Adding proc: "..procInfo.name)--.." | "..procInfo.spellId)
 	if not procInfo.rank then
 		procInfo.rank = ""
 	end
 	if not self.optpc.procs[procInfo.procId] then
+		self:debug("Adding proc: "..procInfo.name)--.." | "..procInfo.spellId)
 		local procStats = {}
 		procStats.name = procInfo.name
 		procStats.rank = procInfo.rank
@@ -575,6 +575,7 @@ local untrackedTypes = {
 	SPELL_AURA_REMOVED = true,
 	-- this is better
 }
+
 function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
@@ -585,6 +586,13 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		isaura = true
 	end
 	
+	--if name == playerName then
+	--	if not logged[spellId] then
+	--		logged[spellId] = true
+	--		print(spellName.." | "..spellId.." | "..type)
+	--	end
+	--end
+	
 	if self.optpc.tracked[spellId] then
 		-- Fetch procInfo
 		local procInfo = self.optpc.tracked[spellId]
@@ -593,15 +601,19 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		self:debug("Tracked proc found: "..procInfo.name)
 		
 		if untrackedTypes[type] == nil then
+			self:debug("Event not in untracked list ("..type..")")
 			if(name == playerName) then
-				if(procInfo.onSelfOnly and name2 == playerName) then
+				self:debug("Event is related to player ("..playerName..")")
+				self:debug(name..name2)
+				if(procInfo.onSelfOnly == 0 or procInfo.onSelfOnly == false) then
 					self:debug("Sending tracked proc to processProc(): "..procInfo.name)
 					self:processProc(spellId,isaura)
-				elseif not procInfo.onSelfOnly then
+				elseif(procInfo.onSelfOnly and name2 == playerName) then
 					self:debug("Sending tracked proc to processProc(): "..procInfo.name)
 					self:processProc(spellId,isaura)
 				end
 			elseif(name == nil and name2 == playerName) then
+				self:debug("Event is related to player")
 				self:debug("Sending tracked proc to processProc(): "..procInfo.name)
 				self:processProc(spellId,isaura)
 			end
@@ -695,11 +707,11 @@ end
 
 -- Debug function
 function Proculas:debug(msg)
---[===[@debug@
+--@debug@
 	if self.opt.debug then
 		print("[Proculas]:[debug]: "..msg)
 	end
---@end-debug@]===]
+--@end-debug@
 end
 
 -------------------------------------------------------
