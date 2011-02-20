@@ -606,28 +606,9 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		self:debug("Tracked proc found: "..procInfo.name)
 		self:debug("Event not in untracked list ("..type..")")
 		
-		--[[if untrackedTypes[type] == nil then
-			self:debug("Event not in untracked list ("..type..")")
-			if(name == playerName) then
-				self:debug("Event is related to player ("..playerName..")")
-				self:debug(name..name2)
-				if(procInfo.onSelfOnly == 0 or procInfo.onSelfOnly == false) then
-					self:debug("Sending tracked proc to processProc(): "..procInfo.name)
-					self:processProc(spellId,isaura)
-				elseif(procInfo.onSelfOnly and name2 == playerName) then
-					self:debug("Sending tracked proc to processProc(): "..procInfo.name)
-					self:processProc(spellId,isaura)
-				end
-			elseif(name == nil and name2 == playerName) then
-				self:debug("Event is related to player")
-				self:debug("Sending tracked proc to processProc(): "..procInfo.name)
-				self:processProc(spellId,isaura)
-			end
-		end]]
-		
 		if name == playerName or (name == nil and name2 ~= nil and name2 == playerName) then
 			self:debug("Event is related to player ("..playerName..")")
-			if procInfo.onSelfOnly then
+			if (procInfo.onSelfOnly == 0 or procInfo.onSelfOnly == false) then
 				self:debug("Sending tracked proc to processProc(): "..procInfo.name)
 				self:processProc(spellId,isaura)
 			elseif(procInfo.onSelfOnly and name2 == playerName) then
