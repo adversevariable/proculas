@@ -1,7 +1,7 @@
 --
 -- ProculasLDB
 -- Sends the Proc Stats to DataBroker
--- Created by Clorell of Hellscream [US]
+-- Created by Mcstabin of Hellscream [US]
 -- $Id$
 --
 

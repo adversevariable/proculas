@@ -1,7 +1,7 @@
 --
 -- Proculas
 -- Tracks and gatheres stats on Procs.
--- Created by Clorell of Hellscream [US]
+-- Created by Mcstabin of Hellscream [US]
 -- $Id$
 --
 
@@ -343,6 +343,10 @@ function Proculas:addNewProc()
 	procInfo.name = self.newproc.name
 	procInfo.onSelfOnly = self.newproc.selfOnly
 	
+	if not self.newproc.selfOnly then
+		procInfo.onSelfOnly = 0
+	end
+	
 	for t,v in pairs(self.newproc.types) do
 		if v then
 			table.insert(procInfo.types, t)
@@ -586,21 +590,23 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		isaura = true
 	end
 	
-	--if name == playerName then
-	--	if not logged[spellId] then
-	--		logged[spellId] = true
-	--		print(spellName.." | "..spellId.." | "..type)
-	--	end
-	--end
+	--[[if name == playerName then
+		if not logged then logged = {} end
+		if not logged[spellId] then
+			logged[spellId] = true
+			print(spellName.." | "..spellId.." | "..type)
+		end
+	end]]
 	
-	if self.optpc.tracked[spellId] then
+	if self.optpc.tracked[spellId] and untrackedTypes[type] == nil then
 		-- Fetch procInfo
 		local procInfo = self.optpc.tracked[spellId]
 		local procData = self.optpc.procs[procInfo.procId]
 		
 		self:debug("Tracked proc found: "..procInfo.name)
+		self:debug("Event not in untracked list ("..type..")")
 		
-		if untrackedTypes[type] == nil then
+		--[[if untrackedTypes[type] == nil then
 			self:debug("Event not in untracked list ("..type..")")
 			if(name == playerName) then
 				self:debug("Event is related to player ("..playerName..")")
@@ -614,6 +620,17 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 				end
 			elseif(name == nil and name2 == playerName) then
 				self:debug("Event is related to player")
+				self:debug("Sending tracked proc to processProc(): "..procInfo.name)
+				self:processProc(spellId,isaura)
+			end
+		end]]
+		
+		if name == playerName or (name == nil and name2 ~= nil and name2 == playerName) then
+			self:debug("Event is related to player ("..playerName..")")
+			if procInfo.onSelfOnly then
+				self:debug("Sending tracked proc to processProc(): "..procInfo.name)
+				self:processProc(spellId,isaura)
+			elseif(procInfo.onSelfOnly and name2 == playerName) then
 				self:debug("Sending tracked proc to processProc(): "..procInfo.name)
 				self:processProc(spellId,isaura)
 			end

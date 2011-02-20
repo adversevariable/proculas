@@ -1,6 +1,6 @@
 --
 -- Proculas
--- Created by Clorell of Hellscream [US]
+-- Created by Mcstabin of Hellscream [US]
 -- $Id$
 --
 
@@ -734,7 +734,7 @@ local options = {
 					name = L["Add Proc"],
 					desc = L["Add to tracked procs."],
 					func = function()
-						Proculas.newproc.types = {SPELL_AURA_APPLIED,SPELL_AURA_REFRESHED}
+						Proculas.newproc.types = {"SPELL_AURA_APPLIED","SPELL_AURA_REFRESHED"}
 						Proculas:addNewProc()
 					end,
 				},
