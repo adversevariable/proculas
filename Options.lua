@@ -718,7 +718,7 @@ local options = {
 						Proculas.newproc.types[ info[#info] ] = value
 					end,
 				},]]
-				optionsHeader = {
+				--[[optionsHeader = {
 					order = 40,
 					type = "header",
 					name = L["Options"],
@@ -726,9 +726,9 @@ local options = {
 				selfOnly = {
 					type = "toggle",
 					name = L['Self Only'],
-					desc = L['Only track this proc on myself.'],
+					desc = L['Only click this if this proc puts auras on mutiple people.'],
 					order = 41,
-				},
+				},]]
 				addIt = {
 					type = "execute",
 					name = L["Add Proc"],
