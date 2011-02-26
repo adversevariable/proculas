@@ -42,6 +42,9 @@ local PROCS = {
 	[56339] = {spellIds={"90898"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="34",heroic=true}, -- Proc #34: Tendrils of Burrowing Dark
 	[55237] = {spellIds={"92166"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="35"}, -- Proc #35: Porcelain Crab
 	[56280] = {spellIds={"92174"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="36",heroic=true}, -- Proc #36: Porcelain Crab
+	[61047] = {spellIds={"85022"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESHED"},onSelfOnly=0,procId="48"}, -- Proc #48: Vicious Gladiator's Insignia of Conquest
+	[61045] = {spellIds={"85027"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESHED"},onSelfOnly=0,procId="49"}, -- Proc #49: Vicious Gladiator's Insignia of Dominance
+	[61046] = {spellIds={"85032"},types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESHED"},onSelfOnly=0,procId="50"}, -- Proc #50: Vicious Gladiator's Insignia of Victory
 }
 
 function TrinketProcs:OnInitialize()
