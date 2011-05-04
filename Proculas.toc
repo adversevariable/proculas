@@ -1,4 +1,4 @@
-## Interface: 40000
+## Interface: 40100
 ## Title: Proculas |cff69ccf02|r
 ## Notes: Tracks Proc stats such as PPM and Uptime.
 ## Author: Clorell [US Hellscream]

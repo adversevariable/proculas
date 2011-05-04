@@ -581,12 +581,34 @@ local untrackedTypes = {
 }
 
 function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
-	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
-	local spellId, spellName, spellSchool = select(9, ...)
+	--local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
+	--local spellId, spellName, spellSchool = select(9, ...)
+	local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellId, spellName, spellSchool = select(1, ...)
+	
+	if not hideCaster then
+		hideCaster = nil
+	end
+	
+	--[[if sourceName == playerName or destName == playerName then
+		print("timestamp " .. timestamp)
+		print("event " .. event)
+		if hideCaster then
+		print("hideCaster " .. hideCaster)
+		end
+		print("sourceGUID " .. sourceGUID)
+		print("sourceName " .. sourceName)
+		print("sourceFlags " .. sourceFlags)
+		print("destGUID " .. destGUID)
+		print("destName " .. destName)
+		print("destFlags " .. destFlags)
+		print("spellId " .. spellId)
+		print("spellName " .. spellName)
+		print("spellSchool " .. spellSchool)
+	end]]
 	
 	-- Check if the type is SPELL_AURA_APPLIED
 	local isaura = false
-	if(type == "SPELL_AURA_APPLIED") then
+	if(event == "SPELL_AURA_APPLIED") then
 		isaura = true
 	end
 	
@@ -598,20 +620,20 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		end
 	end]]
 	
-	if self.optpc.tracked[spellId] and untrackedTypes[type] == nil then
+	if self.optpc.tracked[spellId] and untrackedTypes[event] == nil then
 		-- Fetch procInfo
 		local procInfo = self.optpc.tracked[spellId]
 		local procData = self.optpc.procs[procInfo.procId]
 		
 		self:debug("Tracked proc found: "..procInfo.name)
-		self:debug("Event not in untracked list ("..type..")")
+		self:debug("Event not in untracked list ("..event..")")
 		
-		if name == playerName or (name == nil and name2 ~= nil and name2 == playerName) then
+		if sourceName == playerName or (sourceName == nil and destName ~= nil and destName == playerName) then
 			self:debug("Event is related to player ("..playerName..")")
 			if (procInfo.onSelfOnly == 0 or procInfo.onSelfOnly == false) then
 				self:debug("Sending tracked proc to processProc(): "..procInfo.name)
 				self:processProc(spellId,isaura)
-			elseif(procInfo.onSelfOnly and name2 == playerName) then
+			elseif(procInfo.onSelfOnly and destName == playerName) then
 				self:debug("Sending tracked proc to processProc(): "..procInfo.name)
 				self:processProc(spellId,isaura)
 			end
@@ -619,9 +641,9 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	end
 	
 	-- Aura Removed/Expired
-	if self.optpc.tracked[spellId] and type == "SPELL_AURA_REMOVED" then
+	if self.optpc.tracked[spellId] and event == "SPELL_AURA_REMOVED" then
 		local procInfo = self.optpc.tracked[spellId]
-		if name == playerName and self.active[procInfo.procId] then
+		if sourceName == playerName and self.active[procInfo.procId] then
 			local procData = self.optpc.procs[procInfo.procId]
 			for index,spID in pairs(self.active) do
 				procData.started = 0
