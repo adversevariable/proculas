@@ -583,12 +583,12 @@ local untrackedTypes = {
 function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	--local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	--local spellId, spellName, spellSchool = select(9, ...)
-	local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellId, spellName, spellSchool = select(1, ...)
-	
+  --    timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellId, spellName, spellSchool = select(1, ...)
+	local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, spellSchool = select(1, ...) --, missType, amountMissed 
 	if not hideCaster then
 		hideCaster = nil
 	end
-	
+  
 	--[[if sourceName == playerName or destName == playerName then
 		print("timestamp " .. timestamp)
 		print("event " .. event)

@@ -1,13 +1,23 @@
-Copyright (c) Clorell
+Copyright (c) Mcstabin of US Hellscream
 All Rights Reserved
 
 "The Project" is the program/addon/script.
-"The Author" is Clorell.
+"The Author" is Mcstabin of US Hellscream.
 "The User" is the person or persons using The Project.
 
-By using The Project, you agree that:
-- No one may modify, clone, use or reproduce ANY part of The Project without written permission from The Author.
-- No one may redistribute The Project without written permission from The Author.
-- The Project is supplied AS IS and The Author takes no resposibility for what harm, damages, loss of data The Project may cuase.
-- The Author may not be blamed, sued or fined for whatever The Project may or may not do.
-- The User accepts all responsibility for what The Project may cause, be it damages or loss of data.
+You may use The Project under the following terms:
+- You will NOT modify, clone, use or reproduce ANY part of The Project without written permission from The Author.
+- You will NOT redistribute The Project without written permission form The Author.
+- The Author has the right to change anything and everything at any time without any warning of any sort.
+- You will NOT blame, sue, accuse The Author due to any damages or loss of data or use caused by The Project.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
