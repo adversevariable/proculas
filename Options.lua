@@ -86,19 +86,34 @@ local options = {
 				Proculas.opt[ info[#info] ] = value
 			end,
 			args = {
-				postProcs = {
+				licenseHeader = {
+					order = 0,
+					type = "header",
+					name = "License Agreement",
+				},
+				licenseWarning = {
 					order = 1,
+					type = "description",
+					name = L["licenseWarning"],
+				},
+				licenseDiv = {
+					order = 2,
+					type = "header",
+					name = "",
+				},
+				postProcs = {
+					order = 3,
 					name = L["Announce Procs"],
 					desc = L["Toggle the announcing of Procs."],
 					type = "toggle",
 				},
 				screenEffectsDesc = {
-					order = 2,
+					order = 4,
 					type = "header",
 					name = L["Screen Effects"],
 				},
 				flash = {
-					order = 3,
+					order = 5,
 					name = L["Flash Screen"],
 					desc = L["Toggle Screen Flashing."],
 					type = "toggle",
@@ -108,12 +123,12 @@ local options = {
 					end,
 				},
 				soundDesc = {
-					order = 4,
+					order = 6,
 					type = "header",
 					name = L['Sound Settings'],
 				},
 				playSound = {
-					order = 5,
+					order = 7,
 					name = L["Play Sound"],
 					desc = L["Play Sound"],
 					type = "toggle",
@@ -124,7 +139,7 @@ local options = {
 				},
 				soundFile = {
 					type = "select", dialogControl = 'LSM30_Sound',
-					order = 6,
+					order = 8,
 					name = L["Sound to play"],
 					desc = L["Sound to play"],
 					values = AceGUIWidgetLSMlists.sound,
@@ -144,12 +159,12 @@ local options = {
 					end,
 				},]]
 				miscellaneous = {
-					order = 8,
+					order = 9,
 					type = "header",
 					name = L["Miscellaneous"],
 				},
 				minimapButtonHide = {
-					order = 9,
+					order = 10,
 					name = L["Hide Minimap Button"],
 					desc = L["Toggle the visiblity of the Minimap Button."],
 					type = "toggle",

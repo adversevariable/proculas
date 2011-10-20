@@ -1,17 +1,18 @@
 Copyright (c) Mcstabin of US Hellscream
 All Rights Reserved
 
-"The Project" is the program/addon/script.
+"The Project" is the addon.
 "The Author" is Mcstabin of US Hellscream.
 "The User" is the person or persons using The Project.
 
 You may use The Project under the following terms:
-- You will NOT modify, clone, use or reproduce ANY part of The Project without written permission from The Author.
-- You will NOT redistribute The Project without written permission form The Author.
+- You agree to NOT modify, clone, use or reproduce ANY part of The Project without written and signed permission from The Author.
+- You agree to NOT redistribute any part of The Project at all without written and signed permission from The Author.
+- You agree to NOT redistribute The Project without written permission from The Author.
+- You agree to NOT blame, sue, accuse The Author due to any damages or loss of data or use caused by The Project.
 - The Author has the right to change anything and everything at any time without any warning of any sort.
-- You will NOT blame, sue, accuse The Author due to any damages or loss of data or use caused by The Project.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
