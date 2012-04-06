@@ -2,7 +2,8 @@
 -- Proculas
 -- Tracks and gatheres stats on Procs.
 -- Created by Mcstabin of Hellscream [US]
--- $Id$
+-- 
+-- File hash: @file-hash@
 --
 
 -------------------------------------------------------
@@ -15,9 +16,9 @@ Proculas.enabled = true
 
 -------------------------------------------------------
 -- Proculas Version
-Proculas.revision = tonumber(("266"):match("%d+"))
-Proculas.version = GetAddOnMetadata('Proculas', 'Version').." r266"
-if(Proculas.revision == nil) then
+Proculas.revision = "@project-abbreviated-hash@"
+Proculas.version = GetAddOnMetadata('Proculas', 'Version').." @project-abbreviated-hash@"
+if(Proculas.revision == "@".."project-abbreviated-hash".."@") then
 	Proculas.version = "DEV"
 end
 local VERSION = Proculas.version
