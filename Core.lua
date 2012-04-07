@@ -93,6 +93,12 @@ function Proculas:OnInitialize()
 	end
 	
 	self.newproc = {types={}}
+	
+	-- Debug stuff
+	self.debug = {
+		debug = false,
+		mySpellInfoInChat = false
+	}
 end
 
 -- OnEnable
@@ -590,22 +596,26 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		hideCaster = nil
 	end
   
-	--[[if sourceName == playerName or destName == playerName then
-		print("timestamp " .. timestamp)
-		print("event " .. event)
-		if hideCaster then
-		print("hideCaster " .. hideCaster)
+	--[[
+	if self.debug.mySpellInfoInChat then
+		if sourceName == playerName or destName == playerName then
+			print("timestamp " .. timestamp)
+			print("event " .. event)
+			if hideCaster then
+			print("hideCaster " .. hideCaster)
+			end
+			print("sourceGUID " .. sourceGUID)
+			print("sourceName " .. sourceName)
+			print("sourceFlags " .. sourceFlags)
+			print("destGUID " .. destGUID)
+			print("destName " .. destName)
+			print("destFlags " .. destFlags)
+			print("spellId " .. spellId)
+			print("spellName " .. spellName)
+			print("spellSchool " .. spellSchool)
 		end
-		print("sourceGUID " .. sourceGUID)
-		print("sourceName " .. sourceName)
-		print("sourceFlags " .. sourceFlags)
-		print("destGUID " .. destGUID)
-		print("destName " .. destName)
-		print("destFlags " .. destFlags)
-		print("spellId " .. spellId)
-		print("spellName " .. spellName)
-		print("spellSchool " .. spellSchool)
-	end]]
+	end
+	]]
 	
 	-- Check if the type is SPELL_AURA_APPLIED
 	local isaura = false
