@@ -117,3 +117,4 @@ L['Actions'] = true
 L['Config'] = true
 L['licenseWarning'] = "By using Proculas you agree to the Proculas License: http://www.wowace.com/licenses/1326-proculas-license-4-0/"
 L['Debug'] = true
+L['Show debug messages']
