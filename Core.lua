@@ -597,7 +597,7 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	end
   
 	--[[
-	if self.debug.mySpellInfoInChat then
+	if self.opt.debug.mySpellInfoInChat then
 		if sourceName == playerName or destName == playerName then
 			print("timestamp " .. timestamp)
 			print("event " .. event)
@@ -739,7 +739,7 @@ end
 -- Debug function
 function Proculas:debug(msg)
 --@debug@
-	if self.opt.debug then
+	if self.opt.debug.enabled then
 		print("[Proculas][Debug]: "..msg)
 	end
 --@end-debug@
