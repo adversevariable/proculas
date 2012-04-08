@@ -118,3 +118,4 @@ L['Config'] = true
 L['licenseWarning'] = "By using Proculas you agree to the Proculas License: http://www.wowace.com/licenses/1326-proculas-license-4-0/"
 L['Debug'] = true
 L['Show debug messages']
+L['debug_spell_info_in_chat'] = "Any spell you cast either via actionbar, item or proc will be shown in the chat with the SpellID"
