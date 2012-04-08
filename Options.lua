@@ -181,9 +181,9 @@ local options = {
 			type = "group",
 			name = L["Announce Options"],
 			desc = L["Announce Options"],
-			get = function(info) return Proculas.opt[ info[#info] ] end,
+			get = function(info) return Proculas.opt.announce[ info[#info] ] end,
 			set = function(info, value)
-				Proculas.opt[ info[#info] ] = value
+				Proculas.opt.announce[ info[#info] ] = value
 			end,
 			args = {
 				messageOpt = {
@@ -195,7 +195,7 @@ local options = {
 					type = "input",
 					order = 2,
 					name = L["Message"],
-					desc = L["The Announce Message."],
+					desc = L["The Announce Message. Put %s for the proc name."],
 				},
 				color = {
 					type = "color",

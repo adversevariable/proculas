@@ -27,7 +27,7 @@ L['Message'] = true
 L['Announce Location'] = true
 L['Color'] = true
 L['The color of the message.'] = true
-L['The Announce Message.'] = true
+L['The Announce Message. Put %s for the proc name.'] = true
 L['Proc'] = true
 L['Total'] = true
 L['PPM'] = true
@@ -117,5 +117,5 @@ L['Actions'] = true
 L['Config'] = true
 L['licenseWarning'] = "By using Proculas you agree to the Proculas License: http://www.wowace.com/licenses/1326-proculas-license-4-0/"
 L['Debug'] = true
-L['Show debug messages']
+L['Show debug messages'] = true
 L['debug_spell_info_in_chat'] = "Any spell you cast either via actionbar, item or proc will be shown in the chat with the SpellID"
