@@ -95,10 +95,10 @@ function Proculas:OnInitialize()
 	self.newproc = {types={}}
 	
 	-- Debug stuff
-	self.debug = {
+	--[[self.debug = {
 		debug = false,
 		mySpellInfoInChat = false
-	}
+	}]]
 end
 
 -- OnEnable
@@ -740,7 +740,7 @@ end
 function Proculas:debug(msg)
 --@debug@
 	if self.opt.debug then
-		print("[Proculas]:[debug]: "..msg)
+		print("[Proculas][Debug]: "..msg)
 	end
 --@end-debug@
 end
