@@ -56,6 +56,10 @@ local defaults = {
 			rounding = 10,
 		},
 		customSounds = {},
+		debug = {
+			enable = false,
+			mySpellInfoInChat = false,
+		},
 	},
 }
 Proculas.defaults = defaults
