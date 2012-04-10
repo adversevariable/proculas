@@ -611,6 +611,14 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	end
 	]]
 	
+	--[[
+	if self.opt.debug.mySpellInfoInChat then
+		if sourceName == playerName or destName == playerName then
+			self.debug(spellName .. ": ID: " .. spellId .. " | Event: event")
+		end
+	end
+	]]
+	
 	-- Check if the type is SPELL_AURA_APPLIED
 	local isaura = false
 	if(event == "SPELL_AURA_APPLIED") then
