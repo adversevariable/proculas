@@ -204,7 +204,6 @@ function Proculas:scanForProcs()
 	-- Find Procs
 	self:scanItem(GetInventorySlotInfo("MainHandSlot"))
 	self:scanItem(GetInventorySlotInfo("SecondaryHandSlot"))
-	self:scanItem(GetInventorySlotInfo("RangedSlot"))
 	self:scanItem(GetInventorySlotInfo("Trinket0Slot"))
 	self:scanItem(GetInventorySlotInfo("Trinket1Slot"))
 	self:scanItem(GetInventorySlotInfo("Finger0Slot"))
