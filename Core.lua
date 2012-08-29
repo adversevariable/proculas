@@ -61,6 +61,7 @@ Proculas.procs = {
 local playerClass = select(2,UnitClass("player"))
 local playerName = UnitName("player")
 local combatTickTimer
+local inCombat
 
 -------------------------------------------------------
 -- Startup stuff
@@ -99,6 +100,7 @@ end
 function Proculas:OnEnable()
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
+	combatTickTimer = self:ScheduleRepeatingTimer("combatTick", 1)
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	self:scanForProcs();
@@ -129,18 +131,26 @@ function Proculas:combatTick()
 			proc.uptime = proc.uptime+1
 		end
 		-- Update Total Time
-		proc.time = proc.time+1
+		if self.active[proc.procId] or inCombat then
+			proc.time = proc.time+1
+		end
 	end
+	
+	--for procID, spellID in pairs(self.active) do
+	--	self.optpc.tracked[spellID].uptime = self.optpc.tracked[spellID].uptime+1
+	--end
 end
 
 -- Does the required things for when the player enters combat
 function Proculas:PLAYER_REGEN_DISABLED()
-	combatTickTimer = self:ScheduleRepeatingTimer("combatTick", 1)
+	--combatTickTimer = self:ScheduleRepeatingTimer("combatTick", 1)
+	inCombat = true
 end
 
 -- Does the required things for when the player leaves combat
 function Proculas:PLAYER_REGEN_ENABLED()
-	self:CancelTimer(combatTickTimer)
+	--self:CancelTimer(combatTickTimer)
+	inCombat = false
 end
 
 -------------------------------------------------------
@@ -499,7 +509,7 @@ function Proculas:processProc(spellID,isAura)
 	local procInfo = self.optpc.tracked[spellID]
 	--local procData = self.optpc.procs[procInfo.name..procInfo.rank]
 	local procData = self.optpc.procs[procInfo.procId]
-	
+
 	if isAura then
 		self.active[procInfo.procId] = spellID
 	end
