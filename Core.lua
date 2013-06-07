@@ -1,7 +1,7 @@
 --
 -- Proculas
 -- Tracks and gatheres stats on Procs.
--- Created by Mcstabin of Hellscream [US]
+-- Created by Korvo of Proudmoore [US]
 -- 
 -- File hash: @file-hash@
 --

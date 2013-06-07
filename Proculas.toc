@@ -1,11 +1,11 @@
 ## Interface: 50001
 ## Title: Proculas |cff69ccf02|r
 ## Notes: Tracks Proc stats such as PPM and Uptime.
-## Author: Clorell [US Hellscream]
+## Author: Korvo [US Proudmoore]
 ## Version: @project-version@
 ## SavedVariables: ProculasDB
 ## SavedVariablesPerCharacter: ProculasDBPC
-## Created by Clorell of US Hellscream
+## Created by Korvo of US Proudmoore
 ## OptionalDeps: LubStub, LibBlacklist, CallbackHandler-1.0, AceAddon-3.0, AceGUI-3.0, AceConfig-3.0, AceConsole-3.0, AceDB-3.0, AceEvent-3.0, AceDBOptions-3.0, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, LibSink-2.0, AceTimer-3.0, AceLocale-3.0, LibDataBroker-1.1, LibDBIcon-1.0, LibBars-1.0, LibEffects-1.0, LibQTip-1.0
 
 #@no-lib-strip@

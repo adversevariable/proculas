@@ -1,7 +1,6 @@
 --
 -- Proculas
--- Created by Mcstabin of Hellscream [US]
--- $Id$
+-- Created by Korvo of Proudmoore [US]
 --
 
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
