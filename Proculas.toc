@@ -1,4 +1,4 @@
-## Interface: 50001
+## Interface: 50300
 ## Title: Proculas |cff69ccf02|r
 ## Notes: Tracks Proc stats such as PPM and Uptime.
 ## Author: Korvo [US Proudmoore]
