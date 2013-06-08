@@ -2,7 +2,7 @@
 -- Proculas
 -- Tracks and gatheres stats on Procs.
 -- Created by Korvo of Proudmoore [US]
--- 
+--
 -- File hash: @file-hash@
 --
 
@@ -69,30 +69,30 @@ local inCombat
 -- OnInitialize
 function Proculas:OnInitialize()
 	self:Print(VERSION.." running.")
-	
+
 	-- Database stuff
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", self.defaults)
 	self.dbpc = LibStub("AceDB-3.0"):New("ProculasDBPC", self.defaultsPC)
 	self.opt = self.db.profile
 	self.optpc = self.dbpc.profile
-	
+
 	-- Tracked procs
 	self.tracked = self.optpc.tracked
-	
+
 	-- Active procs
 	self.active = {}
-	
+
 	-- Create the Cooldown bars frame.
 	self:CreateCDFrame()
-	
+
 	-- Set the Sink options.
 	self:SetSinkStorage(self.opt.sinkOptions)
-	
+
 	-- Register Custom Sounds
 	for name,info in pairs(self.opt.customSounds) do
 		LSM:Register("sound", info.name, info.location)
 	end
-	
+
 	self.newproc = {types={}}
 end
 
@@ -135,7 +135,7 @@ function Proculas:combatTick()
 			proc.time = proc.time+1
 		end
 	end
-	
+
 	--for procID, spellID in pairs(self.active) do
 	--	self.optpc.tracked[spellID].uptime = self.optpc.tracked[spellID].uptime+1
 	--end
@@ -171,7 +171,7 @@ function Proculas:scanItem(slotID)
 		if(found) then
 			local _, itemId, enchantId, jewelId1, jewelId2, jewelId3, jewelId4, suffixId, uniqueId, fromLvl = strsplit(":", itemstring)
 			local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture = GetItemInfo(itemlink)
-			
+
 			-- Enchants and Embroideries
 			if tonumber(enchantId) ~= 0 then
 				local enchID = tonumber(enchantId)
@@ -188,7 +188,7 @@ function Proculas:scanItem(slotID)
 					end
 				end
 			end
-			
+
 			-- Items
 			itemId = tonumber(itemId)
 			if self.procs.ITEMS[itemId] then
@@ -210,7 +210,7 @@ end
 -- Scans for Procs
 function Proculas:scanForProcs()
 	--self:Print("Scanning for procs");
-	
+
 	-- Find Procs
 	self:scanItem(GetInventorySlotInfo("MainHandSlot"))
 	self:scanItem(GetInventorySlotInfo("SecondaryHandSlot"))
@@ -228,7 +228,7 @@ function Proculas:scanForProcs()
 	self:scanItem(GetInventorySlotInfo("WaistSlot"))
 	self:scanItem(GetInventorySlotInfo("LegsSlot"))
 	self:scanItem(GetInventorySlotInfo("FeetSlot"))
-	
+
 	-- Add Class Procs
 	for index,procs in pairs(self.procs) do
 		if(index == playerClass) then
@@ -271,13 +271,13 @@ function Proculas:addProc(procInfo)
 		end
 		--self.optpc.procs[procInfo.name..procInfo.rank] = procStats
 		self.optpc.procs[procInfo.procId] = procStats
-		
+
 		--if explode then
 		--if not type(procInfo.spellId) == "table" then
 		--	self:debug("addProc(): spellId not table, exploding")
 		--	procInfo.spellId = string.explode(",",procInfo.spellId)
 		--end
-		
+
 		for _,spellId in pairs(procInfo.spellIds) do
 			local procData = {}
 			procData.name = procInfo.name
@@ -327,16 +327,16 @@ function Proculas:addNewProc()
 	-- blarg...
 	local procInfo = {types={}}
 	procInfo.procId = 'custom'..countarray(self.optpc.procs)
-	
+
 	if not self.newproc.name or not self.newproc.spellId then
 		return
 	end
 	--[[if not #self.newproc.types > 0 then
 		return
 	end]]
-	
+
 	if self.newproc.item then
-		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(self.newproc.itemId) 
+		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(self.newproc.itemId)
 		procInfo.icon = itemTexture
 		procInfo.rank = ''
 		procInfo.item = true
@@ -345,43 +345,43 @@ function Proculas:addNewProc()
 		procInfo.icon = icon
 		procInfo.rank = rank
 	end
-	
+
 	procInfo.spellIds = self.newproc.spellId
 	procInfo.spellIds = string.explode(",",procInfo.spellIds)
-	
+
 	--procInfo.types = self.newproc.types
 	procInfo.name = self.newproc.name
 	procInfo.onSelfOnly = self.newproc.selfOnly
-	
+
 	if not self.newproc.selfOnly then
 		procInfo.onSelfOnly = 0
 	end
-	
+
 	for t,v in pairs(self.newproc.types) do
 		if v then
 			table.insert(procInfo.types, t)
 		end
 	end
-	
+
 	--for _,spellId in pairs(procInfo.spellId) do
 		--local procData = procInfo
 		--procData.spellId = spellId
 		self:addProc(procInfo)
 	--end
-	
+
 	-- Reset newproc array
 	Proculas.newproc = {types={}}
 end
 
 function Proculas:deleteProc(procId)
 	local procInfo = self.optpc.procs[procId]
-	
+
 	for index,info in pairs(self.optpc.tracked) do
 		if info.procId == procId then
 			self.optpc.tracked[index] = nil
 		end
 	end
-	
+
 	self.optpc.procs[procId] = nil
 end
 
@@ -410,13 +410,13 @@ function Proculas:CreateCDFrame()
 	self.procCooldowns.RegisterCallback(self, "AnchorClicked")
 	self.procCooldowns:SetUserPlaced(true)
 	self.procCooldowns:ReverseGrowth(self.opt.cooldowns.reverseGrowth)
-		
+
 	if(self.opt.cooldowns.show) then
 		self.procCooldowns:Show()
 	else
 		self.procCooldowns:Hide()
 	end
-	
+
 	self:setMovableCooldownsFrame(self.opt.cooldowns.movableFrame)
 end
 
@@ -482,7 +482,7 @@ function Proculas:postProc(spellID)
 	local procInfo = self.optpc.tracked[spellID]
 	--local procData = self.optpc.procs[procInfo.name..procInfo.rank]
 	local procData = self.optpc.procs[procInfo.procId]
-	
+
 	-- Sink
 	local pourBefore = ""
 	if(self.opt.sinkOptions.sink20OutputSink == "Channel") then
@@ -513,12 +513,12 @@ function Proculas:processProc(spellID,isAura)
 	if isAura then
 		self.active[procInfo.procId] = spellID
 	end
-	
+
 	self:debug("Processing proc: "..procInfo.name)
-	
+
 	-- Post Proc
 	self:postProc(spellID)
-	
+
 	-- Check Cooldown
 	if procData.updateCD and procData.lastProc > 0 and ((procData.cooldown == 0) or (time() - procData.lastProc < procData.cooldown)) then
 		local proccd = time() - procData.lastProc
@@ -537,7 +537,7 @@ function Proculas:processProc(spellID,isAura)
 			procData.started = time()
 			self.active[procInfo.procId] = spellID
 	end
-	
+
 	-- Reset cooldown bar
 	if (procData.cooldown or (self.opt.cooldowns.cooldowns and (procData.cooldown ~= false or procData.cooldown == nil))) and procData.cooldown > 0 then
 		local bar = self.procCooldowns:GetBar(procData.name..procData.rank)
@@ -546,7 +546,7 @@ function Proculas:processProc(spellID,isAura)
 		end
 		bar:SetTimer(procData.cooldown, procData.cooldown)
 	end
-	
+
 	-- Sound
 	if procData.soundFile ~= nil then
 		PlaySoundFile(LSM:Fetch("sound", procData.soundFile)) 
@@ -563,7 +563,7 @@ function Proculas:processProc(spellID,isAura)
 	if procData.shake or (self.opt.effects.shake and (procData.shake ~= false or procData.shake == nil)) then
 		--self:Shake()
 	end
-	
+
 	-- Count
 	procData.count = procData.count+1
 	procData.lastProc = time()
@@ -594,11 +594,11 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	--local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	--local spellId, spellName, spellSchool = select(9, ...)
   --    timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellId, spellName, spellSchool = select(1, ...)
-	local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, spellSchool = select(1, ...) --, missType, amountMissed 
+	local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, spellSchool = select(1, ...) --, missType, amountMissed
 	if not hideCaster then
 		hideCaster = nil
 	end
-  
+
 	--[[
 	if self.opt.debug.mySpellInfoInChat then
 		if sourceName == playerName or destName == playerName then
@@ -619,7 +619,7 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		end
 	end
 	]]
-	
+
 	--[[
 	if self.opt.debug.mySpellInfoInChat then
 		if sourceName == playerName or destName == playerName then
@@ -627,13 +627,13 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		end
 	end
 	]]
-	
+
 	-- Check if the type is SPELL_AURA_APPLIED
 	local isaura = false
 	if(event == "SPELL_AURA_APPLIED") then
 		isaura = true
 	end
-	
+
 	--[[if name == playerName then
 		if not logged then logged = {} end
 		if not logged[spellId] then
@@ -641,12 +641,12 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 			print(spellName.." | "..spellId.." | "..type)
 		end
 	end]]
-	
+
 	if self.optpc.tracked[spellId] and untrackedTypes[event] == nil then
 		-- Fetch procInfo
 		local procInfo = self.optpc.tracked[spellId]
 		local procData = self.optpc.procs[procInfo.procId]
-		
+
 		self:debug("Tracked proc found: "..procInfo.name)
 		self:debug("Event not in untracked list ("..event..")")
 		
@@ -661,7 +661,7 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 			end
 		end
 	end
-	
+
 	-- Aura Removed/Expired
 	if self.optpc.tracked[spellId] and event == "SPELL_AURA_REMOVED" then
 		local procInfo = self.optpc.tracked[spellId]
@@ -681,13 +681,13 @@ end
 function Proculas:old_COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
 	local spellId, spellName, spellSchool = select(9, ...)
-	
+
 	-- Check if the type is SPELL_AURA_APPLIED
 	local isaura = false
 	if(type == "SPELL_AURA_APPLIED") then
 		isaura = true
 	end
-	
+
 	-- Ghetto proc searcher
 	-- Prints stuff from the combat log to the chat
 	-- with the spell ID, spell Name and event.
@@ -697,16 +697,16 @@ function Proculas:old_COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		if not spellId then spellId = '' end
 		print(spellId.." :: "..spellName.." / "..type)
 	end]]
-	
+
 	-- Check if its a proc
 	if self.optpc.tracked[spellId] then
 		-- Fetch procInfo
 		local procInfo = self.optpc.tracked[spellId]
 		--local procData = self.optpc.procs[procInfo.name..procInfo.rank]
 		local procData = self.optpc.procs[procInfo.procId]
-		
+
 		self:debug("Tracked proc found: "..procInfo.name)
-		
+
 		-- Check if this is the right combat event for the proc
 		if(checkType(procInfo.types,type)) then
 			self:debug("Tracked proc matched combat log event: "..procInfo.name.." / "..type)
@@ -725,7 +725,7 @@ function Proculas:old_COMBAT_LOG_EVENT_UNFILTERED(event,...)
 			end
 		end
 	end
-	
+
 	-- Aura Removed/Expired
 	if self.optpc.tracked[spellId] and type == "SPELL_AURA_REMOVED" then
 		local procInfo = self.optpc.tracked[spellId]

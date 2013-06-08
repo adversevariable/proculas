@@ -267,14 +267,14 @@ local options = {
 							desc = L["Bar texture."],
 							order = 4,
 							values = AceGUIWidgetLSMlists.statusbar,
-						}, 
+						},
 						barFont = {
 							type = "select", dialogControl = 'LSM30_Font',
 							name = L["Font"],
 							desc = L["Font used for the bars."],
 							order = 5,
 							values = AceGUIWidgetLSMlists.font,
-						},                        		
+						},
 						barFontSize = {
 							type = "range",
 							name = L["Font Size"],
@@ -343,14 +343,14 @@ local options = {
 							desc = L["Check to flash the cooldown bar when its close to ending."],
 							order = 12,
 							get = function(info)
-								if Proculas.opt.cooldowns.flashTimer == 4 then 
+								if Proculas.opt.cooldowns.flashTimer == 4 then
 									return true
 								else
 									return false
 								end
 							end,
 							set = function(info,value)
-								if value then 
+								if value then
 									Proculas.opt.cooldowns.flashTimer = 4
 								else
 									Proculas.opt.cooldowns.flashTimer = 0
@@ -385,12 +385,12 @@ local options = {
 						end
 						return procs
 					end,
-					get = function() 
+					get = function()
 						if Proculas.editingproc ~= nil then
 							 return Proculas.editingprocIdent
 						end
 					end,
-					set = function(info,value) 
+					set = function(info,value)
 						Proculas.editingproc = Proculas.optpc.procs[value]
 						--Proculas.editingprocIdent = Proculas.optpc.procs[value].name..Proculas.optpc.procs[value].rank
 						Proculas.editingprocIdent = Proculas.editingproc.procId
@@ -419,9 +419,9 @@ local options = {
 					min = 0,
 					max = 600,
 					step = 1,
-					get = function() 
+					get = function()
 						if Proculas.editingproc ~= nil then
-							return Proculas.optpc.procs[Proculas.editingprocIdent].cooldown 
+							return Proculas.optpc.procs[Proculas.editingprocIdent].cooldown
 						end
 					end,
 					set = function(info,value)
@@ -486,7 +486,7 @@ local options = {
 					order = 23,
 					tristate = true,
 					disabled = function() return Proculas.editingproc == nil end,
-				},                            
+				},
 				--[[shake = {
 					type = "toggle",
 					name = L["Shake Screen"],
@@ -513,7 +513,7 @@ local options = {
 						local delProcId = Proculas.editingproc.procId
 						Proculas.editingproc = nil
 						Proculas:deleteProc(delProcId)
-						
+
 					end,
 					order = 41,
 					disabled = function() return Proculas.editingproc == nil end,
@@ -817,12 +817,12 @@ local options = {
 						end
 						return sounds
 					end,
-					get = function() 
+					get = function()
 						if Proculas.editingsound ~= nil then
 							 return Proculas.editingsound
 						end
 					end,
-					set = function(info,value) 
+					set = function(info,value)
 						Proculas.editingsound = value
 					end
 				},

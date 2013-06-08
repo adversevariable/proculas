@@ -53,7 +53,7 @@ end
 
 local function StatsToChat(crapola, stats)
 	local procInfo = Proculas.optpc.procs[stats.procId]
-	
+
 	ChatFrame_OpenChat("[Proculas]: "..procInfo.name.." - "..stats.ppm.." PPM, "..stats.cd.." CD, "..stats.uptime.." UT", SELECTED_DOCK_FRAME)
 end
 
@@ -70,27 +70,27 @@ function dataobj:OnEnter()
 
 	tooltip:AddHeader(L["Proculas"])
 	tooltip:AddLine(" ")
-	
+
 	--Proculas:procStatsTooltip(tooltip)
 	local lineCount = 3
 	tooltip:AddLine(Yellow(L["Proc"].." "),Yellow(" "..L["Total"].." "),Yellow(" "..L["PPM"].." "),Yellow(" "..L["CD"].." "),Yellow(" "..L["Uptime"]))
 	for a,proc in pairs(Proculas.optpc.procs) do
-		
-		
+
+
 		if not proc.enabled then
 			break
 		end
 		if(proc.name) then
 			if proc.count > 0 then
 				lineCount = lineCount+1
-				
+
 				-- Proc Count
 				if proc.count > 0 then
 					procCount = proc.count
 				else
 					procCount = L["NA"]
 				end
-				
+
 				-- Proc Cooldown
 				if proc.cooldown > 0 then
 					if proc.cooldown > 60 then
@@ -103,7 +103,7 @@ function dataobj:OnEnter()
 				else
 					procCooldown = L["NA"]
 				end
-				
+
 				-- Procs Per Minute
 				local ppm = 0
 				if proc.count > 0 then
@@ -114,7 +114,7 @@ function dataobj:OnEnter()
 				else
 					procPPM = L["NA"]
 				end
-				
+
 				-- Proc Uptime
 				if not proc.uptime then
 					proc.uptime = 0
@@ -128,7 +128,7 @@ function dataobj:OnEnter()
 				else
 					procUptime = L["NA"]
 				end
-				
+
 				-- Proc Name
 				if not proc.rank == "" then
 					procName = proc.name.." "..proc.rank
@@ -136,7 +136,7 @@ function dataobj:OnEnter()
 					procName = proc.name
 				end
 				tooltip:AddLine(Green(procName), procCount, procPPM, procCooldown, procUptime)
-				
+
 				-- Proc stats to chat link
 				local procStats = {
 					procId = proc.procId,
@@ -151,12 +151,12 @@ function dataobj:OnEnter()
 		end
 	end
 	tooltip:AddLine(" ")
-	
+
 	local lineNumA = tooltip:AddLine("a")
 	tooltip:SetCell(lineNumA, 1, Green(L["Right click to open config"]), "LEFT", 4)
 	local lineNumB = tooltip:AddLine("b")
 	tooltip:SetCell(lineNumB, 1, Green(L["Alt click to reset stats"]), "LEFT", 4)
-	
+
 	tooltip:SmartAnchorTo(self)
 	tooltip:Show()
 end
@@ -172,15 +172,15 @@ local configMenu = CreateFrame("Frame", "ProculasLDB_Menu")
 configMenu.displayMode = "MENU"
 configMenu.initialize = function(self, level)
 	if not level then return end
-	
+
 	tooltip:Hide()
-	
+
 	local title = UIDropDownMenu_CreateInfo()
 	title.text = "Proculas"
 	title.isTitle = true
 	title.notCheckable = true
 	UIDropDownMenu_AddButton(title, level)
-	
+
 	local openConfig = UIDropDownMenu_CreateInfo()
 	openConfig.text = L["Config"]
 	openConfig.notCheckable = true
