@@ -301,8 +301,8 @@ function string.trim(str)
 	-- Function by Colandus
 	return (string.gsub(str, "^%s*(.-)%s*$", "%1"))
 end
- 
-function string.explode(sep, str) 
+
+function string.explode(sep, str)
 	-- Function by Colandus
 	local pos, t = 1, {}
 	--if #sep == 0 or #str == 0 then return end
@@ -549,9 +549,9 @@ function Proculas:processProc(spellID,isAura)
 
 	-- Sound
 	if procData.soundFile ~= nil then
-		PlaySoundFile(LSM:Fetch("sound", procData.soundFile)) 
+		PlaySoundFile(LSM:Fetch("sound", procData.soundFile), "Master")
 	elseif self.opt.sound.soundFile and self.opt.sound.playSound then
-		PlaySoundFile(LSM:Fetch("sound", self.opt.sound.soundFile))
+		PlaySoundFile(LSM:Fetch("sound", self.opt.sound.soundFile), "Master")
 	end
 
 	-- Flash Screen
