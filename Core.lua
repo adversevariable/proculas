@@ -320,7 +320,7 @@ end
 function Proculas:addNewProc()
 	-- blarg...
 	local procInfo = {types={}}
-	procInfo.procId = 'custom'..countarray(self.optpc.procs)
+	procInfo.procId = 'custom'..time()
 
 	if not self.newproc.name or not self.newproc.spellId then
 		return
