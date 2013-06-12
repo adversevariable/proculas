@@ -13,6 +13,14 @@ if not Proculas.enabled then
 end
 
 -------------------------------------------------------
+-- Used to bring up the Config/Options window
+function Proculas:ShowConfig()
+	local Options = self:GetModule("Options")
+	InterfaceOptionsFrame_OpenToCategory(Options.optionsFrames.Profiles)
+	InterfaceOptionsFrame_OpenToCategory(Options.optionsFrames.Proculas)
+end
+
+-------------------------------------------------------
 -- Proculas Default Options
 
 -- Default options
