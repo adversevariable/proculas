@@ -269,14 +269,8 @@ function Proculas:addProc(procInfo)
 		if procInfo.heroic then
 			procStats.heroic = true
 		end
-		--self.optpc.procs[procInfo.name..procInfo.rank] = procStats
-		self.optpc.procs[procInfo.procId] = procStats
 
-		--if explode then
-		--if not type(procInfo.spellId) == "table" then
-		--	self:debug("addProc(): spellId not table, exploding")
-		--	procInfo.spellId = string.explode(",",procInfo.spellId)
-		--end
+		self.optpc.procs[procInfo.procId] = procStats
 
 		for _,spellId in pairs(procInfo.spellIds) do
 			local procData = {}
@@ -331,9 +325,6 @@ function Proculas:addNewProc()
 	if not self.newproc.name or not self.newproc.spellId then
 		return
 	end
-	--[[if not #self.newproc.types > 0 then
-		return
-	end]]
 
 	if self.newproc.item then
 		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(self.newproc.itemId)
@@ -362,12 +353,6 @@ function Proculas:addNewProc()
 			table.insert(procInfo.types, t)
 		end
 	end
-
-	--for _,spellId in pairs(procInfo.spellId) do
-		--local procData = procInfo
-		--procData.spellId = spellId
-		self:addProc(procInfo)
-	--end
 
 	-- Reset newproc array
 	Proculas.newproc = {types={}}
@@ -599,48 +584,11 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event,...)
 		hideCaster = nil
 	end
 
-	--[[
-	if self.opt.debug.mySpellInfoInChat then
-		if sourceName == playerName or destName == playerName then
-			print("timestamp " .. timestamp)
-			print("event " .. event)
-			if hideCaster then
-			print("hideCaster " .. hideCaster)
-			end
-			print("sourceGUID " .. sourceGUID)
-			print("sourceName " .. sourceName)
-			print("sourceFlags " .. sourceFlags)
-			print("destGUID " .. destGUID)
-			print("destName " .. destName)
-			print("destFlags " .. destFlags)
-			print("spellId " .. spellId)
-			print("spellName " .. spellName)
-			print("spellSchool " .. spellSchool)
-		end
-	end
-	]]
-
-	--[[
-	if self.opt.debug.mySpellInfoInChat then
-		if sourceName == playerName or destName == playerName then
-			self.debug(spellName .. ": ID: " .. spellId .. " | Event: event")
-		end
-	end
-	]]
-
 	-- Check if the type is SPELL_AURA_APPLIED
 	local isaura = false
 	if(event == "SPELL_AURA_APPLIED") then
 		isaura = true
 	end
-
-	--[[if name == playerName then
-		if not logged then logged = {} end
-		if not logged[spellId] then
-			logged[spellId] = true
-			print(spellName.." | "..spellId.." | "..type)
-		end
-	end]]
 
 	if self.optpc.tracked[spellId] and untrackedTypes[event] == nil then
 		-- Fetch procInfo
@@ -689,16 +637,6 @@ function Proculas:old_COMBAT_LOG_EVENT_UNFILTERED(event,...)
 	if(type == "SPELL_AURA_APPLIED") then
 		isaura = true
 	end
-
-	-- Ghetto proc searcher
-	-- Prints stuff from the combat log to the chat
-	-- with the spell ID, spell Name and event.
-	-- But only the things that have the players name on it.
-	--[[if name == playerName or name2 == playerName then
-		if not spellName then spellName = '' end
-		if not spellId then spellId = '' end
-		print(spellId.." :: "..spellName.." / "..type)
-	end]]
 
 	-- Check if its a proc
 	if self.optpc.tracked[spellId] then
