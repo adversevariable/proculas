@@ -14,8 +14,7 @@ if not Proculas.enabled then
 end
 
 local PROCS = {
-	[48108] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="38"}, -- Proc #38: Hot Streak
-	[64343] = {types={"SPELL_AURA_APPLIED","SPELL_AURA_REFRESH"},onSelfOnly=0,procId="39"}, -- Proc #39: Impact
+
 }
 
 function MageProcs:OnInitialize()
