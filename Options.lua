@@ -404,6 +404,12 @@ local options = {
 						Proculas.editingprocIdent = Proculas.editingproc.procId
 					end
 				},
+				name = {
+					type = "input",
+					name = L["Name"],
+					desc = L["Name of the proc."],
+					order = 1.1,
+				},
 				enabled = {
 					type = "toggle",
 					name = L["Enabled"],
