@@ -385,7 +385,7 @@ local options = {
 					width = "full",
 					order = 1,
 					name = L["Select Proc"],
-					desc = L["Select a proc to see it's options."],
+					desc = L["Select a proc to see its options."],
 					values = function()
 						local procs = {}
 						for index, proc in pairs(Proculas.optpc.procs) do
