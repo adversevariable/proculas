@@ -318,8 +318,18 @@ end
 -- Adds the proc from the options panel.
 function Proculas:addNewProc()
 	-- blarg...
-	local procInfo = {types={}}
-	procInfo.procId = 'custom'..time()
+	procId = 'custom'..time()
+	procInfo = {types={}}
+
+	procInfo.procId = procId
+	procInfo.count = 0
+	procInfo.started = 0
+	procInfo.uptime = 0
+	procInfo.cooldown = 0
+	procInfo.lastProc = 0
+	procInfo.updateCD = true
+	procInfo.enabled = true
+	procInfo.time = 0
 
 	if not self.newproc.name or not self.newproc.spellId then
 		return
@@ -351,6 +361,24 @@ function Proculas:addNewProc()
 		if v then
 			table.insert(procInfo.types, t)
 		end
+	end
+
+	self.optpc.procs[procId] = procInfo
+
+	for _, spellId in pairs(procInfo.spellIds) do
+		local procData = {}
+		procData.name = procInfo.name
+		procData.rank = procInfo.rank
+		procData.types = procInfo.types
+		procData.onSelfOnly = procInfo.onSelfOnly
+		procData.procId = procInfo.procId
+		if procInfo.itemID then
+			procData.itemID = procInfo.itemID
+		end
+		if procInfo.heroic then
+			procData.heroic = true
+		end
+		self.optpc.tracked[tonumber(spellId)] = procData
 	end
 
 	-- Reset newproc array

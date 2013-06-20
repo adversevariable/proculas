@@ -394,7 +394,7 @@ local options = {
 					values = function()
 						local procs = {}
 						for index, proc in pairs(Proculas.optpc.procs) do
-							procs[proc.procId] = proc.name
+							procs[index] = proc.name
 						end
 						return procs
 					end,
@@ -404,9 +404,10 @@ local options = {
 						end
 					end,
 					set = function(info,value)
-						Proculas.editingproc = Proculas.optpc.procs[value]
+						-- Proculas.editingproc = Proculas.optpc.procs[value]
 						--Proculas.editingprocIdent = Proculas.optpc.procs[value].name..Proculas.optpc.procs[value].rank
-						Proculas.editingprocIdent = Proculas.editingproc.procId
+						Proculas.editingprocIdent = value
+						Proculas.editingproc = Proculas.optpc.procs[value]
 					end
 				},
 				name = {
@@ -529,10 +530,10 @@ local options = {
 					name = L["Delete Proc"],
 					desc = L["Delete proc from Proculas"],
 					func = function()
-						local delProcId = Proculas.editingproc.procId
+						local delProcId = Proculas.editingprocIdent
+						Proculas.editingprocIdent = nil
 						Proculas.editingproc = nil
 						Proculas:deleteProc(delProcId)
-
 					end,
 					order = 41,
 					disabled = function() return Proculas.editingproc == nil end,
