@@ -68,6 +68,11 @@ local defaults = {
 			mySpellInfoInChat = false,
 		},
 	},
+
+	char = {
+		tracked = {},
+		procs = {}
+	},
 }
 Proculas.defaults = defaults
 

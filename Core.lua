@@ -72,9 +72,8 @@ function Proculas:OnInitialize()
 
 	-- Database stuff
 	self.db = LibStub("AceDB-3.0"):New("ProculasDB", self.defaults)
-	self.dbpc = LibStub("AceDB-3.0"):New("ProculasDBPC", self.defaultsPC)
 	self.opt = self.db.profile
-	self.optpc = self.dbpc.profile
+	self.optpc = self.db.char
 
 	-- Tracked procs
 	self.tracked = self.optpc.tracked
