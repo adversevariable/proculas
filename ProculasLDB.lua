@@ -1,7 +1,10 @@
 --
--- ProculasLDB
--- Sends the Proc Stats to DataBroker
--- Created by Korvo of Proudmoore [US]
+-- Proculas
+-- Tracks and gatheres stats on Procs.
+--
+-- Copyright (c) Xocide, who is:
+--  - Korvo on US Proudmoore
+--  - Idunnô, Clorell, Mcstabin on US Hellscream
 --
 
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
