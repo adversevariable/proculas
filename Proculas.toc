@@ -15,6 +15,10 @@ embeds.xml
 locale\enUS.lua
 
 Core.lua
+Scanner.lua
+Processor.lua
+Cooldowns.lua
+CombatScanner.lua
 Options.lua
 ProculasLDB.lua
 
