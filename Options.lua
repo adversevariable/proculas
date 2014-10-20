@@ -398,7 +398,17 @@ local options = {
 					values = function()
 						local procs = {}
 						for index, proc in pairs(Proculas.optpc.procs) do
-							procs[index] = proc.name
+							local spellIds = ""
+							local count = 0
+							for _, spellId in pairs(proc.spellIds) do
+								if count == 0 then
+									spellIds = spellId
+								else
+									spellIds = spellIds .. ", " .. spellId
+								end
+								count = count + 1
+							end
+							procs[index] = proc.name .. " " .. "(" .. spellIds .. ")"
 						end
 						return procs
 					end,
