@@ -91,12 +91,12 @@ function Proculas:processProc(spellID,isAura)
 
 	-- Flash Screen
 	if procData.flash or (self.opt.effects.flash and (procData.flash ~= false or procData.flash == nil)) then
-		self:Flash()
+		self:FlashScreen()
 	end
 
 	-- Shake Screen
 	if procData.shake or (self.opt.effects.shake and (procData.shake ~= false or procData.shake == nil)) then
-		--self:Shake()
+		self:ShakeScreen()
 	end
 
 	-- Count
