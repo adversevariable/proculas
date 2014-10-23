@@ -12,8 +12,6 @@
 embeds.xml
 #@end-no-lib-strip@
 
-LibEffects-1.0\LibEffects-1.0.lua
-
 locale\enUS.lua
 
 Core.lua
