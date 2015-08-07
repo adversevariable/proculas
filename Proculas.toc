@@ -1,4 +1,4 @@
-## Interface: 60000
+## Interface: 60200
 ## Title: Proculas |cff69ccf02|r
 ## Notes: Tracks Proc stats such as PPM and Uptime.
 ## Author: Idunno [US Hellscream]
