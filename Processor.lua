@@ -74,9 +74,9 @@ function Proculas:processProc(spellID,isAura)
 
 	-- Reset cooldown bar
 	if (procData.cooldown or (self.opt.cooldowns.cooldowns and (procData.cooldown ~= false or procData.cooldown == nil))) and procData.cooldown > 0 then
-		local bar = self.procCooldowns:GetBar(procData.name..procData.rank)
+		local bar = self.procCooldowns:GetBar(procData.name..procInfo.rank)
 		if not bar then
-			bar = self.procCooldowns:NewTimerBar(procData.name..procData.rank, procData.name, procData.cooldown, procData.cooldown, procData.icon, self.opt.cooldowns.flashTimer)
+			bar = self.procCooldowns:NewTimerBar(procData.name..procInfo.rank, procData.name, procData.cooldown, procData.cooldown, procData.icon, self.opt.cooldowns.flashTimer)
 		end
 		bar:SetTimer(procData.cooldown, procData.cooldown)
 	end
