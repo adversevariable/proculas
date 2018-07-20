@@ -3,8 +3,7 @@
 -- Tracks and gatheres stats on Procs.
 --
 -- Copyright (c) Xocide, who is:
---  - Korvo on US Proudmoore
---  - Idunnô, Clorell, Mcstabin on US Hellscream
+--  - Idunno of US Nagrand
 --
 
 local playerName = UnitName("player")
