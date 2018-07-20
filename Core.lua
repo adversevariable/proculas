@@ -359,9 +359,7 @@ end
 
 -- Debug function
 function Proculas:debug(msg)
---@debug@
 	if self.opt.debug.enabled then
 		print("[Proculas][Debug]: "..msg)
 	end
---@end-debug@
 end

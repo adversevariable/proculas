@@ -119,3 +119,6 @@ L['licenseWarning'] = "By using Proculas you agree to the Proculas License: http
 L['Debug'] = true
 L['Show debug messages'] = true
 L['debug_spell_info_in_chat'] = "Any spell you cast either via actionbar, item or proc will be shown in the chat with the SpellID"
+L['Debug'] = true
+L['Debug mode'] = true
+L['My spells in chat window'] = true
