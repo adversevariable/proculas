@@ -2,8 +2,7 @@
 -- Proculas
 -- Tracks and gatheres stats on Procs.
 --
--- Copyright (c) Xocide, who is:
---  - Idunno of US Nagrand
+-- Copyright (c) AdverseVariable
 --
 
 local LSM = LibStub("LibSharedMedia-3.0")
@@ -72,11 +71,17 @@ function Proculas:processProc(spellID,isAura)
 			self.active[procInfo.procId] = spellID
 	end
 
+	if not procData.rank then
+		procRank = ""
+	else
+		procRank = procData.rank
+	end
+
 	-- Reset cooldown bar
 	if (procData.cooldown or (self.opt.cooldowns.cooldowns and (procData.cooldown ~= false or procData.cooldown == nil))) and procData.cooldown > 0 then
-		local bar = self.procCooldowns:GetBar(procData.name..procInfo.rank)
+		local bar = self.procCooldowns:GetBar(procData.name..procRank)
 		if not bar then
-			bar = self.procCooldowns:NewTimerBar(procData.name..procInfo.rank, procData.name, procData.cooldown, procData.cooldown, procData.icon, self.opt.cooldowns.flashTimer)
+			bar = self.procCooldowns:NewTimerBar(procData.name..procRank, procData.name, procData.cooldown, procData.cooldown, procData.icon, self.opt.cooldowns.flashTimer)
 		end
 		bar:SetTimer(procData.cooldown, procData.cooldown)
 	end

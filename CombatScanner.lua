@@ -2,49 +2,39 @@
 -- Proculas
 -- Tracks and gatheres stats on Procs.
 --
--- Copyright (c) Xocide, who is:
---  - Idunno of US Nagrand
+-- Copyright (c) AdverseVariable
 --
 
 local playerName = UnitName("player")
 
 -------------------------------------------------------
 -- The Proc scanner, scans the combat log for proc spells
--- This sweet little Proc Tracker here is Copyright (c) Xocide
+-- This sweet little Proc Tracker here is Copyright (c) AdverseVariable
 
 local untrackedTypes = {
 	SPELL_AURA_REMOVED = true,
-	SPELL_CAST_FAILED = true,
-	SPELL_CAST_SUCCESS = true
 }
 
-function Proculas:COMBAT_LOG_EVENT_UNFILTERED()
-	local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, spellSchool = CombatLogGetCurrentEventInfo()
-
-	-- self:Print( timestamp, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, spellSchool)
-	-- self:Print('timestamp', timestamp)
-	-- self:Print('eventType', eventType)
-	-- self:Print('hideCaster', hideCaster)
-	-- self:Print('sourceGUID', sourceGUID)
-	-- self:Print('sourceName', sourceName)
-	-- self:Print('sourceFlags', sourceFlags)
-	-- self:Print('sourceRaidFlags', sourceRaidFlags)
-	-- self:Print('destGUID', destGUID)
-	-- self:Print('destName', destName)
-	-- self:Print('destFlags', destFlags)
-	-- self:Print('destRaidFlags', destRaidFlags)
-	-- self:Print('spellId', spellId)
-	-- self:Print('spellName', spellName)
-	-- self:Print('spellSchool', spellSchool)
-
-	if self.opt.debug.mySpellInfoInChat and sourceName == playerName and untrackedTypes[event] == nil then
-		self:Print(spellName .. ": " .. spellId .. " - event: " .. event)
+function Proculas:COMBAT_LOG_EVENT_UNFILTERED(event)
+	--local msg,type,msg2,name,msg3,msg4,name2 = select(1, ...)
+	--local spellId, spellName, spellSchool = select(9, ...)
+	--timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags, spellId, spellName, spellSchool = select(1, ...)
+-- print("CLEU")
+	local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellId, spellName, spellSchool = CombatLogGetCurrentEventInfo() --, missType, amountMissed
+	if not hideCaster then
+		hideCaster = nil
 	end
 
+	--[[
+	if sourceName == playerName then
+		self:Print(spellName .. ": " .. spellId)
+	end
+	--]]
+
 	-- Check if the type is SPELL_AURA_APPLIED
-	local isAura = false
+	local isaura = false
 	if(event == "SPELL_AURA_APPLIED") then
-		isAura = true
+		isaura = true
 	end
 
 	if self.optpc.tracked[spellId] and untrackedTypes[event] == nil then
@@ -61,10 +51,10 @@ function Proculas:COMBAT_LOG_EVENT_UNFILTERED()
 			self:debug("Event is related to player ("..playerName..")")
 			if (procInfo.onSelfOnly == 0 or procInfo.onSelfOnly == false) then
 				self:debug("Sending tracked proc to processProc(): "..procInfo.name)
-				self:processProc(spellId, isAura)
+				self:processProc(spellId,isaura)
 			elseif(procInfo.onSelfOnly and destName == playerName) then
 				self:debug("Sending tracked proc to processProc(): "..procInfo.name)
-				self:processProc(spellId, isAura)
+				self:processProc(spellId,isaura)
 			end
 		end
 	end

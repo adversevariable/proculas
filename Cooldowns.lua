@@ -2,8 +2,7 @@
 -- Proculas
 -- Tracks and gatheres stats on Procs.
 --
--- Copyright (c) Xocide, who is:
---  - Idunno of US Nagrand
+-- Copyright (c) AdverseVariable
 --
 
 local L = LibStub("AceLocale-3.0"):GetLocale("Proculas", false)

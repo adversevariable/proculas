@@ -1,8 +1,8 @@
-Copyright (c) Idunno of US Nagrand
+Copyright (c) AdverseVariable
 All Rights Reserved
 
 "The Project" is the addon.
-"The Author" is Mcstabin of US Hellscream.
+"The Author" is AdverseVariable
 "The User" is the person or persons using The Project.
 
 You may use The Project under the following terms:

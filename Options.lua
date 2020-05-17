@@ -2,8 +2,7 @@
 -- Proculas
 -- Tracks and gatheres stats on Procs.
 --
--- Copyright (c) Xocide, who is:
---  - Idunno of US Nagrand
+-- Copyright (c) AdverseVariable
 --
 
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
@@ -668,29 +667,6 @@ local options = {
 				},
 			},
 		}, -- Sound
-		debug = {
-			type = "group",
-			name = L["Debug"],
-			order = 1,
-			get = function(info) return Proculas.opt.debug[ info[#info] ] end,
-			set = function(info, value)
-				Proculas.opt.debug[ info[#info] ] = value
-			end,
-			args = {
-				enable = {
-					order = 1,
-					name = L["Debug mode"],
-					desc = L["Debug mode"],
-					type = "toggle",
-				},
-				mySpellInfoInChat = {
-					order = 1,
-					name = L["My spells in chat window"],
-					desc = L["My spells in chat window"],
-					type = "toggle",
-				},
-			}
-		}
 	}
 }
 options.args.announce.args.Sink.order = 5
@@ -716,7 +692,6 @@ function Options:SetupOptions()
 	self.optionsFrames.Procs = ACD3:AddToBlizOptions("Proculas", L["Proc Options"], "Proculas", "procs")
 	self.optionsFrames.AddProc = ACD3:AddToBlizOptions("Proculas", L["Add Proc"], "Proculas", "addProc")
 	self.optionsFrames.Sounds = ACD3:AddToBlizOptions("Proculas", L["Sound"], "Proculas", "sound")
-	self.optionsFrames.Debug = ACD3:AddToBlizOptions("Proculas", L["Debug"], "Proculas", "debug")
 	self:RegisterModuleOptions("Profiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(Proculas.db), L["Profiles"])
 end
 

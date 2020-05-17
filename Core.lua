@@ -2,8 +2,7 @@
 -- Proculas
 -- Tracks and gatheres stats on Procs.
 --
--- Copyright (c) Xocide, who is:
---  - Idunno of US Nagrand
+-- Copyright (c) AdverseVariable
 --
 
 -------------------------------------------------------
@@ -16,8 +15,8 @@ Proculas.enabled = true
 
 -------------------------------------------------------
 -- Proculas Version
-Proculas.revision = "@project-abbreviated-hash@"
-Proculas.version = GetAddOnMetadata('Proculas', 'Version').." @project-abbreviated-hash@"
+Proculas.revision = "31ae12bcbdff"
+Proculas.version = GetAddOnMetadata('Proculas', 'Version').." 31ae12bcbdff"
 if(Proculas.revision == "@".."project-abbreviated-hash".."@") then
 	Proculas.version = "DEV"
 end
@@ -359,7 +358,9 @@ end
 
 -- Debug function
 function Proculas:debug(msg)
+--[===[@debug@
 	if self.opt.debug.enabled then
 		print("[Proculas][Debug]: "..msg)
 	end
+--@end-debug@]===]
 end

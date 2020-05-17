@@ -2,8 +2,7 @@
 -- Proculas
 -- Tracks and gatheres stats on Procs.
 --
--- Copyright (c) Xocide, who is:
---  - Idunno of US Nagrand
+-- Copyright (c) AdverseVariable
 --
 
 local Proculas = LibStub("AceAddon-3.0"):GetAddon("Proculas")
