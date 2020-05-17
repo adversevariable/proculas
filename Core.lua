@@ -15,8 +15,8 @@ Proculas.enabled = true
 
 -------------------------------------------------------
 -- Proculas Version
-Proculas.revision = "31ae12bcbdff"
-Proculas.version = GetAddOnMetadata('Proculas', 'Version').." 31ae12bcbdff"
+Proculas.revision = "@project-abbreviated-hash@"
+Proculas.version = GetAddOnMetadata('Proculas', 'Version').." @project-abbreviated-hash@"
 if(Proculas.revision == "@".."project-abbreviated-hash".."@") then
 	Proculas.version = "DEV"
 end
@@ -358,9 +358,9 @@ end
 
 -- Debug function
 function Proculas:debug(msg)
---[===[@debug@
+--@debug@
 	if self.opt.debug.enabled then
 		print("[Proculas][Debug]: "..msg)
 	end
---@end-debug@]===]
+--@end-debug@
 end
